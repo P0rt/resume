@@ -2,7 +2,7 @@
   "name": "draggable",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://p0rt.github.io/p0rt.github.io",
+  "homepage": "http://p0rt.github.io/resume/",
   "dependencies": {
     "react": "^16.6.3",
     "react-dom": "^16.6.3",

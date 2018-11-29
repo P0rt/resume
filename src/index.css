@@ -1,7 +1,19 @@
 @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans');
 
+:root {
+  --colorLink: #0000ff
+}
+
+a {
+  color: var(--colorLink);
+}
+
 .header {
   margin-bottom: 4px;
+}
+
+.header__kek {
+  padding-left: 20px;
 }
 
 .kek {
@@ -9,24 +21,25 @@
   align-items: center;
   justify-content: center;
   border: solid 1px #000;
+  box-shadow: -5px -5px 0px -2px rgba(0,0,0,0.75);
   border-radius: 4px;
   background: #fff;
   font-family: 'IBM Plex Sans', sans-serif, "Ubuntu";
   font-size: 18px;
 }
 
-.line {
-  border-bottom: 1px solid black;
-}
-
 .kek--first {
-  z-index: 1;
+  z-index: -1;
 }
 
 .kek--second {
   min-height: 400px;
   min-width: 507px;
-  z-index: -1;
+  z-index: 1;
+}
+
+.line {
+  border-bottom: 1px solid black;
 }
 
 .block {
@@ -39,7 +52,7 @@
   overflow: hidden;
   border-radius: 5px;
   border: solid 1px #000;
-  box-shadow: -5px -5px 0px -2px rgba(0,0,0,0.75);
+  box-shadow: -5px -5px 0 -2px rgba(0,0,0,0.75);
   margin: 20px 20px 0;
 }
 
@@ -61,5 +74,13 @@
   width: 15px;
   border: 1px solid black;
   border-radius: 50px;
+  position: relative;
+}
+
+.line__ring--link {
+  position: absolute;
+  text-decoration: none;
+  left: 3px;
+  top: -4px;
 }
 

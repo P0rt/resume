@@ -24,10 +24,15 @@ const App = () => (
                 x: 400,
                 y: 200,
                 width: '63%',
-                height: '60%'
+                height: '50%'
             }}
         >
-            <div>
+            <div className="line">
+                <div className="line__ring">
+                    <a className="line__ring--link" href="">?</a>
+                </div>
+            </div>
+            <div className="header__kek">
                 <h3>Technical skills</h3>
             </div>
         </Rnd>
@@ -43,7 +48,9 @@ const App = () => (
             }}
         >
             <div className="line">
-                <div className="line__ring"></div>
+                <div className="line__ring">
+                    <a className="line__ring--link" href="">?</a>
+                </div>
             </div>
             <div className="block">
                 <img className="images image--cover" src={logo} alt={"logo"}/>
@@ -51,14 +58,14 @@ const App = () => (
                 <h3>Sergey Parfenov</h3>
                     <div>
                         <h4 className="header">Now i am</h4>
-                        <p>Learning Specialist at <a href="https://www.yandex.ru/">Yandex</a></p>
-                        <p>Teacher at <a href="https://kruzhok.io/">Kruzhok</a></p>
+                        <p>Learning Specialist at <a target="_blank" href="https://www.yandex.ru/">Yandex</a></p>
+                        <p>Teacher at <a target="_blank" href="https://kruzhok.io/">Kruzhok</a></p>
                     </div>
                     <div>
                         <h4 className="header">While ago i was</h4>
-                        <p>Frontend developer at <a href="https://www.sravni.ru/">Sravni.ru</a></p>
-                        <p>Frontend developer at <a href="">Spaces.ru</a></p>
-                        <p>Teacher assistant at <a href="https://moscoding.ru/">Moscow Coding School</a></p>
+                        <p>Frontend developer at <a target="_blank" href="https://www.sravni.ru/">Sravni.ru</a></p>
+                        <p>Frontend developer at <a target="_blank" href="">Spaces.ru</a></p>
+                        <p>Teacher assistant at <a target="_blank" href="https://moscoding.ru/">Moscow Coding School</a></p>
                     </div>
                 </div>
             </div>

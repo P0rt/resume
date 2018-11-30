@@ -29,6 +29,8 @@ a {
 }
 
 .kek--first {
+  min-height: 400px;
+  min-width: 540px;
   z-index: -1;
 }
 
@@ -84,3 +86,7 @@ a {
   top: -4px;
 }
 
+.link__social {
+  display: flex;
+  flex-direction: column;
+}

@@ -21,9 +21,9 @@ const App = () => (
             onClick={focusResume}
             className="kek kek--first"
             default={{
-                x: 400,
-                y: 200,
-                width: '63%',
+                x: 200,
+                y: 40,
+                width: '50%',
                 height: '50%'
             }}
         >
@@ -34,6 +34,15 @@ const App = () => (
             </div>
             <div className="header__kek">
                 <h3>Technical skills</h3>
+                <p>HTML, CSS, Flex, Grid, BEM, JavaScript, ReactJS, ES6, Command Line, Git, Git flow, AMP, Web components,
+                    Regular expression, NodeJS+-;)</p>
+                <div className="link__social">
+                    <h4>More link</h4>
+                    <span><a target="_blank" rel="noopener noreferrer" href="https://github.com/P0rt">GitHub</a></span>
+                    <span><a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/sergey-parfenov-721b25171/">LinkedIn</a></span>
+                    <span><a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/Duckambition">Facebook</a></span>
+                </div>
+                <p></p>
             </div>
         </Rnd>
         <Rnd
@@ -58,14 +67,14 @@ const App = () => (
                 <h3>Sergey Parfenov</h3>
                     <div>
                         <h4 className="header">Now i am</h4>
-                        <p>Learning Specialist at <a target="_blank" href="https://www.yandex.ru/">Yandex</a></p>
-                        <p>Teacher at <a target="_blank" href="https://kruzhok.io/">Kruzhok</a></p>
+                        <p>Learning Specialist at <a target="_blank" rel="noopener noreferrer" href="https://www.yandex.ru/">Yandex</a></p>
+                        <p>Teacher at <a target="_blank" rel="noopener noreferrer" href="https://kruzhok.io/">Kruzhok</a></p>
                     </div>
                     <div>
                         <h4 className="header">While ago i was</h4>
-                        <p>Frontend developer at <a target="_blank" href="https://www.sravni.ru/">Sravni.ru</a></p>
-                        <p>Frontend developer at <a target="_blank" href="">Spaces.ru</a></p>
-                        <p>Teacher assistant at <a target="_blank" href="https://moscoding.ru/">Moscow Coding School</a></p>
+                        <p>Frontend developer at <a target="_blank" rel="noopener noreferrer" href="https://www.sravni.ru/">Sravni.ru</a></p>
+                        <p>Frontend developer at <a target="_blank" rel="noopener noreferrer" href="">Spaces.ru</a></p>
+                        <p>Teacher assistant at <a target="_blank" rel="noopener noreferrer" href="https://moscoding.ru/">Moscow Coding School</a></p>
                     </div>
                 </div>
             </div>

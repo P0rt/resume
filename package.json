@@ -5,7 +5,6 @@
   "homepage": "http://p0rt.github.io/resume/",
   "dependencies": {
     "react": "^16.6.3",
-    "react-dinosaur-game": "^1.0.0",
     "react-dom": "^16.6.3",
     "react-rnd": "^9.0.4",
     "react-scripts": "2.1.1"

@@ -53,7 +53,8 @@ export const Block = () => (
         default={{
             x: 300,
             y: 100,
-            width: 809
+            width: '50%',
+            height: '47%'
         }}
     >
         <div className="line">

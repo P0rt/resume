@@ -5,6 +5,10 @@ body {
   padding: 50px;
 }
 
+p {
+  margin: 0;
+}
+
 h2 {
   font-family: 'Cormorant Garamond', 'Arial', 'Helvetica', sans-serif;
   margin: 0;
@@ -34,6 +38,14 @@ span {
 .container__block {
   width: 530px;
   padding: 0 40px 40px;
+}
+
+.container__title {
+  margin: 14px 0;
+}
+
+.container__links {
+  margin-bottom: 12px;
 }
 
 .container__block:last-child {

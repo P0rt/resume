@@ -1,1 +1,0 @@
-export let data = 'HTML, CSS, Flex, Grid, BEM, JavaScript, ReactJS, ES6, Command Line, Git, Git flow, AMP, Web components, Regular expression, NodeJS+-';

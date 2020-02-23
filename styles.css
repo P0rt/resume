@@ -16,7 +16,7 @@ h3 {
   padding-bottom: 5px;
 }
 
-span p{
+span {
   font-family: 'Lora', 'Arial', 'Helvetica', sans-serif;
   margin: 0;
 }
@@ -36,6 +36,21 @@ span p{
   padding: 0 40px 40px;
 }
 
+.container__block:last-child {
+  padding-bottom: 0;
+}
+
+.container__assets {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.container__content {
+  display: flex;
+  flex-direction: column;
+}
+
 @media screen and (max-width: 1050px) {
 
   body {
@@ -46,15 +61,19 @@ span p{
     flex-direction: column;
   }
 
+  .container__img {
+    object-fit: cover;
+    width: 100%;
+    height: 300px;
+  }
+
   .container__block {
     max-width: 400px;
     padding: 20px 0;
     width: 100%;
   }
 
-  .container__img {
-    object-fit: cover;
-    width: 390px;
-    height: 300px;
+  .container__block:last-child {
+    padding-bottom: 50px;
   }
 }

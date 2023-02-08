@@ -6,6 +6,10 @@ body {
   padding: 50px;
 }
 
+p {
+  margin: 0;
+}
+
 h2 {
   font-family: 'Cormorant Garamond', 'Arial', 'Helvetica', sans-serif;
   margin: 0;

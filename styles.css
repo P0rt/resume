@@ -4,26 +4,38 @@
 body {
   margin: 0;
   padding: 50px;
+  background: var(--bkg-color);
+  --text-color: #222;
+  --bkg-color: #fff;
+}
+
+body.dark-theme {
+  --text-color: #eee;
+  --bkg-color: #121212;
 }
 
 p {
   margin: 0;
+  color: var(--text-color);
 }
 
 h2 {
   font-family: 'Cormorant Garamond', 'Arial', 'Helvetica', sans-serif;
   margin: 0;
+  color: var(--text-color);
 }
 
 h3 {
   font-family: 'Playfair Display', 'Arial', 'Helvetica', sans-serif;
   margin: 0;
   padding-bottom: 5px;
+  color: var(--text-color);
 }
 
 span {
   font-family: 'Lora', 'Arial', 'Helvetica', sans-serif;
   margin: 0;
+  color: var(--text-color);
 }
 
 figure {
@@ -32,10 +44,12 @@ figure {
 
 figcaption {
   font-size: 1.3em;
+  color: var(--text-color);
 }
 
 span {
   font-family: 'Raleway', sans-serif;
+  color: var(--text-color);
 }
 
 .container {
@@ -101,5 +115,18 @@ span {
 
   .container__block:last-child {
     padding-bottom: 50px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  /* defaults to dark theme */
+  body {
+    --text-color: #eee;
+    --bkg-color: #121212;
+  }
+  
+  body.light-theme {
+    --text-color: #222;
+    --bkg-color: #fff;
   }
 }

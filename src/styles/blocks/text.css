@@ -5,7 +5,7 @@
 .container__block {
   padding: 0 0 40px;
   font-size: 1.1em;
-  width: 450px;
+  max-width: 450px;
 }
 
 .container__text {
@@ -23,4 +23,10 @@
 
 .container__block:last-child {
   padding-bottom: 0;
+}
+
+@media screen and (max-width: 1050px) {
+  .container__text {
+    padding: 30px 20px 0;
+  } 
 }

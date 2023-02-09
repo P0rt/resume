@@ -11,12 +11,17 @@ body {
 
 body.dark-theme {
   --text-color: #eee;
-  --bkg-color: #121212;
+  --bkg-color: #1a1a1a;
+  --link-color: #0433ff;
 }
 
 p {
   margin: 0;
   color: var(--text-color);
+}
+
+a {
+  color: var(--link-color);
 }
 
 h2 {

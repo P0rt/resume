@@ -1,4 +1,4 @@
-name: Merge master with gh-pages
+name: Open pull request on push to master
 
 on:
   push:
@@ -6,16 +6,20 @@ on:
       - master
 
 jobs:
-  merge:
+  open_pull_request:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Merge master with gh-pages
-      run: |
-        git checkout gh-pages
-        git merge master
-        git push origin gh-pages
-        
+    - name: Open pull request
+      uses: peter-evans/create-pull-request@v2
+      with:
+        base: gh-pages
+        head: master
+        title: "Automatic pull request from master branch"
+        body: "This pull request was automatically opened by GitHub Actions."
+        commit-message: "Automatic pull request from master branch"
+        labels: "automated, pull request"
+        token: ${{ secrets.GITHUB_TOKEN }}

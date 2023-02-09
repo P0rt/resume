@@ -1,0 +1,11 @@
+/* Fonts */
+@import url('https://fonts.googleapis.com/css?family=Cormorant+Garamond|Lora|Playfair+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
+
+/* Components */
+@import './blocks/root.css';
+@import './blocks/avatar.css';
+@import './blocks/text.css';
+
+/* Dark Mode */
+@import './blocks/darkmode.css';

@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+}
+
+.container__block {
+  width: 440px;
+  padding: 0 0 40px;
+  font-size: 1.1em;
+}
+
+.container__text {
+  padding: 0 40px;
+}
+
+.container__headers {
+  font-family: 'Cormorant Garamond', 'Arial', 'Helvetica', sans-serif;
+  font-size: 1.5em;
+}
+
+.block-text {
+  color: var(--text-color);
+}
+
+.container__block:last-child {
+  padding-bottom: 0;
+}

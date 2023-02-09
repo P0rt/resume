@@ -1,0 +1,37 @@
+body {
+  margin: 0;
+  padding: 50px;
+  background: var(--bkg-color);
+  --bkg-color: #fff;
+}
+
+p {
+  margin: 0;
+  color: var(--text-color);
+}
+
+a {
+  color: var(--link-color);
+}
+
+h3 {
+  font-family: 'Playfair Display', 'Arial', 'Helvetica', sans-serif;
+  font-size: 1em;
+  margin: 0;
+  padding-bottom: 5px;
+}
+
+span {
+  margin: 0;
+  color: var(--text-color);
+  font-family: 'Raleway', sans-serif;
+}
+
+figure {
+  margin: 0;
+}
+
+figcaption {
+  font-size: 1.3em;
+  color: var(--text-color);
+}

@@ -13,8 +13,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Run build command
+    - name: Install dependencies
       run: npm i
+
+    - name: Build project
       run: npm run build
 
     - name: Deploy to gh-pages

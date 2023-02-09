@@ -15,7 +15,13 @@ a {
   color: var(--link-color);
 }
 
-h3 {
+h1 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1em;
+  margin: 0;
+}
+
+h2 {
   font-family: 'Playfair Display', 'Arial', 'Helvetica', sans-serif;
   font-size: 1em;
   margin: 0;

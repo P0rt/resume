@@ -1,6 +1,6 @@
 body.dark-theme {
   --text-color: #eeee;
-  --bkg-color: #0f0f0f;
+  --bkg-color: #202124;
   --link-color: #3da6ff;
 }
 
@@ -8,12 +8,12 @@ body.dark-theme {
   /* defaults to dark theme */
   body {
     --text-color: #eee;
-    --bkg-color: #121212;
+    --bkg-color: #202124;
     --link-color: #3da6ff;
   }
 
   body.light-theme {
-    --text-color: #222;
+    --text-color: #202124;
     --bkg-color: #fff;
     --link-color: #3da6ff;
   }

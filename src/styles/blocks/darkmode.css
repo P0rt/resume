@@ -1,12 +1,6 @@
-body.dark-theme {
-  --text-color: #eeee;
-  --bkg-color: #202124;
-  --link-color: #3da6ff;
-}
-
 @media (prefers-color-scheme: dark) {
   /* defaults to dark theme */
-  body {
+  body.dark-theme {
     --text-color: #eee;
     --bkg-color: #202124;
     --link-color: #3da6ff;

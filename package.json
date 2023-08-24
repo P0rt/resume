@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/P0rt/resume#readme",
   "dependencies": {
-    "browser-sync": "^2.27.5",
+    "browser-sync": "^2.29.1",
     "editorconfig-checker": "^5.0.1",
     "html-minifier": "^4.0.0",
     "postcss-cli": "^10.1.0",

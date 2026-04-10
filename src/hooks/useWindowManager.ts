@@ -123,6 +123,19 @@ export function useWindowManager() {
     )
   }, [])
 
+  const resizeWindow = useCallback(
+    (id: WindowId, x: number, y: number, w: number, h: number) => {
+      setWindows(prev =>
+        prev.map(win =>
+          win.id === id
+            ? { ...win, position: { x, y }, size: { width: w, height: h } }
+            : win
+        )
+      )
+    },
+    []
+  )
+
   return {
     windows,
     openWindow,
@@ -133,5 +146,6 @@ export function useWindowManager() {
     moveWindow,
     toggleMinimize,
     updateTitle,
+    resizeWindow,
   }
 }

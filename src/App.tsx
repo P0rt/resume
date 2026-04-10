@@ -8,6 +8,7 @@ import { Explorer } from './components/Explorer'
 import { PhotoViewer } from './components/PhotoViewer'
 import { Browser } from './components/Browser'
 import { ContextMenu, type MenuItem } from './components/ContextMenu'
+import { Assistant } from './components/Assistant'
 import type { WindowId } from './types'
 
 interface CtxState {
@@ -27,6 +28,7 @@ export function App() {
     moveWindow,
     toggleMinimize,
     updateTitle,
+    resizeWindow,
   } = useWindowManager()
   const [startMenuOpen, setStartMenuOpen] = useState(false)
   const [isShutdown, setIsShutdown] = useState(false)
@@ -128,6 +130,7 @@ export function App() {
             onMaximize={() => maximizeWindow(w.id)}
             onFocus={() => focusWindow(w.id)}
             onMove={(x, y) => moveWindow(w.id, x, y)}
+            onResize={(x, y, width, height) => resizeWindow(w.id, x, y, width, height)}
           >
             {w.id === 'notepad' && <Notepad />}
             {w.id === 'mycomputer' && (
@@ -152,6 +155,7 @@ export function App() {
         onOpenLink={handleOpenLink}
         onShutdown={() => setIsShutdown(true)}
       />
+      <Assistant />
       {ctxMenu && (
         <ContextMenu
           x={ctxMenu.x}

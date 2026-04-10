@@ -11,8 +11,8 @@ export function NotepadIcon({ size = 32 }: IconProps) {
           <stop offset="100%" stopColor="#E8E8D0" />
         </linearGradient>
         <linearGradient id="notepad-bar" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#0A246A" />
-          <stop offset="100%" stopColor="#3A6EA5" />
+          <stop offset="0%" stopColor="#6B3A1F" />
+          <stop offset="100%" stopColor="#C48840" />
         </linearGradient>
       </defs>
       <path d="M8 2 L24 2 L26 4 L26 30 L6 30 L6 4 Z" fill="url(#notepad-page)" stroke="#555" strokeWidth="0.75" />
@@ -36,14 +36,14 @@ export function ComputerIcon({ size = 32 }: IconProps) {
           <stop offset="100%" stopColor="#B0B0A0" />
         </linearGradient>
         <linearGradient id="screen-bg" x1="0" y1="0" x2="0.3" y2="1">
-          <stop offset="0%" stopColor="#4080C0" />
-          <stop offset="100%" stopColor="#0A246A" />
+          <stop offset="0%" stopColor="#3D5040" />
+          <stop offset="100%" stopColor="#1A1610" />
         </linearGradient>
       </defs>
       <rect x="2" y="1" width="28" height="20" rx="2" fill="url(#monitor-body)" stroke="#666" strokeWidth="0.75" />
       <rect x="4" y="3" width="24" height="16" rx="1" fill="url(#screen-bg)" />
-      <rect x="6" y="5" width="8" height="6" rx="0.5" fill="#fff" fillOpacity="0.9" stroke="#0A246A" strokeWidth="0.5" />
-      <rect x="6" y="5" width="8" height="2" rx="0.5" fill="#0A246A" />
+      <rect x="6" y="5" width="8" height="6" rx="0.5" fill="#fff" fillOpacity="0.9" stroke="#6B3A1F" strokeWidth="0.5" />
+      <rect x="6" y="5" width="8" height="2" rx="0.5" fill="#6B3A1F" />
       <rect x="13" y="21" width="6" height="3" fill="#A0A090" stroke="#666" strokeWidth="0.5" />
       <rect x="8" y="24" width="16" height="3" rx="1" fill="url(#monitor-body)" stroke="#666" strokeWidth="0.5" />
       <circle cx="26" cy="18" r="0.8" fill="#00cc00" />
@@ -171,7 +171,7 @@ export function RecycleIcon({ size = 32 }: IconProps) {
       <line x1="13" y1="11" x2="13.3" y2="25" stroke="#888" strokeWidth="0.75" />
       <line x1="16" y1="11" x2="16" y2="25" stroke="#888" strokeWidth="0.75" />
       <line x1="19" y1="11" x2="18.7" y2="25" stroke="#888" strokeWidth="0.75" />
-      <path d="M14 14 L16 12 L18 14 L16.5 14 L16.5 18 L15.5 18 L15.5 14 Z" fill="#3A6EA5" fillOpacity="0.5" />
+      <path d="M14 14 L16 12 L18 14 L16.5 14 L16.5 18 L15.5 18 L15.5 14 Z" fill="#8B5A30" fillOpacity="0.5" />
     </svg>
   )
 }

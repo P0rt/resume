@@ -1,0 +1,39 @@
+---
+description: React/TypeScript component conventions
+globs: src/**/*.tsx,src/**/*.ts
+alwaysApply: false
+---
+
+# React & TypeScript Conventions
+
+## Components
+
+- Functional components only, exported as named functions: `export function MyComponent() {}`
+- Props interface defined above the component, not exported:
+  ```tsx
+  interface MyComponentProps {
+    title: string
+    onClose: () => void
+  }
+  export function MyComponent({ title, onClose }: MyComponentProps) { ... }
+  ```
+- No `React.FC` — use explicit return types only when needed
+
+## State & Callbacks
+
+- Wrap all handlers passed as props in `useCallback` with correct deps
+- Use `useRef` for mutable values that shouldn't trigger re-renders (z-index counters, drag state, timers)
+- Pointer events (`onPointerDown/Move/Up`) for drag-and-drop (mouse + touch unified)
+- Prevent double-click after drag: track `lastDragEnd` timestamp, ignore clicks within 300ms
+
+## Types
+
+- `WindowId` union and `WindowState` interface live in `src/types.ts`
+- Use `import type { ... }` for type-only imports
+- Adding a new window type requires updating: `WindowId` union, `WINDOW_DEFAULTS` in `useWindowManager.ts`, render logic in `App.tsx`
+
+## SVG Icons
+
+- Defined as React components in `Icons.tsx` accepting `{ size?: number }`
+- Use inline SVG (no external icon libraries)
+- Keep paths simple, ME-era aesthetic: 16×16 viewBox, solid fills, minimal gradients

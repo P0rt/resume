@@ -1,0 +1,47 @@
+---
+description: Project overview — Windows ME resume simulator
+alwaysApply: true
+---
+
+# Project: Windows ME Resume
+
+Interactive resume styled as a Windows Millennium Edition desktop. Deployed to GitHub Pages at `p0rt.github.io/resume/`.
+
+## Tech Stack
+
+- React 19 + TypeScript 6 + Vite 8
+- `98.css` library for Win98/ME base styling
+- Single global CSS (`src/global.css`) with BEM-like naming on top of 98.css
+- No CSS modules, no CSS-in-JS, no Tailwind
+- No state management library — `useState`, `useCallback`, `useRef` only
+- GitHub Actions CI → `tsc -b && vite build` → gh-pages
+
+## Architecture
+
+```
+src/
+  App.tsx              — root: window manager, global state, context menu
+  types.ts             — WindowId union type, WindowState interface
+  global.css           — all styles (overrides 98.css)
+  hooks/
+    useWindowManager.ts — open/close/minimize/maximize/focus/move windows
+  components/
+    Desktop.tsx        — draggable icons, right-click context menu
+    Window.tsx         — window chrome (title bar, drag, min/max/close)
+    Taskbar.tsx        — start menu, running windows, clock
+    Notepad.tsx        — resume.txt content
+    Explorer.tsx       — My Computer + Experience views
+    Browser.tsx        — IE5 simulator: page/iframe modes, history
+    PhotoViewer.tsx    — avatar display
+    ContextMenu.tsx    — right-click menu with submenus
+    Icons.tsx          — SVG icon components
+```
+
+## Key Conventions
+
+- Named exports only (no default exports)
+- `import type { ... }` for type-only imports
+- Props interfaces defined locally in component files (not exported), except shared types like `MenuItem`
+- All handler callbacks wrapped in `useCallback`
+- Data (resume text, job history, links) hardcoded in components
+- Vite base URL: `/resume/`

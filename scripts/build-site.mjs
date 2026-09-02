@@ -102,7 +102,7 @@ function featuredWriting(articles) {
         <time datetime="${escapeHtml(lead.date)}">${escapeHtml(humanDate(lead.date))}</time>
         <h3>${escapeHtml(lead.title)}</h3>
         <p>${escapeHtml(lead.description)}</p>
-        <span>Read locally <span aria-hidden="true">↗</span></span>
+        <span>Read article <span aria-hidden="true">↗</span></span>
       </a>
     </article>
     <div class="writing-recent">${rest.map((article) => articleRow(article, "post-row-compact")).join("")}</div>`;
@@ -161,7 +161,7 @@ function articleDocument(article, older, newer) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="${escapeHtml(article.description)}">
-  <meta name="theme-color" content="#f5f5f2" data-theme-color>
+  <meta name="theme-color" content="#f7f7f4" data-theme-color>
   <meta property="og:type" content="article">
   <meta property="og:title" content="${escapeHtml(article.title)}">
   <meta property="og:description" content="${escapeHtml(article.description)}">

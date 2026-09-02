@@ -1,0 +1,12 @@
+@import "./blocks/root.css";
+@import "./blocks/avatar.css";
+@import "./blocks/text.css";
+@import "./blocks/darkmode.css";
+
+@font-face {
+  font-family: "Manrope";
+  src: url("../assets/fonts/manrope-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#f4f7fb" media="(prefers-color-scheme: light)" data-theme-color>
+  <meta name="theme-color" content="#181818" media="(prefers-color-scheme: dark)" data-theme-color>
+  <link rel="icon" href="./assets/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="./styles/index.css">
+  <title>Page not found | Sergei Parfenov</title>
+  <script>
+    document.documentElement.classList.add("js");
+    (function () {
+      try {
+        var savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "light" || savedTheme === "dark") {
+          document.documentElement.dataset.theme = savedTheme;
+        }
+      } catch (error) {
+        document.documentElement.removeAttribute("data-theme");
+      }
+      var activeTheme = document.documentElement.dataset.theme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.querySelectorAll("[data-theme-color]").forEach(function (meta) {
+        meta.setAttribute("content", activeTheme === "dark" ? "#181818" : "#f4f7fb");
+      });
+    }());
+  </script>
+</head>
+<body>
+  <main class="utility-page">
+    <article class="utility-card">
+      <p class="eyebrow">404</p>
+      <h1>This path does not lead anywhere yet.</h1>
+      <p>The page may have moved, or the link may be incomplete. The home page and writing hub are still available.</p>
+      <a class="button" href="./index.html">Back home</a>
+    </article>
+  </main>
+</body>
+</html>

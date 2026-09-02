@@ -1,0 +1,312 @@
+import { promises as fs } from "node:fs";
+import path from "node:path";
+import matter from "gray-matter";
+import { marked } from "marked";
+
+const ROOT = process.cwd();
+const SRC_DIR = path.join(ROOT, "src");
+const DIST_DIR = path.join(ROOT, "dist");
+const ARTICLES_DIR = path.join(ROOT, "content/articles");
+const DOMAIN = "https://sergei-parfenov.com";
+
+function escapeHtml(value = "") {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function escapeXml(value = "") {
+  return escapeHtml(value);
+}
+
+function normalizeTypography(value = "") {
+  return String(value).replace(/[\u2013\u2014]/g, "-");
+}
+
+function isoDate(value) {
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return new Date().toISOString();
+  return date.toISOString();
+}
+
+function humanDate(value) {
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(value));
+}
+
+function estimateReadingTime(markdown) {
+  const words = markdown.replace(/[`#>*_[\]()!-]/g, " ").trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 220));
+}
+
+function absoluteArticleUrl(slug) {
+  return `${DOMAIN}/blog/${slug}/`;
+}
+
+async function loadArticles() {
+  const filenames = (await fs.readdir(ARTICLES_DIR)).filter((filename) => filename.endsWith(".md"));
+  const articles = await Promise.all(filenames.map(async (filename) => {
+    const raw = await fs.readFile(path.join(ARTICLES_DIR, filename), "utf8");
+    const parsed = matter(raw);
+    const slug = parsed.data.slug || filename.replace(/\.md$/, "");
+    const content = normalizeTypography(parsed.content);
+
+    return {
+      ...parsed.data,
+      title: normalizeTypography(parsed.data.title),
+      description: normalizeTypography(parsed.data.description),
+      slug,
+      content,
+      date: isoDate(parsed.data.date),
+      updated: isoDate(parsed.data.updated || parsed.data.date),
+      readingTime: Number(parsed.data.readingTime) || estimateReadingTime(content),
+      tags: Array.isArray(parsed.data.tags) ? parsed.data.tags : [],
+      canonicalUrl: absoluteArticleUrl(slug),
+    };
+  }));
+
+  return articles
+    .filter((article) => article.published !== false)
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
+function articleRow(article, className = "") {
+  const tags = article.tags.slice(0, 2).map((tag) => escapeHtml(tag)).join(", ");
+  return `
+    <article class="post-row ${className}" data-reveal>
+      <a class="post-row-link" href="./blog/${escapeHtml(article.slug)}/">
+        <time datetime="${escapeHtml(article.date)}">${escapeHtml(humanDate(article.date))}</time>
+        <span class="post-row-copy">
+          <span class="post-row-title">${escapeHtml(article.title)}</span>
+          <span class="post-row-description">${escapeHtml(article.description)}</span>
+        </span>
+        <span class="post-row-meta">${escapeHtml(tags)}<br>${article.readingTime} min</span>
+      </a>
+    </article>`;
+}
+
+function featuredWriting(articles) {
+  const [lead, ...rest] = articles.slice(0, 3);
+  if (!lead) return "<p>No articles published yet.</p>";
+
+  return `
+    <article class="writing-lead" data-reveal>
+      <a href="./blog/${escapeHtml(lead.slug)}/">
+        <time datetime="${escapeHtml(lead.date)}">${escapeHtml(humanDate(lead.date))}</time>
+        <h3>${escapeHtml(lead.title)}</h3>
+        <p>${escapeHtml(lead.description)}</p>
+        <span>Read locally <span aria-hidden="true">↗</span></span>
+      </a>
+    </article>
+    <div class="writing-recent">${rest.map((article) => articleRow(article, "post-row-compact")).join("")}</div>`;
+}
+
+function archiveMarkup(articles) {
+  const byYear = articles.reduce((groups, article) => {
+    const year = new Date(article.date).getUTCFullYear();
+    if (!groups.has(year)) groups.set(year, []);
+    groups.get(year).push(article);
+    return groups;
+  }, new Map());
+  return [...byYear].map(([year, yearArticles]) => `
+    <section class="archive-year" aria-labelledby="year-${year}">
+      <h2 id="year-${year}">${year}</h2>
+      <div class="archive-list">${yearArticles.map((article) => articleRow(article)).join("")}</div>
+    </section>`).join("");
+}
+
+function articleDocument(article, older, newer) {
+  const body = marked.parse(article.content, { gfm: true });
+  const cover = article.coverImage ? `
+    <figure class="article-cover" data-reveal>
+      <img src="${escapeHtml(article.coverImage)}" alt="" width="1000" height="500" loading="eager">
+    </figure>` : "";
+  const sourceLink = article.sourceUrl ? `
+    <p class="source-line">First published on <a href="${escapeHtml(article.sourceUrl)}" target="_blank" rel="noopener noreferrer">DEV Community <span aria-hidden="true">↗</span></a></p>` : "";
+  const olderLink = older ? `<a href="../${escapeHtml(older.slug)}/"><span>Previous</span>${escapeHtml(older.title)}</a>` : "<span></span>";
+  const newerLink = newer ? `<a href="../${escapeHtml(newer.slug)}/"><span>Next</span>${escapeHtml(newer.title)}</a>` : "<span></span>";
+  const tags = article.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("");
+  const socialImage = article.coverImage || `${DOMAIN}/assets/portrait-blue.jpg`;
+  const structuredData = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: article.title,
+    description: article.description,
+    datePublished: article.date,
+    dateModified: article.updated,
+    mainEntityOfPage: article.canonicalUrl,
+    image: socialImage,
+    author: {
+      "@type": "Person",
+      name: "Sergei Parfenov",
+      url: `${DOMAIN}/`,
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Sergei Parfenov",
+      url: `${DOMAIN}/`,
+    },
+  }).replaceAll("<", "\\u003c");
+
+  return `<!doctype html>
+<html lang="${escapeHtml(article.language || "en")}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="${escapeHtml(article.description)}">
+  <meta name="theme-color" content="#f5f5f2" data-theme-color>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="${escapeHtml(article.title)}">
+  <meta property="og:description" content="${escapeHtml(article.description)}">
+  <meta property="og:image" content="${escapeHtml(socialImage)}">
+  <meta property="og:url" content="${escapeHtml(article.canonicalUrl)}">
+  <meta property="article:published_time" content="${escapeHtml(article.date)}">
+  <meta property="article:modified_time" content="${escapeHtml(article.updated)}">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="${escapeHtml(article.canonicalUrl)}">
+  <link rel="alternate" type="application/rss+xml" title="Writing by Sergei Parfenov" href="${DOMAIN}/rss.xml">
+  <link rel="icon" href="../../assets/favicon.ico" sizes="any">
+  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../styles/index.css">
+  <title>${escapeHtml(article.title)} | Sergei Parfenov</title>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="application/ld+json">${structuredData}</script>
+</head>
+<body class="article-page">
+  <a class="skip-link" href="#main">Skip to article</a>
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Article navigation">
+      <a class="wordmark" href="../../index.html" aria-label="Sergei Parfenov, home">SP</a>
+      <div class="nav-menu">
+        <a href="../../index.html#about">About</a>
+        <a href="../../blog.html" aria-current="page">Writing</a>
+        <a href="../../index.html#experience">Experience</a>
+      </div>
+      <div class="nav-tools">
+        <button class="theme-toggle" type="button" data-theme-toggle><span data-theme-label>Theme</span></button>
+        <a href="../../assets/resume.pdf" download>Resume</a>
+      </div>
+    </nav>
+  </header>
+  <main id="main">
+    <article>
+      <header class="article-header section-shell">
+        <a class="back-link" href="../../blog.html">← All writing</a>
+        <h1>${escapeHtml(article.title)}</h1>
+        <p class="article-deck">${escapeHtml(article.description)}</p>
+        <div class="article-meta-line">
+          <time datetime="${escapeHtml(article.date)}">${escapeHtml(humanDate(article.date))}</time>
+          <span>${article.readingTime} min read</span>
+          <span class="article-tags">${tags}</span>
+          <button type="button" data-copy-url>Copy URL</button>
+        </div>
+      </header>
+      ${cover}
+      <div class="article-prose section-shell" data-article-body>${body}</div>
+      <footer class="article-footer section-shell">
+        ${sourceLink}
+        <nav class="article-pagination" aria-label="More articles">${olderLink}${newerLink}</nav>
+      </footer>
+    </article>
+  </main>
+  <footer class="site-footer section-shell">
+    <a href="../../index.html">Sergei Parfenov</a>
+    <a href="../../blog.html">Writing</a>
+    <span>© <span data-current-year>${new Date().getFullYear()}</span></span>
+  </footer>
+  <script src="../../scripts/main.js"></script>
+</body>
+</html>`;
+}
+
+function rssDocument(articles) {
+  const items = articles.slice(0, 30).map((article) => `
+    <item>
+      <title>${escapeXml(article.title)}</title>
+      <link>${escapeXml(article.canonicalUrl)}</link>
+      <guid isPermaLink="true">${escapeXml(article.canonicalUrl)}</guid>
+      <pubDate>${new Date(article.date).toUTCString()}</pubDate>
+      <description>${escapeXml(article.description)}</description>
+    </item>`).join("");
+
+  return `<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Writing by Sergei Parfenov</title>
+    <link>${DOMAIN}/blog.html</link>
+    <description>Essays on AI systems, agents, infrastructure, and product engineering.</description>
+    <language>en</language>${items}
+  </channel>
+</rss>`;
+}
+
+function sitemapDocument(articles) {
+  const staticPages = ["/", "/blog.html", "/privacy.html"];
+  const urls = [
+    ...staticPages.map((pathname) => ({ url: `${DOMAIN}${pathname}`, updated: articles[0]?.updated })),
+    ...articles.map((article) => ({ url: article.canonicalUrl, updated: article.updated })),
+  ];
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map((item) => `  <url><loc>${escapeXml(item.url)}</loc><lastmod>${isoDate(item.updated).slice(0, 10)}</lastmod></url>`).join("\n")}
+</urlset>`;
+}
+
+async function walk(directory) {
+  const entries = await fs.readdir(directory, { withFileTypes: true });
+  const files = await Promise.all(entries.map(async (entry) => {
+    const target = path.join(directory, entry.name);
+    return entry.isDirectory() ? walk(target) : [target];
+  }));
+  return files.flat();
+}
+
+if (path.basename(DIST_DIR) !== "dist") throw new Error("Refusing to clean an unexpected output directory.");
+await fs.rm(DIST_DIR, { recursive: true, force: true });
+await fs.mkdir(DIST_DIR, { recursive: true });
+
+const articles = await loadArticles();
+const replacements = {
+  "{{ARTICLE_COUNT}}": String(articles.length),
+  "{{FEATURED_ARTICLES}}": featuredWriting(articles),
+  "{{ARTICLE_ARCHIVE}}": archiveMarkup(articles),
+  "{{LATEST_ARTICLE_URL}}": articles[0] ? `./blog/${articles[0].slug}/` : "./blog.html",
+};
+
+for (const filename of await walk(SRC_DIR)) {
+  if (!filename.endsWith(".html")) continue;
+  const relative = path.relative(SRC_DIR, filename);
+  let html = await fs.readFile(filename, "utf8");
+  Object.entries(replacements).forEach(([token, replacement]) => {
+    html = html.replaceAll(token, replacement);
+  });
+  const target = path.join(DIST_DIR, relative);
+  await fs.mkdir(path.dirname(target), { recursive: true });
+  await fs.writeFile(target, html, "utf8");
+}
+
+for (let index = 0; index < articles.length; index += 1) {
+  const article = articles[index];
+  const target = path.join(DIST_DIR, "blog", article.slug, "index.html");
+  await fs.mkdir(path.dirname(target), { recursive: true });
+  await fs.writeFile(target, articleDocument(article, articles[index + 1], articles[index - 1]), "utf8");
+}
+
+await Promise.all([
+  fs.cp(path.join(SRC_DIR, "assets"), path.join(DIST_DIR, "assets"), { recursive: true }),
+  fs.cp(path.join(SRC_DIR, "scripts"), path.join(DIST_DIR, "scripts"), { recursive: true }),
+  fs.cp(path.join(SRC_DIR, "styles"), path.join(DIST_DIR, "styles"), { recursive: true }),
+  fs.writeFile(path.join(DIST_DIR, "rss.xml"), rssDocument(articles), "utf8"),
+  fs.writeFile(path.join(DIST_DIR, "sitemap.xml"), sitemapDocument(articles), "utf8"),
+  fs.writeFile(path.join(DIST_DIR, "robots.txt"), `User-agent: *\nAllow: /\nSitemap: ${DOMAIN}/sitemap.xml\n`, "utf8"),
+]);
+
+console.log(`Built ${articles.length} article pages.`);

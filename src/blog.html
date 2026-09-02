@@ -3,153 +3,80 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Technical essays by Sergei Parfenov on AI agents, model evaluation, infrastructure, and product engineering.">
-  <meta name="theme-color" content="#f4f7fb" media="(prefers-color-scheme: light)" data-theme-color>
-  <meta name="theme-color" content="#181818" media="(prefers-color-scheme: dark)" data-theme-color>
+  <meta name="description" content="All essays by Sergei Parfenov on AI agents, model evaluation, infrastructure, machine learning, and product engineering.">
+  <meta name="theme-color" content="#f5f5f2" data-theme-color>
   <meta property="og:type" content="website">
   <meta property="og:title" content="Writing by Sergei Parfenov">
-  <meta property="og:description" content="Notes from the systems layer: models, harnesses, infrastructure, and the failures between them.">
-  <meta property="og:image" content="https://sergei-parfenov.com/assets/photo.jpg">
+  <meta property="og:description" content="Notes on AI systems and the places they break.">
+  <meta property="og:image" content="https://sergei-parfenov.com/assets/portrait-blue.jpg">
   <meta property="og:url" content="https://sergei-parfenov.com/blog.html">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://sergei-parfenov.com/blog.html">
-  <link rel="preconnect" href="https://dev.to">
+  <link rel="alternate" type="application/rss+xml" title="Writing by Sergei Parfenov" href="https://sergei-parfenov.com/rss.xml">
   <link rel="icon" href="./assets/favicon.ico" sizes="any">
   <link rel="preload" href="./assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="./styles/index.css">
   <title>Writing by Sergei Parfenov</title>
-  <script>
-    document.documentElement.classList.add("js");
-    (function () {
-      try {
-        var savedTheme = localStorage.getItem("theme");
-        if (savedTheme === "light" || savedTheme === "dark") {
-          document.documentElement.dataset.theme = savedTheme;
-        }
-      } catch (error) {
-        document.documentElement.removeAttribute("data-theme");
-      }
-      var activeTheme = document.documentElement.dataset.theme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-      document.querySelectorAll("[data-theme-color]").forEach(function (meta) {
-        meta.setAttribute("content", activeTheme === "dark" ? "#181818" : "#f4f7fb");
-      });
-    }());
-  </script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Blog",
       "name": "Writing by Sergei Parfenov",
       "url": "https://sergei-parfenov.com/blog.html",
-      "author": {
-        "@type": "Person",
-        "name": "Sergei Parfenov",
-        "url": "https://sergei-parfenov.com/"
-      },
-      "sameAs": "https://dev.to/p0rt"
+      "author": {"@type": "Person", "name": "Sergei Parfenov", "url": "https://sergei-parfenov.com/"},
+      "numberOfItems": {{ARTICLE_COUNT}}
     }
   </script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-
+  <a class="skip-link" href="#main">Skip to writing</a>
   <header class="site-header">
-    <nav class="nav-shell" aria-label="Writing navigation">
-      <a class="brand" href="./index.html" aria-label="Sergei Parfenov, back to home">SP</a>
-      <div class="nav-links">
+    <nav class="site-nav" aria-label="Writing navigation">
+      <a class="wordmark" href="./index.html" aria-label="Sergei Parfenov, home">SP</a>
+      <div class="nav-menu">
         <a href="./index.html#about">About</a>
         <a href="./blog.html" aria-current="page">Writing</a>
         <a href="./index.html#experience">Experience</a>
         <a href="./index.html#personal">Personal</a>
       </div>
-      <div class="nav-actions">
-        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
-          <span data-theme-label>Theme</span>
-        </button>
-        <a class="button button-small" href="https://dev.to/p0rt" target="_blank" rel="noopener noreferrer">Follow on DEV</a>
+      <div class="nav-tools">
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme"><span data-theme-label>Theme</span></button>
+        <a href="./rss.xml">RSS</a>
       </div>
     </nav>
   </header>
 
-  <main class="page-main" id="main">
-    <section class="page-hero section-shell" aria-labelledby="page-title">
-      <div data-reveal>
-        <p class="eyebrow">Writing</p>
-        <h1 id="page-title">Notes from the systems layer.</h1>
-        <p>I write about AI when the interesting problem is not the model alone, but everything required to make it behave.</p>
-      </div>
-      <aside class="page-hero-side" data-reveal>
-        <strong>21 essays</strong>
-        <p>Research led, source linked, and written from what worked or broke in practice.</p>
-      </aside>
-    </section>
-
-    <section class="feed-section section-shell" aria-labelledby="feed-title">
-      <div class="feed-toolbar" data-reveal>
-        <h2 id="feed-title">Latest essays</h2>
-        <p class="feed-status" data-feed-status>Loading latest from DEV…</p>
-      </div>
-
-      <div class="feed-grid" data-dev-feed aria-live="polite" aria-busy="false">
-        <article class="feed-card" data-reveal>
-          <a href="https://dev.to/p0rt/the-model-scored-30-the-harness-scored-100-which-one-did-you-benchmark-3mp4" target="_blank" rel="noopener noreferrer">
-            <div class="article-meta"><span>AI systems</span><span>10 min read</span></div>
-            <h3>The Model Scored 30%. The Harness Scored 100%. Which One Did You Benchmark?</h3>
-            <p>Harnesses drive massive score jumps, but the benchmark rarely carries their provenance.</p>
-            <span class="article-source">Read on DEV <span aria-hidden="true">↗</span></span>
-          </a>
-        </article>
-
-        <article class="feed-card" data-reveal>
-          <a href="https://dev.to/p0rt/local-solves-where-your-data-goes-it-doesnt-solve-what-your-agent-does-306b" target="_blank" rel="noopener noreferrer">
-            <div class="article-meta"><span>AI security</span><span>8 min read</span></div>
-            <h3>Local Solves Where Your Data Goes. It Does Not Solve What Your Agent Does.</h3>
-            <p>Data locality answers one security question. Agent authority answers another.</p>
-            <span class="article-source">Read on DEV <span aria-hidden="true">↗</span></span>
-          </a>
-        </article>
-
-        <article class="feed-card" data-reveal>
-          <a href="https://dev.to/p0rt/your-agent-planned-the-right-tools-it-still-crashed-the-machine-58hf" target="_blank" rel="noopener noreferrer">
-            <div class="article-meta"><span>Infrastructure</span><span>6 min read</span></div>
-            <h3>Your Agent Planned the Right Tools. It Still Crashed the Machine.</h3>
-            <p>Planning the right action does not guarantee the system has enough capacity to execute it.</p>
-            <span class="article-source">Read on DEV <span aria-hidden="true">↗</span></span>
-          </a>
-        </article>
-
-        <article class="feed-card" data-reveal>
-          <a href="https://dev.to/p0rt/the-agent-faked-a-test-log-then-believed-it-self-editing-harnesses-have-a-provenance-problem-3id6" target="_blank" rel="noopener noreferrer">
-            <div class="article-meta"><span>Agents</span><span>12 min read</span></div>
-            <h3>The Agent Faked a Test Log, Then Believed It.</h3>
-            <p>Self editing harnesses have a provenance problem that clean execution logs cannot solve.</p>
-            <span class="article-source">Read on DEV <span aria-hidden="true">↗</span></span>
-          </a>
-        </article>
+  <main id="main" class="blog-main">
+    <section class="blog-hero section-shell" aria-labelledby="blog-title">
+      <p class="eyebrow hero-enter">Writing</p>
+      <h1 id="blog-title" class="hero-title"><span>All notes.</span><span class="accent-text">No feed algorithm.</span></h1>
+      <p class="hero-summary hero-enter">{{ARTICLE_COUNT}} essays about AI systems, agents, machine learning, and the failures between a model and a product.</p>
+      <div class="blog-tools hero-enter">
+        <a class="text-link" href="./rss.xml">Subscribe via RSS <span aria-hidden="true">↗</span></a>
+        <a class="text-link" href="https://dev.to/p0rt" target="_blank" rel="noopener noreferrer">Discuss on DEV <span aria-hidden="true">↗</span></a>
       </div>
     </section>
 
-    <section class="source-note section-shell" aria-labelledby="source-title">
-      <h2 id="source-title" data-reveal>One idea, one canonical home.</h2>
-      <div data-reveal>
-        <p>Existing essays currently live on DEV, so every card links to the original source.</p>
-        <p>Future essays can start on this domain and be republished to DEV with a canonical URL pointing back here. That gives search engines one clear source and keeps the discussion on both platforms.</p>
-      </div>
+    <section class="archive section-shell" aria-label="Article archive">
+      {{ARTICLE_ARCHIVE}}
     </section>
+
+    <aside class="canonical-note section-shell" data-reveal>
+      <h2>Each article has a permanent address here.</h2>
+      <p>Republished copies can point back to that URL as their canonical source. Imported articles also keep a visible link to the original DEV discussion.</p>
+    </aside>
   </main>
 
   <footer class="site-footer section-shell">
-    <p>Sergei Parfenov</p>
+    <a href="./index.html">Sergei Parfenov</a>
     <div class="footer-links">
-      <a href="./index.html">Home</a>
       <a href="https://github.com/P0rt" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a href="https://dev.to/p0rt" target="_blank" rel="noopener noreferrer">DEV</a>
       <a href="./privacy.html">Privacy</a>
     </div>
-    <p>© <span data-current-year>2026</span></p>
+    <span>© <span data-current-year>2026</span></span>
   </footer>
-
   <script src="./scripts/main.js"></script>
-  <script src="./scripts/blog.js"></script>
 </body>
 </html>

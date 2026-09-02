@@ -5,37 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Privacy information for Sergei Parfenov's personal website.">
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#f4f7fb" media="(prefers-color-scheme: light)" data-theme-color>
-  <meta name="theme-color" content="#181818" media="(prefers-color-scheme: dark)" data-theme-color>
+  <meta name="theme-color" content="#f5f5f2" data-theme-color>
   <link rel="icon" href="./assets/favicon.ico" sizes="any">
   <link rel="stylesheet" href="./styles/index.css">
   <title>Privacy | Sergei Parfenov</title>
-  <script>
-    document.documentElement.classList.add("js");
-    (function () {
-      try {
-        var savedTheme = localStorage.getItem("theme");
-        if (savedTheme === "light" || savedTheme === "dark") {
-          document.documentElement.dataset.theme = savedTheme;
-        }
-      } catch (error) {
-        document.documentElement.removeAttribute("data-theme");
-      }
-      var activeTheme = document.documentElement.dataset.theme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-      document.querySelectorAll("[data-theme-color]").forEach(function (meta) {
-        meta.setAttribute("content", activeTheme === "dark" ? "#181818" : "#f4f7fb");
-      });
-    }());
-  </script>
+  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
   <main class="utility-page">
-    <article class="utility-card">
+    <article class="utility-content">
       <p class="eyebrow">Privacy</p>
       <h1>This site keeps things simple.</h1>
-      <p>No analytics, advertising cookies, or contact forms are used. The writing page requests public article data from DEV, which receives the standard technical information sent with a web request.</p>
+      <p>No analytics, advertising cookies, or contact forms are used. Articles and assets are served as static files.</p>
       <a class="button" href="./index.html">Back home</a>
     </article>
   </main>
+  <script src="./scripts/main.js"></script>
 </body>
 </html>

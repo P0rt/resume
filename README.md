@@ -1,8 +1,6 @@
 # Sergei Parfenov
 
-Personal site, writing hub, and career archive.
-
-Production: https://sergei-parfenov.com
+Personal site, article archive, and career profile for [sergei-parfenov.com](https://sergei-parfenov.com).
 
 ## Local development
 
@@ -11,14 +9,20 @@ npm install
 npm start
 ```
 
-Create a production build with `npm run build`.
+Create a production build with `npm run build`. The build writes the site to `dist`, including one HTML page per article, RSS, sitemap, and robots.txt.
 
-Vercel builds the `master` branch from GitHub with the settings in `vercel.json`. GitHub Actions validates tests and the production build without publishing to GitHub Pages.
+Vercel builds the `main` branch from GitHub with the settings in `vercel.json`. GitHub Actions validates the tests and production build without publishing to GitHub Pages.
 
-## Content settings
+## Articles
 
-The public Spotify URL lives in `src/scripts/main.js` under `profileLinks.spotify`. The link stays hidden until a real URL is provided.
+Article source files live in `content/articles`. Create a draft with:
 
-The writing hub has indexable fallback content and refreshes its visible article list from the public DEV API in the browser.
+```bash
+npm run article:new -- "Article title"
+```
 
-See `BLOGGING.md` before publishing an article on both this site and DEV.
+Set `published: true` in its front matter when it is ready. The stable public URL will be `https://sergei-parfenov.com/blog/<slug>/`.
+
+Refresh articles originally published on DEV with `npm run articles:sync`. The importer preserves local-first articles and only updates files whose `source` is `dev`.
+
+See `BLOGGING.md` for the publishing and canonical URL workflow.

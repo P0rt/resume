@@ -5,36 +5,15 @@ import vm from "node:vm";
 
 const script = await readFile(new URL("../src/scripts/main.js", import.meta.url), "utf8");
 
-function setup({ saved = null, dark = false, storageBlocked = false, hasControl = true, reducedMotion = false } = {}) {
-  const root = { dataset: {} };
-  // Mirrors the existing inline initialization before the stylesheet renders.
-  if (!storageBlocked && ["light", "dark"].includes(saved)) root.dataset.theme = saved;
+function setup({ dark = false, reducedMotion = false } = {}) {
   const handlers = {};
-  const button = {
-    hidden: true,
-    attributes: { "aria-label": "Dark theme" },
-    setAttribute(name, value) { this.attributes[name] = value; },
-    addEventListener(name, callback) { handlers[name] = callback; },
-  };
   const meta = { setAttribute(name, value) { this[name] = value; } };
   const system = { matches: dark, addEventListener(name, callback) { handlers.system = callback; } };
   const revealed = new Set();
   const revealItem = { classList: { add: (name) => revealed.add(name) } };
-  const storage = {
-    getItem() {
-      if (storageBlocked) throw new Error("Storage unavailable");
-      return saved;
-    },
-    setItem(key, value) {
-      if (storageBlocked) throw new Error("Storage unavailable");
-      saved = value;
-    },
-  };
   vm.runInNewContext(script, {
     document: {
-      documentElement: root,
-      querySelector: () => hasControl ? button : null,
-      querySelectorAll: (selector) => {
+      querySelectorAll(selector) {
         if (selector === "[data-theme-color]") return [meta];
         if (selector === "[data-reveal]") return [revealItem];
         return [];
@@ -42,81 +21,36 @@ function setup({ saved = null, dark = false, storageBlocked = false, hasControl 
     },
     window: {
       matchMedia: (query) => query.includes("color-scheme") ? system : { matches: reducedMotion },
-      addEventListener(name, callback) { handlers[name] = callback; },
     },
-    localStorage: storage,
+    localStorage: {
+      getItem() { throw new Error("Theme must not read stored overrides"); },
+      setItem() { throw new Error("Theme must not persist overrides"); },
+    },
   });
-  return {
-    root, button, meta, revealed,
-    saved: () => saved,
-    click: () => handlers.click(),
-    systemChange(value) { system.matches = value; handlers.system(); },
-    storageChange(value, key = "theme") { saved = value; handlers.storage({ key }); },
-  };
+  return { meta, revealed, systemChange(value) { system.matches = value; handlers.system(); } };
 }
 
-test("theme switch reflects the system preference on first visit", () => {
+test("theme color uses the browser preference without controls or storage", () => {
   for (const dark of [false, true]) {
-    const page = setup({ dark });
-    assert.equal(page.button.hidden, false);
-    assert.equal(page.button.attributes["aria-checked"], String(dark));
-    assert.equal(page.meta.content, dark ? "#131416" : "#f7f7f4");
+    assert.equal(setup({ dark }).meta.content, dark ? "#131416" : "#f7f7f4");
   }
+  assert.ok(!/localStorage|data-theme-toggle|dataset\.theme/.test(script));
 });
 
-test("toggling both ways updates theme, persistence and checked state with a stable label", () => {
+test("theme color follows live operating system changes in both directions", () => {
   const page = setup();
-  for (const expected of ["dark", "light"]) {
-    page.click();
-    assert.equal(page.root.dataset.theme, expected);
-    assert.equal(page.saved(), expected);
-    assert.equal(page.button.attributes["aria-checked"], String(expected === "dark"));
-    assert.equal(page.button.attributes["aria-label"], "Dark theme");
-  }
-});
-
-test("a saved preference is restored on another page and overrides system changes", () => {
-  for (const saved of ["light", "dark"]) {
-    const page = setup({ saved, dark: saved !== "dark" });
-    page.systemChange(saved !== "dark");
-    assert.equal(page.root.dataset.theme, saved);
-    assert.equal(page.button.attributes["aria-checked"], String(saved === "dark"));
-  }
-});
-
-test("without a saved preference the switch follows system changes", () => {
-  const page = setup({ saved: "invalid" });
   page.systemChange(true);
-  assert.equal(page.button.attributes["aria-checked"], "true");
+  assert.equal(page.meta.content, "#131416");
   page.systemChange(false);
-  assert.equal(page.button.attributes["aria-checked"], "false");
+  assert.equal(page.meta.content, "#f7f7f4");
 });
 
-test("blocked storage does not break switching", () => {
-  const page = setup({ storageBlocked: true });
-  page.click();
-  assert.equal(page.root.dataset.theme, "dark");
-  assert.equal(page.button.attributes["aria-checked"], "true");
-  page.click();
-  assert.equal(page.root.dataset.theme, "light");
-});
-
-test("theme stays in sync when another tab updates or clears the preference", () => {
-  const page = setup({ saved: "light" });
-  page.storageChange("dark");
-  assert.equal(page.root.dataset.theme, "dark");
-  assert.equal(page.button.attributes["aria-checked"], "true");
-  page.storageChange(null, null);
-  assert.equal(page.root.dataset.theme, undefined);
-  assert.equal(page.button.attributes["aria-checked"], "false");
-});
-
-test("pages without a switch still initialize normally", () => {
-  assert.doesNotThrow(() => setup({ hasControl: false }));
+test("CSS honors the system theme even without JavaScript or with a stale theme attribute", async () => {
+  const styles = await readFile(new URL("../src/styles/index.css", import.meta.url), "utf8");
+  assert.match(styles, /@media \(prefers-color-scheme: dark\)\s*\{\s*:root\s*\{/);
+  assert.ok(!/\[data-theme|\.theme-toggle|\.theme-thumb/.test(styles));
 });
 
 test("content stays visible with reduced motion or without IntersectionObserver", () => {
-  for (const reducedMotion of [false, true]) {
-    assert.ok(setup({ reducedMotion }).revealed.has("is-visible"));
-  }
+  for (const reducedMotion of [false, true]) assert.ok(setup({ reducedMotion }).revealed.has("is-visible"));
 });

@@ -11,14 +11,13 @@ const publishedSlugs = new Set();
 
 function validateControls(html, page, destination) {
   const header = html.match(/<header class="page-controls section-shell">([\s\S]*?)<\/header>/)?.[1];
-  if (!header) throw new Error(`Missing page controls on ${page}`);
-  if ((header.match(/<a\s/g) || []).length !== 1 || (header.match(/<button\s/g) || []).length !== 1) {
-    throw new Error(`Expected only one link and one theme switch on ${page}`);
+  if (page === "home") {
+    if (header) throw new Error("Homepage must not have header controls");
+  } else {
+    if (!header || (header.match(/<a\s/g) || []).length !== 1 || header.includes("<button")) throw new Error(`Expected one return link on ${page}`);
+    if (!header.includes(`href="${destination}"`)) throw new Error(`Wrong return destination on ${page}`);
   }
-  if (!header.includes(`href="${destination}"`)) throw new Error(`Wrong page control destination on ${page}`);
-  if (!header.includes('role="switch" aria-checked="false" aria-label="Dark theme"')) {
-    throw new Error(`Missing accessible theme switch on ${page}`);
-  }
+  if (/data-theme-toggle|localStorage|role="switch"/.test(html)) throw new Error(`Theme must follow the browser on ${page}`);
   if (/nav-menu|site-nav|resume\.pdf/.test(html)) throw new Error(`Old navigation or resume link on ${page}`);
   if (/\{\{[A-Z_]+\}\}/.test(html)) throw new Error(`Unresolved template on ${page}`);
 }
@@ -50,7 +49,7 @@ if ((work.match(/<article class="experience-item">/g) || []).length !== profile.
 if (/experience-item|open-project|help-list/.test(index)) throw new Error("Detailed content must not appear on the compact homepage");
 if (/href="(?:\.\/|\/)blog\//.test(index)) throw new Error("Homepage must link to the blog, not individual articles");
 if (!index.includes('href="/work-together/"')) throw new Error("Missing link to the detailed profile");
-for (const section of ["about", "writing", "personal"]) {
+for (const section of ["about", "writing"]) {
   if (!index.includes(`id="${section}"`)) throw new Error(`Missing homepage section ${section}`);
 }
 if (await fs.access(path.join(distDir, "assets/resume.pdf")).then(() => true, () => false)) {
@@ -58,7 +57,7 @@ if (await fs.access(path.join(distDir, "assets/resume.pdf")).then(() => true, ()
 }
 if (!work.includes("AI Engineer")) throw new Error("TripleTen role is missing");
 if (work.includes("Practicum USA")) throw new Error("Standalone Practicum USA entry still exists");
-if (!index.includes("open.spotify.com/playlist/6kX9RuLad2D5hsX86fjvgg")) throw new Error("Spotify playlist is missing");
+if (/open.spotify.com|id="personal"/.test(index)) throw new Error("Music block is still on the homepage");
 if (!index.includes("portrait-blue.jpg")) throw new Error("New portrait is missing");
 
 const articlePages = await fs.readdir(path.join(distDir, "blog"));

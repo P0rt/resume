@@ -1,53 +1,13 @@
-const root = document.documentElement;
-const themeButton = document.querySelector("[data-theme-toggle]");
 const themeColors = document.querySelectorAll("[data-theme-color]");
 const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-function storedTheme() {
-  try {
-    const theme = localStorage.getItem("theme");
-    return theme === "light" || theme === "dark" ? theme : null;
-  } catch (error) {
-    return null;
-  }
+function updateThemeColor() {
+  themeColors.forEach((meta) => meta.setAttribute("content", systemTheme.matches ? "#131416" : "#f7f7f4"));
 }
 
-function activeTheme() {
-  return root.dataset.theme || (systemTheme.matches ? "dark" : "light");
-}
-
-function updateThemeControl() {
-  const current = activeTheme();
-  themeColors.forEach((meta) => meta.setAttribute("content", current === "dark" ? "#131416" : "#f7f7f4"));
-  themeButton?.setAttribute("aria-checked", String(current === "dark"));
-  if (themeButton) themeButton.hidden = false;
-}
-
-themeButton?.addEventListener("click", () => {
-  const next = activeTheme() === "dark" ? "light" : "dark";
-  root.dataset.theme = next;
-  try {
-    localStorage.setItem("theme", next);
-  } catch (error) {
-    root.dataset.theme = next;
-  }
-  updateThemeControl();
-});
-
-systemTheme.addEventListener("change", () => {
-  if (!storedTheme()) updateThemeControl();
-});
-
-window.addEventListener("storage", (event) => {
-  if (event.key !== "theme" && event.key !== null) return;
-  const theme = storedTheme();
-  if (theme) root.dataset.theme = theme;
-  else delete root.dataset.theme;
-  updateThemeControl();
-});
-
-updateThemeControl();
+systemTheme.addEventListener("change", updateThemeColor);
+updateThemeColor();
 
 const revealItems = document.querySelectorAll("[data-reveal]");
 if (reduceMotion || !("IntersectionObserver" in window)) {

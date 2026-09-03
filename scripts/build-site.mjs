@@ -49,10 +49,6 @@ function absoluteArticleUrl(slug) {
 function pageControls(href, label, arrow = "↗") {
   return `<header class="page-controls section-shell">
     <a class="page-link" href="${escapeHtml(href)}">${escapeHtml(label)} <span aria-hidden="true">${arrow}</span></a>
-    <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Dark theme" data-theme-toggle hidden>
-      <span aria-hidden="true">Dark</span>
-      <span class="theme-track" aria-hidden="true"><span class="theme-thumb"></span></span>
-    </button>
   </header>`;
 }
 
@@ -177,7 +173,7 @@ function articleDocument(article, older, newer) {
   <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../../styles/index.css">
   <title>${escapeHtml(article.title)} | Sergei Parfenov</title>
-  <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");</script>
   <script type="application/ld+json">${structuredData}</script>
 </head>
 <body class="article-page">
@@ -298,7 +294,6 @@ const replacements = {
       ? job.positions.map((position) => `<p><strong>${escapeHtml(position.company)}</strong><br>${escapeHtml(position.description)}</p>`).join("")
       : `<p>${escapeHtml(job.description)}</p>${(job.highlights || []).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}${job.coverage ? `<p><a href="${escapeHtml(job.coverage.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.coverage.label)} <span aria-hidden="true">↗</span></a></p>` : ""}`}</div>
   </article>`).join("\n"),
-  "{{HOME_CONTROLS}}": pageControls("./blog.html", "Blog"),
   "{{BLOG_CONTROLS}}": pageControls("/", "Home", "←"),
   "{{ARTICLE_COUNT}}": String(articles.length),
   "{{FEATURED_ARTICLES}}": featuredWriting(articles),

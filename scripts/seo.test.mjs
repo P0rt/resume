@@ -168,7 +168,10 @@ test("homepage uses a single reading flow without the old three-column layout", 
   assert.ok(home.includes('class="home-intro"'));
   assert.ok(home.includes('class="home-directory"'));
   assert.ok(!home.includes('class="profile-columns'));
-  assert.equal((home.match(/class="home-row"/g) || []).length, 3);
+  assert.equal((home.match(/class="home-row"/g) || []).length, 2);
+  assert.ok(!home.includes("page-controls"));
+  assert.ok(!home.includes("open.spotify.com"));
+  assert.equal((home.match(/href="\.\/blog.html"/g) || []).length, 1);
   assert.ok(styles.includes("prefers-reduced-motion: no-preference"));
   assert.ok(styles.includes("max-width: 767px"));
 });

@@ -692,6 +692,54 @@ a:focus-visible {
   margin-top: 24px;
 }
 
+.contribution {
+  padding-top: 48px;
+}
+
+.contribution-label {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.contribution h2 {
+  max-width: 704px;
+  margin: 0;
+  font-family: var(--font-editorial);
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 36px;
+  text-wrap: balance;
+}
+
+.contribution h2 a {
+  text-decoration-thickness: 1px;
+}
+
+.contribution h2 a:hover {
+  color: var(--accent);
+}
+
+.contribution h2 a:active {
+  color: var(--accent-strong);
+}
+
+.contribution-byline {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.contribution-copy {
+  max-width: 704px;
+  margin: 16px 0 0;
+  font-size: 16px;
+  line-height: 24px;
+  text-wrap: pretty;
+}
+
 .archive {
   padding-block: 96px 120px;
 }

@@ -295,6 +295,12 @@ const replacements = {
   "{{PROFILE_LINKEDIN}}": escapeHtml(profile.sameAs.find((url) => url.startsWith("https://www.linkedin.com/in/"))),
   "{{PROFILE_ABOUT}}": profile.about.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("\n"),
   "{{PROFILE_WRITING}}": escapeHtml(profile.writing),
+  "{{PROFILE_CONTRIBUTIONS}}": profile.contributions.map((item, index) => `<section class="contribution section-shell" id="contribution-${index + 1}" aria-labelledby="contribution-title-${index + 1}">
+    <p class="contribution-label">Review contribution · ${escapeHtml(item.publisher)} · <time datetime="${escapeHtml(item.datePublished)}">${escapeHtml(item.datePublished.slice(0, 4))}</time></p>
+    <h2 id="contribution-title-${index + 1}"><a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)} <span aria-hidden="true">↗</span></a></h2>
+    <p class="contribution-byline">By ${escapeHtml(item.author)}</p>
+    <p class="contribution-copy">${escapeHtml(item.summary)} ${escapeHtml(item.contribution)}</p>
+  </section>`).join("\n"),
   "{{COLLABORATION_TITLE}}": escapeHtml(profile.collaboration.title),
   "{{COLLABORATION_DESCRIPTION}}": escapeHtml(profile.collaboration.description),
   "{{COLLABORATION_APPROACH}}": escapeHtml(profile.collaboration.approach),

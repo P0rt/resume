@@ -122,6 +122,34 @@ test("404 assets and return links use absolute paths even for nested missing URL
   assert.ok(page.includes('href="/"'));
 });
 
+test("external review contributions keep their own authorship and stay out of the article feed", async () => {
+  const blog = await read("blog.html");
+  const bio = JSON.parse(await read("profile.json"));
+  assert.equal(bio.contributions.length, 1);
+  const contribution = bio.contributions[0];
+  assert.equal(contribution.role, "Public review feedback");
+  assert.equal(contribution.author, "Dimitrios S. Sfyris");
+  assert.ok(blog.includes(`href="${contribution.url}"`));
+  assert.ok(blog.includes(`By ${contribution.author}`));
+  assert.ok(blog.includes(contribution.contribution));
+  assert.ok(blog.indexOf('id="contribution-1"') < blog.indexOf('aria-label="Article archive"'));
+  assert.ok(snapshot.profileMarkdown.includes(contribution.title));
+  assert.ok(snapshot.profileMarkdown.includes(`My role: ${contribution.role}`));
+  assert.deepEqual(snapshot.profile.contributions, bio.contributions);
+  const nodes = graph(blog);
+  const work = nodes.find((item) => item["@id"] === contribution.url);
+  assert.equal(work["@type"], "CreativeWork");
+  assert.equal(work.author.name, contribution.author);
+  assert.equal(work.contributor["@id"], `${origin}/#person`);
+  const blogNode = nodes.find((item) => item["@type"] === "Blog");
+  assert.ok(blogNode.mentions.some((item) => item["@id"] === contribution.url));
+  assert.equal(blogNode.blogPost.length, snapshot.articles.length);
+  assert.ok(!blogNode.blogPost.some((item) => item.url === contribution.url));
+  for (const file of ["index.html", "articles.json", "rss.xml", "sitemap.xml"]) {
+    assert.ok(!(await read(file)).includes(contribution.url), `External work must not become an authored post or homepage article: ${file}`);
+  }
+});
+
 test("LinkedIn uses the corrected canonical profile across pages and agent output", async () => {
   const linkedin = "https://www.linkedin.com/in/sergei--parfenov/";
   const bio = JSON.parse(await read("profile.json"));

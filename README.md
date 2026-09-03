@@ -41,6 +41,8 @@ Refresh articles originally published on DEV with `npm run articles:sync`. The i
 
 See `BLOGGING.md` for the publishing and canonical URL workflow.
 
+External review contributions live in `content/profile.json` under `contributions`. The blog highlights [The Agentic Commerce Blueprint](https://www.webdigestpro.com/the-agentic-commerce-blueprint/) above the chronological archive. Its credited author is Dimitrios S. Sfyris; Sergei is credited with public review feedback on provenance, inherited refusal, permissions and current-state checks. Keep that distinction in visible copy and structured data: this is an external technical guide with a review contribution, not an academic publication authored by Sergei. It is represented as a mentioned CreativeWork, not an authored BlogPosting, and does not increase the article count or enter the RSS feed. The same attribution is available through profile JSON, Markdown and MCP search/fetch. No individual paper link is added to the homepage.
+
 ## SEO and agent access
 
 Public profile fields live in `content/profile.json`; the homepage, Person/ProfilePage schema and agent-readable profile use that same source. Each article has an explicit author, BlogPosting/BreadcrumbList data, canonical URL and Markdown alternate. The sitemap excludes noindex utility pages and uses actual article modification dates.

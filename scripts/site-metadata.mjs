@@ -38,9 +38,18 @@ export function workSchema() {
 }
 
 export function blogSchema(articles) {
+  const contributions = profile.contributions.map((item) => ({
+    "@type": "CreativeWork", "@id": item.url, url: item.url, name: item.title,
+    description: `${item.summary} ${profile.name}: ${item.role}.`,
+    datePublished: item.datePublished, inLanguage: "en",
+    author: { "@type": "Person", name: item.author },
+    publisher: { "@type": "Organization", name: item.publisher },
+    contributor: { "@id": person["@id"] },
+  }));
   return jsonLd({ "@context": "https://schema.org", "@graph": [
-    website, person,
+    website, person, ...contributions,
     { "@type": "Blog", "@id": `${DOMAIN}/blog.html#blog`, url: `${DOMAIN}/blog.html`, name: `Writing by ${profile.name}`, inLanguage: "en", author: { "@id": person["@id"] }, isPartOf: { "@id": website["@id"] },
+      mentions: contributions.map((item) => ({ "@id": item["@id"] })),
       blogPost: articles.map((article) => ({ "@type": "BlogPosting", "@id": `${article.canonicalUrl}#article`, url: article.canonicalUrl, headline: article.title, datePublished: article.date, author: { "@id": person["@id"] } })) },
   ] });
 }
@@ -79,6 +88,7 @@ export function profileMarkdown(articleCount) {
     "## Education & courses", profile.education.map((item) => `### ${item.institution}\n\n${item.program}\n\n${item.qualification} | ${item.period}`).join("\n\n"),
     "## Writing", profile.writing,
     `${articleCount} published articles: ${DOMAIN}/blog.html\nArticles are also published on DEV.`,
+    "## Review contributions", profile.contributions.map((item) => `### [${item.title}](${item.url})\n\nBy ${item.author} | ${item.publisher} | ${item.datePublished}\nMy role: ${item.role}\n\n${item.summary}\n\n${item.contribution}`).join("\n\n"),
     "## Music", `${profile.music.description}\n${profile.music.url}`,
     "## Contact and profiles", `Email: ${profile.email}\n${profile.sameAs.join("\n")}`,
   ].join("\n\n") + "\n";

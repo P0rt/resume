@@ -55,6 +55,19 @@ test("resources expose the same published snapshot, including every article", as
   assert.equal(read.contents[0].text, article.text);
 });
 
+test("agents can discover review contributions without confusing them with authored articles", async () => {
+  const contribution = snapshot.profile.contributions[0];
+  const found = await client.callTool({ name: "search", arguments: { query: contribution.title } });
+  assert.ok(found.structuredContent.results.some((item) => item.id === "profile"));
+  const profile = await client.callTool({ name: "get_profile", arguments: {} });
+  assert.deepEqual(profile.structuredContent.contributions, snapshot.profile.contributions);
+  const fetched = await client.callTool({ name: "fetch", arguments: { id: "profile" } });
+  assert.ok(fetched.structuredContent.text.includes(contribution.url));
+  assert.ok(fetched.structuredContent.text.includes(`By ${contribution.author}`));
+  assert.ok(fetched.structuredContent.text.includes(`My role: ${contribution.role}`));
+  assert.ok(!snapshot.articles.some((item) => item.url === contribution.url));
+});
+
 test("keyword search supports names in Russian and English without empty-query dumping", () => {
   assert.equal(searchDocuments(snapshot, "Сергей Парфенов")[0].id, "profile");
   assert.equal(searchDocuments(snapshot, "Sergey Parfenov")[0].id, "profile");

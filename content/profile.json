@@ -32,6 +32,18 @@
   "focus": "Agents, evaluation, learning systems",
   "audience": "Nearly 10k subscribers",
   "writing": "I write about AI engineering: experiments, systems that break, and what the measurements actually tell us. My writing reaches nearly 10k subscribers.",
+  "contributions": [
+    {
+      "title": "The Agentic Commerce Blueprint",
+      "url": "https://www.webdigestpro.com/the-agentic-commerce-blueprint/",
+      "author": "Dimitrios S. Sfyris",
+      "publisher": "WebDigestPro",
+      "datePublished": "2026-07-13",
+      "role": "Public review feedback",
+      "summary": "A reference architecture for commerce systems used by AI agents.",
+      "contribution": "I contributed public review feedback on typed provenance, how refusals carry through derived claims, and the checks that bind an agent’s actions to live permissions and current system state."
+    }
+  ],
   "collaboration": {
     "title": "We could work together.",
     "description": "An early product to build, an AI hypothesis to test, or a system that needs to work for thousands of people. I bring the engineering and product decisions together.",

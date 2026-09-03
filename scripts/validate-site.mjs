@@ -40,18 +40,23 @@ for (const filename of filenames) {
 }
 
 const index = await fs.readFile(path.join(distDir, "index.html"), "utf8");
+const work = await fs.readFile(path.join(distDir, "work-together/index.html"), "utf8");
 validateControls(index, "home", "./blog.html");
+validateControls(work, "work-together", "/");
 validateControls(await fs.readFile(path.join(distDir, "blog.html"), "utf8"), "blog", "/");
 if (/<details\b|<summary\b/.test(index)) throw new Error("Homepage information is still collapsed");
-if ((index.match(/<article class="experience-item">/g) || []).length !== 5) throw new Error("Experience entry is missing");
-for (const section of ["about", "writing", "experience", "personal"]) {
+if ((work.match(/<article class="experience-item">/g) || []).length !== 5) throw new Error("Experience entry is missing from work-together");
+if (/experience-item|open-project|help-list/.test(index)) throw new Error("Detailed content must not appear on the compact homepage");
+if (/href="(?:\.\/|\/)blog\//.test(index)) throw new Error("Homepage must link to the blog, not individual articles");
+if (!index.includes('href="/work-together/"')) throw new Error("Missing link to the detailed profile");
+for (const section of ["about", "writing", "personal"]) {
   if (!index.includes(`id="${section}"`)) throw new Error(`Missing homepage section ${section}`);
 }
 if (await fs.access(path.join(distDir, "assets/resume.pdf")).then(() => true, () => false)) {
   throw new Error("The resume PDF is still being published");
 }
-if (!index.includes("AI/ML Engineer")) throw new Error("TripleTen role is missing");
-if (index.includes("Practicum USA")) throw new Error("Standalone Practicum USA entry still exists");
+if (!work.includes("AI/ML Engineer")) throw new Error("TripleTen role is missing");
+if (work.includes("Practicum USA")) throw new Error("Standalone Practicum USA entry still exists");
 if (!index.includes("open.spotify.com/playlist/6kX9RuLad2D5hsX86fjvgg")) throw new Error("Spotify playlist is missing");
 if (!index.includes("portrait-blue.jpg")) throw new Error("New portrait is missing");
 
@@ -62,4 +67,4 @@ for (const filename of ["index.html", "blog.html", "rss.xml", "sitemap.xml", "ro
   await fs.access(path.join(distDir, filename));
 }
 
-console.log(`Validated the single-page profile, minimal controls, unpublished PDF, and ${publishedSlugs.size} unique article URLs.`);
+console.log(`Validated the compact homepage, detailed work page, minimal controls, unpublished PDF, and ${publishedSlugs.size} unique article URLs.`);

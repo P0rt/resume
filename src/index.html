@@ -60,23 +60,16 @@
 
       <section class="profile-story" id="about" aria-labelledby="about-title">
         <h2 id="about-title">{{PROFILE_SUMMARY}}</h2>
-        <div class="profile-prose">{{PROFILE_ABOUT}}</div>
-        <section class="open-work" aria-labelledby="open-work-title">
-          <h3 id="open-work-title" class="folio-label">Some of that work, in the open</h3>
-          {{PROFILE_PROJECTS}}
-        </section>
+        <p>{{PROFILE_INTRO}}</p>
+        <p class="compact-current">{{PROFILE_CURRENT_LINKS}}</p>
+        <a class="notebook-link" href="/work-together/">Experience &amp; working together <span aria-hidden="true">↗</span></a>
       </section>
 
       <div class="profile-notes">
-        <section aria-labelledby="now-title">
-          <h2 id="now-title">Right now</h2>
-          {{PROFILE_NOW}}
-        </section>
         <section id="writing" aria-labelledby="writing-title">
           <h2 id="writing-title">I write, too.</h2>
-          <p>{{PROFILE_WRITING}}</p>
+          <p>{{PROFILE_BLOG_INTRO}}</p>
           <a class="notebook-link" href="./blog.html">Read the blog <span aria-hidden="true">↗</span></a>
-          <span class="note-caption">{{ARTICLE_COUNT}} articles · also on <a href="https://dev.to/p0rt" target="_blank" rel="noopener noreferrer">DEV</a></span>
         </section>
         <section id="personal" aria-labelledby="personal-title">
           <h2 id="personal-title">And collect music.</h2>
@@ -86,27 +79,6 @@
       </div>
     </div>
 
-    <div class="profile-columns profile-work">
-      <section class="collaboration-note" id="work-together" aria-labelledby="collaboration-title">
-        <h2 id="collaboration-title">{{COLLABORATION_TITLE}}</h2>
-        <p>{{COLLABORATION_DESCRIPTION}}</p>
-        <p>{{COLLABORATION_APPROACH}}</p>
-        <div class="contact-note">
-          <p>{{COLLABORATION_INVITATION}}</p>
-          <a class="notebook-link email-link" href="mailto:{{PROFILE_EMAIL}}">{{PROFILE_EMAIL}} <span aria-hidden="true">↗</span></a>
-        </div>
-      </section>
-
-      <section class="help-note" aria-labelledby="help-title">
-        <h2 id="help-title">Where I can help</h2>
-        <dl class="help-list">{{PROFILE_CAPABILITIES}}</dl>
-      </section>
-
-      <section class="career-note" id="experience" aria-labelledby="experience-title">
-        <h2 id="experience-title">The path here</h2>
-        <div class="career-list">{{PROFILE_EXPERIENCE}}</div>
-      </section>
-    </div>
   </main>
 
   <footer class="site-footer section-shell">

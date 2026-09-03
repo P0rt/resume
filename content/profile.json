@@ -4,6 +4,8 @@
   "role": "AI/ML Engineer and CTO",
   "description": "Sergei Parfenov is an AI/ML engineer and CTO in Barcelona. He builds AI products, evaluates agents and models, and writes about the engineering behind them.",
   "summary": "From a model to a working product.",
+  "intro": "I build AI products and learning systems. I connect engineering with product decisions — from the first experiment to the backend and interface people rely on.",
+  "blogIntro": "I write about AI engineering, experiments and things that break. Nearly 10k subscribers.",
   "location": "Barcelona, Spain",
   "about": [
     "I’m an AI/ML engineer and CTO based in Barcelona. I work across the whole system: the model, the infrastructure behind it, and the interface people use.",

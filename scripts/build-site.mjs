@@ -2,7 +2,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { marked } from "marked";
-import { DOMAIN, profile, homeSchema, blogSchema, articleSchema, writeAgentFiles } from "./site-metadata.mjs";
+import { DOMAIN, profile, homeSchema, workSchema, blogSchema, articleSchema, writeAgentFiles } from "./site-metadata.mjs";
 
 const ROOT = process.cwd();
 const SRC_DIR = path.join(ROOT, "src");
@@ -239,7 +239,7 @@ function rssDocument(articles) {
 
 function sitemapDocument(articles) {
   // Utility pages are noindex. Do not invent lastmod dates for static pages.
-  const staticPages = ["/", "/blog.html"];
+  const staticPages = ["/", "/work-together/", "/blog.html"];
   const urls = [
     ...staticPages.map((pathname) => ({ url: `${DOMAIN}${pathname}` })),
     ...articles.map((article) => ({ url: article.canonicalUrl, updated: article.updated })),
@@ -267,11 +267,15 @@ await fs.mkdir(DIST_DIR, { recursive: true });
 const articles = await loadArticles();
 const replacements = {
   "{{PROFILE_SCHEMA}}": homeSchema(),
+  "{{WORK_SCHEMA}}": workSchema(),
   "{{BLOG_SCHEMA}}": blogSchema(articles),
   "{{PROFILE_NAME}}": escapeHtml(profile.name),
   "{{PROFILE_ROLE}}": escapeHtml(profile.role),
   "{{PROFILE_DESCRIPTION}}": escapeHtml(profile.description),
   "{{PROFILE_SUMMARY}}": escapeHtml(profile.summary),
+  "{{PROFILE_INTRO}}": escapeHtml(profile.intro),
+  "{{PROFILE_BLOG_INTRO}}": escapeHtml(profile.blogIntro),
+  "{{PROFILE_CURRENT_LINKS}}": profile.currentRoles.map((job) => `${escapeHtml(job.role)} at <a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.organization)}</a>.`).join("<br>"),
   "{{PROFILE_LOCATION}}": escapeHtml(profile.location),
   "{{PROFILE_EMAIL}}": escapeHtml(profile.email),
   "{{PROFILE_ABOUT}}": profile.about.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("\n"),
@@ -281,7 +285,7 @@ const replacements = {
   "{{COLLABORATION_APPROACH}}": escapeHtml(profile.collaboration.approach),
   "{{COLLABORATION_INVITATION}}": escapeHtml(profile.collaboration.invitation),
   "{{PROFILE_NOW}}": profile.currentRoles.map((job) => `<div class="now-role"><h3><a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.organization)}</a> · ${escapeHtml(job.role)}</h3><p>${escapeHtml(job.description)}</p></div>`).join("\n"),
-  "{{PROFILE_PROJECTS}}": profile.projects.map((project) => `<article class="open-project"><h4><a href="${escapeHtml(project.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(project.name)} <span aria-hidden="true">↗</span></a></h4><p>${escapeHtml(project.description)}</p></article>`).join("\n"),
+  "{{PROFILE_PROJECTS}}": profile.projects.map((project) => `<article class="open-project"><h3><a href="${escapeHtml(project.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(project.name)} <span aria-hidden="true">↗</span></a></h3><p>${escapeHtml(project.description)}</p></article>`).join("\n"),
   "{{PROFILE_CURRENT}}": profile.currentRoles.map((job) => `${escapeHtml(job.role)}, ${escapeHtml(job.organization)}`).join("<br>"),
   "{{PROFILE_FOCUS}}": escapeHtml(profile.focus),
   "{{PROFILE_AUDIENCE}}": escapeHtml(profile.audience),

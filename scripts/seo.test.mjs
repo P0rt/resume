@@ -38,7 +38,7 @@ test("profile and articles share one author identity and indexable HTML metadata
 test("sitemap has only indexable canonical pages with genuine article dates", async () => {
   const sitemap = await read("sitemap.xml");
   const urls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
-  assert.deepEqual(new Set(urls), new Set([`${origin}/`, `${origin}/blog.html`, ...snapshot.articles.map((article) => article.url)]));
+  assert.deepEqual(new Set(urls), new Set([`${origin}/`, `${origin}/work-together/`, `${origin}/blog.html`, ...snapshot.articles.map((article) => article.url)]));
   assert.equal(urls.length, new Set(urls).size);
   assert.ok(!sitemap.includes("privacy.html"));
   assert.ok(!sitemap.includes("index.html"));
@@ -71,28 +71,40 @@ test("Markdown, JSON and MCP agree and preserve original article text", async ()
 
 test("the detailed profile stays consistent across the page, JSON, Markdown and MCP", async () => {
   const home = await read("index.html");
+  const work = await read("work-together/index.html");
   const bio = JSON.parse(await read("profile.json"));
   const markdown = await read("index.md");
   const htmlText = (text) => text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
   const paragraphs = [
     ...bio.about,
-    bio.writing,
     ...Object.values(bio.collaboration),
     ...bio.capabilities.flatMap((item) => [item.name, item.description]),
     ...bio.projects.flatMap((item) => [item.name, item.description, item.url]),
     ...bio.experience.flatMap((job) => [job.description, ...(job.highlights || [])]).filter(Boolean),
   ];
   for (const text of paragraphs) {
-    assert.ok(home.includes(htmlText(text)), `Missing visible profile content: ${text}`);
+    assert.ok(work.includes(htmlText(text)), `Missing visible profile content: ${text}`);
     // The collaboration heading is rendered as a stable section name in Markdown.
     if (text !== bio.collaboration.title) assert.ok(markdown.includes(text), `Missing agent content: ${text}`);
   }
   assert.deepEqual(snapshot.profile, bio);
-  assert.ok(home.includes("Mastery Depth Tracker"));
-  assert.ok(home.includes('id="work-together"'));
+  assert.ok(work.includes("Mastery Depth Tracker"));
+  assert.ok(work.includes('id="work-together"'));
+  assert.ok(home.includes(htmlText(bio.intro)));
+  assert.ok(home.includes(htmlText(bio.blogIntro)));
+  assert.ok(!home.includes("Mastery Depth Tracker"));
+  assert.ok(!home.includes("open-project"));
+  assert.ok(!home.includes("help-list"));
+  assert.ok(!home.includes("experience-item"));
+  assert.ok(home.includes('href="/work-together/"'));
   assert.ok(!home.includes("writing-lead"), "Article feed belongs on the separate blog");
   assert.ok(!home.includes("<blockquote"), "Recommendations inform the copy, not a testimonial section");
   assert.equal((home.match(/<h1(?:\s|>)/g) || []).length, 1);
+  assert.equal((work.match(/<h1(?:\s|>)/g) || []).length, 1);
+  const aboutPage = graph(work).find((item) => item["@type"] === "AboutPage");
+  assert.equal(aboutPage.url, `${origin}/work-together/`);
+  assert.equal(aboutPage.mainEntity["@id"], `${origin}/#person`);
+  assert.ok(work.includes(`<link rel="canonical" href="${origin}/work-together/">`));
   assert.ok((await read("blog.html")).includes('class="archive-list"'));
 });
 

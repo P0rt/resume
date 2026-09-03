@@ -27,6 +27,15 @@ export function homeSchema() {
   ] });
 }
 
+export function workSchema() {
+  return jsonLd({ "@context": "https://schema.org", "@graph": [
+    website, person,
+    { "@type": "AboutPage", "@id": `${DOMAIN}/work-together/#page`, url: `${DOMAIN}/work-together/`,
+      name: `Work together | ${profile.name}`, inLanguage: "en", description: profile.collaboration.description,
+      isPartOf: { "@id": website["@id"] }, mainEntity: { "@id": person["@id"] } },
+  ] });
+}
+
 export function blogSchema(articles) {
   return jsonLd({ "@context": "https://schema.org", "@graph": [
     website, person,
@@ -56,7 +65,20 @@ export function articleSchema(article) {
 export function profileMarkdown(articleCount) {
   const currentWork = profile.currentRoles.map((job) => `### ${job.organization}\n\n${job.role}\n\n${job.description}\n\n${job.url}`).join("\n\n");
   const experience = profile.experience.map((job) => `### ${job.company}\n\n${job.role} | ${job.period}\n\n${job.description || job.positions.map((position) => `- ${position.company}: ${position.description}`).join("\n")}${job.highlights ? `\n\n${job.highlights.join("\n\n")}` : ""}${job.url ? `\n\n${job.url}` : ""}`).join("\n\n");
-  return `# ${profile.name}\n\n${profile.role}\n\n${profile.description}\n\nCanonical URL: ${DOMAIN}/\nAlso known as: ${profile.alternateNames.join(", ")}\nBased in: ${profile.location}\n\n## ${profile.summary}\n\n${profile.about.join("\n\n")}\n\n## Current work\n\n${currentWork}\n\n## Working together\n\n${profile.collaboration.description}\n\n${profile.collaboration.approach}\n\n${profile.collaboration.invitation}\n\n## Where I can help\n\n${profile.capabilities.map((item) => `### ${item.name}\n\n${item.description}`).join("\n\n")}\n\n## Open projects\n\n${profile.projects.map((project) => `### ${project.name}\n\n${project.description}\n\n${project.url}`).join("\n\n")}\n\n## Experience\n\n${experience}\n\n## Writing\n\n${profile.writing}\n\n${articleCount} published articles: ${DOMAIN}/blog.html\nArticles are also published on DEV.\n\n## Music\n\n${profile.music.description}\n${profile.music.url}\n\n## Contact and profiles\n\nEmail: ${profile.email}\n${profile.sameAs.join("\n")}\n`;
+  return [
+    `# ${profile.name}`, profile.role, profile.description,
+    `Canonical profile URL: ${DOMAIN}/\nDetailed experience and collaboration: ${DOMAIN}/work-together/\nAlso known as: ${profile.alternateNames.join(", ")}\nBased in: ${profile.location}`,
+    `## ${profile.summary}`, profile.intro, profile.about.join("\n\n"),
+    "## Current work", currentWork,
+    "## Working together", profile.collaboration.description, profile.collaboration.approach, profile.collaboration.invitation,
+    "## Where I can help", profile.capabilities.map((item) => `### ${item.name}\n\n${item.description}`).join("\n\n"),
+    "## Open projects", profile.projects.map((project) => `### ${project.name}\n\n${project.description}\n\n${project.url}`).join("\n\n"),
+    "## Experience", experience,
+    "## Writing", profile.writing,
+    `${articleCount} published articles: ${DOMAIN}/blog.html\nArticles are also published on DEV.`,
+    "## Music", `${profile.music.description}\n${profile.music.url}`,
+    "## Contact and profiles", `Email: ${profile.email}\n${profile.sameAs.join("\n")}`,
+  ].join("\n\n") + "\n";
 }
 
 export function articleMetadata(article) {
@@ -72,7 +94,7 @@ export function articleMarkdown(article) {
 
 export async function writeAgentFiles(articles, outputDirectory) {
   const catalog = articles.map(articleMetadata);
-  const bio = { ...profile, url: `${DOMAIN}/`, articleCount: articles.length };
+  const bio = { ...profile, url: `${DOMAIN}/`, workUrl: `${DOMAIN}/work-together/`, articleCount: articles.length };
   const markdown = profileMarkdown(articles.length);
   const manifest = {
     name: "Sergei Parfenov: public profile and writing",

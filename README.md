@@ -2,7 +2,7 @@
 
 Personal site, article archive, and career profile for [sergei-parfenov.com](https://sergei-parfenov.com).
 
-The homepage is a three-column personal notebook: biography, current work, writing and music, followed by collaboration areas and the expanded career history. It becomes a single reading column on phones. Its only top controls are the blog link and a persistent dark-theme switch. The full blog is a separate page; articles keep their own URLs. The resume PDF is retained in `src/assets/resume.pdf` for later use but is excluded from the public build.
+The homepage is a compact three-column personal notebook: photo, brief introduction, current roles, a mention of the blog and music. It becomes a single reading column on phones. Its only top controls are the blog link and a persistent dark-theme switch. Detailed biography, projects, collaboration areas and career history live at `/work-together/`, linked from the introduction. The full blog is a separate page; individual article and project links do not appear on the homepage. Articles keep their own URLs. The resume PDF is retained in `src/assets/resume.pdf` for later use but is excluded from the public build.
 
 ## Local development
 
@@ -45,7 +45,7 @@ See `BLOGGING.md` for the publishing and canonical URL workflow.
 
 Public profile fields live in `content/profile.json`; the homepage, Person/ProfilePage schema and agent-readable profile use that same source. Each article has an explicit author, BlogPosting/BreadcrumbList data, canonical URL and Markdown alternate. The sitemap excludes noindex utility pages and uses actual article modification dates.
 
-Edit biography paragraphs, collaboration copy, current work, open projects and experience in `content/profile.json`. Experience entries can include `highlights` for additional paragraphs. A build publishes the same content to HTML, `profile.json`, `index.md` and the MCP snapshot. The profile-specific layout lives in `src/styles/profile.css`; shared controls and article typography live in `src/styles/index.css`.
+Edit the short homepage `intro` and `blogIntro`, full biography paragraphs, collaboration copy, current work, open projects and experience in `content/profile.json`. Experience entries can include `highlights` for additional paragraphs. The full profile remains available in `profile.json`, `index.md` and the MCP snapshot, including information moved to `/work-together/`. That page has its own canonical URL, AboutPage metadata and sitemap entry. The profile-specific layout lives in `src/styles/profile.css`; shared controls and article typography live in `src/styles/index.css`.
 
 The September 2026 editorial revision takes its reading-oriented layout cues from [Sergey Nugaev’s homepage](https://sergeynugaev.com/) and [collaboration page](https://sergeynugaev.com/work-together), not his biography, pricing or achievements. Copy is based on Sergei’s supplied career information, his [DEV profile](https://dev.to/p0rt), [GitHub profile](https://github.com/P0rt), public experiment repositories and articles, and [Aliwio](https://aliwio.com). The user supplied four LinkedIn recommendations as background for the writing: rapid AI hypothesis testing, learning personalisation and retention, Mastery Depth Tracker, technical leadership and communicating with non-technical colleagues. These insights are incorporated into the copy; the recommendations are not displayed as quotes, and no authors, precise retention gains, rates or availability were invented.
 

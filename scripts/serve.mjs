@@ -27,6 +27,9 @@ createServer(async (request, response) => {
     const pathname = decodeURIComponent(new URL(request.url, `http://${request.headers.host}`).pathname);
     if (pathname === "/mcp" || pathname === "/api/mcp") return await mcpHandler(request, response);
     if (pathname === "/index.html") { response.writeHead(308, { Location: "/" }); response.end(); return; }
+    if (pathname === "/work-together" || pathname === "/work-together/index.html") {
+      response.writeHead(308, { Location: "/work-together/" }); response.end(); return;
+    }
     const relative = pathname.endsWith("/") ? `${pathname}index.html` : pathname;
     const filename = path.resolve(root, `.${relative}`);
     if (!filename.startsWith(`${root}${path.sep}`)) throw new Error("Invalid path");

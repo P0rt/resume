@@ -11,6 +11,8 @@
   "rewrites": [{ "source": "/mcp", "destination": "/api/mcp" }],
   "redirects": [
     { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/work-together", "destination": "/work-together/", "permanent": true },
+    { "source": "/work-together/index.html", "destination": "/work-together/", "permanent": true },
     { "source": "/blog/:slug/index.html", "destination": "/blog/:slug/", "permanent": true },
     { "source": "/blog", "destination": "/blog.html", "permanent": true },
     { "source": "/blog/", "destination": "/blog.html", "permanent": true },

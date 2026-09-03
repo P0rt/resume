@@ -16,12 +16,11 @@
 }
 
 .profile-intro {
-  padding-bottom: 72px;
+  padding-bottom: 0;
 }
 
-.profile-work {
-  padding-top: 56px;
-  border-top: 1px solid var(--line);
+.work-background {
+  margin-top: 56px;
 }
 
 .profile-sheet h1,
@@ -30,6 +29,19 @@
   font-weight: 400;
   letter-spacing: -.035em;
   text-wrap: balance;
+}
+
+.profile-sheet .work-title {
+  max-width: none;
+  margin: 0 0 24px;
+  font-size: 32px;
+  line-height: 1.15;
+}
+
+.profile-sheet .compact-current {
+  margin-block: 32px 24px;
+  font-size: 15px;
+  line-height: 1.8;
 }
 
 .profile-sheet h1 {
@@ -177,7 +189,7 @@
   margin-top: 20px;
 }
 
-.open-project h4 {
+.open-project h3 {
   margin: 0 0 8px;
   font-size: 15px;
   font-weight: 550;
@@ -345,7 +357,7 @@
   .profile-notes {
     display: grid;
     grid-column: 1 / -1;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 32px;
   }
 
@@ -391,14 +403,6 @@
   .profile-story > h2 {
     max-width: 20ch;
     font-size: 32px;
-  }
-
-  .profile-intro {
-    padding-bottom: 48px;
-  }
-
-  .profile-work {
-    padding-top: 48px;
   }
 
   .career-list {

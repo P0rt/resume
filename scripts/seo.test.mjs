@@ -92,6 +92,11 @@ test("the detailed profile stays consistent across the page, JSON, Markdown and 
   assert.ok(work.includes('id="work-together"'));
   assert.ok(home.includes(htmlText(bio.intro)));
   assert.ok(home.includes(htmlText(bio.blogIntro)));
+  for (const paragraph of bio.homeStory) {
+    assert.ok(home.includes(htmlText(paragraph)));
+    assert.ok(markdown.includes(paragraph));
+  }
+  assert.ok(markdown.includes(bio.homeCurrent));
   assert.ok(!home.includes("Mastery Depth Tracker"));
   assert.ok(!home.includes("open-project"));
   assert.ok(!home.includes("help-list"));
@@ -162,18 +167,21 @@ test("career corrections stay accurate in every public representation", async ()
   }
 });
 
-test("homepage uses a single reading flow without the old three-column layout", async () => {
+test("homepage reads as a personal introduction without directory rows or header controls", async () => {
   const home = await read("index.html");
   const styles = await read("styles/home.css");
   assert.ok(home.includes('class="home-intro"'));
-  assert.ok(home.includes('class="home-directory"'));
+  assert.ok(home.includes('class="home-identity"'));
+  assert.ok(home.includes('class="home-letter"'));
   assert.ok(!home.includes('class="profile-columns'));
-  assert.equal((home.match(/class="home-row"/g) || []).length, 2);
+  assert.ok(!home.includes('class="home-row"'));
   assert.ok(!home.includes("page-controls"));
   assert.ok(!home.includes("open.spotify.com"));
   assert.equal((home.match(/href="\.\/blog.html"/g) || []).length, 1);
   assert.ok(styles.includes("prefers-reduced-motion: no-preference"));
   assert.ok(styles.includes("max-width: 767px"));
+  assert.match(styles, /\.home-identity h1\s*\{[^}]*font-family: var\(--font-editorial\)/);
+  assert.match(styles, /\.home-writing h2\s*\{[^}]*font-family: var\(--font-editorial\)/);
 });
 
 test("drafts never reach HTML, Markdown, catalogs or the MCP bundle", async () => {

@@ -1,52 +1,44 @@
-/* One reading surface. The portrait belongs to the introduction, not a sidebar.
-   Design variance 5 / motion 4 / density 4: compact, with an old-web link language.
-   Keep the existing graph paper, blue accent and native static-site architecture. */
+/* A single-column personal introduction, not a hero plus a directory.
+   The blue portrait is the only visual accent; typography carries the story. */
 .home-page {
-  --page-max: 1056px;
+  --page-max: 800px;
   --page-gutter: 48px;
   --home-ease: cubic-bezier(.22, 1, .36, 1);
+  letter-spacing: 0;
 }
 
 .home-sheet {
-  padding-top: 64px;
-  padding-bottom: 48px;
+  padding-top: 80px;
+  padding-bottom: 32px;
 }
 
-.home-intro {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 224px;
-  align-items: start;
-  gap: 48px;
+.home-identity {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 40px;
 }
 
-.home-intro h1 {
+.home-identity h1 {
   margin: 0;
-  font-size: 60px;
-  font-weight: 600;
-  letter-spacing: -.04em;
-  line-height: 1;
+  font-family: var(--font-editorial);
+  font-size: 48px;
+  font-weight: 400;
+  letter-spacing: -.035em;
+  line-height: 1.1;
   text-wrap: balance;
 }
 
-.home-intro .home-role {
-  margin: 16px 0 32px;
+.home-identity .home-location {
+  margin: 12px 0 0;
   color: var(--muted);
-  font-size: 20px;
-  line-height: 28px;
-}
-
-.home-sheet p {
-  text-wrap: pretty;
-}
-
-.home-bio {
-  max-width: 54ch;
-  margin: 0 0 16px;
-  font-size: 18px;
-  line-height: 28px;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 .home-portrait {
+  width: 96px;
+  flex: 0 0 96px;
   margin: 0;
 }
 
@@ -56,11 +48,28 @@
   object-fit: cover;
 }
 
-.home-portrait figcaption {
-  margin-top: 12px;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 20px;
+.home-letter p,
+.home-writing p {
+  margin: 0 0 24px;
+  font-size: 18px;
+  line-height: 28px;
+  text-wrap: pretty;
+}
+
+.home-letter .home-lead {
+  margin-bottom: 32px;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: -.02em;
+  text-wrap: pretty;
+}
+
+.home-current a,
+.home-link {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
 }
 
 .home-link {
@@ -68,61 +77,48 @@
   min-height: 44px;
   align-items: center;
   gap: 8px;
-  color: var(--accent);
   font-size: 16px;
   line-height: 24px;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 5px;
 }
 
 .home-link span {
   display: inline-block;
-  text-decoration: none;
 }
 
 .home-link:hover,
 .home-current a:hover {
   color: var(--accent-strong);
+  text-decoration-thickness: 2px;
 }
 
-.home-directory {
-  margin-top: 48px;
+.home-writing {
+  margin-top: 32px;
+  padding-top: 24px;
   border-top: 1px solid var(--line);
 }
 
-.home-row {
-  display: grid;
-  grid-template-columns: 144px minmax(0, 1fr);
-  gap: 32px;
-  padding-top: 32px;
+.home-writing h2 {
+  margin: 0 0 8px;
+  font-family: var(--font-editorial);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
 }
 
-.home-row h2 {
+.home-writing .home-link {
+  font-size: inherit;
+}
+
+.home-writing p {
   margin: 0;
-  font-size: 16px;
-  font-weight: 650;
-  line-height: 24px;
-}
-
-.home-row p {
-  max-width: 60ch;
-  margin: 0;
+  color: var(--muted);
   font-size: 16px;
   line-height: 24px;
-}
-
-.home-current {
-  font-size: 16px;
-  line-height: 24px;
-}
-
-.home-current a {
-  color: var(--accent);
 }
 
 .home-page .home-footer {
   grid-template-columns: minmax(0, 1fr) auto;
-  min-height: 96px;
+  min-height: 80px;
   border-top: 0;
   gap: 24px;
   font-size: 12px;
@@ -139,15 +135,14 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .home-intro-copy,
-  .home-portrait,
-  .home-row {
+  .home-identity,
+  .home-letter,
+  .home-writing {
     animation: home-enter 700ms var(--home-ease) both;
   }
 
-  .home-portrait { animation-delay: 80ms; }
-  .home-row:nth-child(1) { animation-delay: 120ms; }
-  .home-row:nth-child(2) { animation-delay: 160ms; }
+  .home-letter { animation-delay: 80ms; }
+  .home-writing { animation-delay: 160ms; }
 
   .home-portrait img,
   .home-link span {
@@ -155,7 +150,7 @@
   }
 
   .home-portrait:hover img {
-    transform: rotate(2deg) translateY(-4px);
+    transform: rotate(-3deg);
   }
 
   .home-link:is(:hover, :focus-visible) span {
@@ -172,21 +167,15 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-@media (max-width: 1023px) {
-  .home-page { --page-gutter: 32px; }
-  .home-intro { grid-template-columns: minmax(0, 1fr) 192px; gap: 32px; }
-  .home-intro h1 { font-size: 48px; }
-}
-
 @media (max-width: 767px) {
   .home-page { --page-gutter: 24px; }
   .home-sheet { padding-top: 40px; padding-bottom: 24px; }
-  .home-intro { grid-template-columns: minmax(0, 1fr); gap: 32px; }
-  .home-intro h1 { max-width: 12ch; font-size: 48px; }
-  .home-intro .home-role { margin-block: 16px 24px; font-size: 18px; }
-  .home-bio { font-size: 16px; line-height: 24px; }
-  .home-portrait { width: 192px; }
-  .home-directory { margin-top: 32px; }
-  .home-row { grid-template-columns: minmax(0, 1fr); gap: 8px; padding-top: 24px; }
-  .home-page .home-footer { grid-template-columns: minmax(0, 1fr); gap: 8px; padding-block: 24px; }
+  .home-identity { gap: 16px; margin-bottom: 32px; }
+  .home-identity h1 { font-size: 36px; line-height: 40px; letter-spacing: -.035em; }
+  .home-identity .home-location { margin-top: 4px; }
+  .home-portrait { width: 72px; flex-basis: 72px; }
+  .home-letter .home-lead { font-size: 24px; line-height: 32px; }
+  .home-letter p { font-size: 16px; line-height: 24px; }
+  .home-writing { margin-top: 24px; }
+  .home-page .home-footer { grid-template-columns: minmax(0, 1fr); gap: 8px; padding-block: 16px; }
 }

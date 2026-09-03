@@ -270,6 +270,8 @@ const replacements = {
   "{{PROFILE_DESCRIPTION}}": escapeHtml(profile.description),
   "{{PROFILE_SUMMARY}}": escapeHtml(profile.summary),
   "{{PROFILE_INTRO}}": escapeHtml(profile.intro),
+  "{{PROFILE_HOME_STORY}}": profile.homeStory.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("\n"),
+  "{{PROFILE_HOME_CURRENT}}": profile.currentRoles.reduce((text, job) => text.replaceAll(escapeHtml(job.organization), `<a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.organization)}</a>`), escapeHtml(profile.homeCurrent)),
   "{{PROFILE_BLOG_INTRO}}": escapeHtml(profile.blogIntro),
   "{{PROFILE_CURRENT_LINKS}}": profile.currentRoles.map((job) => `${escapeHtml(job.role)} at <a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.organization)}</a>.`).join("<br>"),
   "{{PROFILE_LOCATION}}": escapeHtml(profile.location),

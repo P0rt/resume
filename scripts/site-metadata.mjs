@@ -68,7 +68,8 @@ export function profileMarkdown(articleCount) {
   return [
     `# ${profile.name}`, profile.role, profile.description,
     `Canonical profile URL: ${DOMAIN}/\nDetailed experience and collaboration: ${DOMAIN}/work-together/\nAlso known as: ${profile.alternateNames.join(", ")}\nBased in: ${profile.location}`,
-    `## ${profile.summary}`, profile.intro, profile.about.join("\n\n"),
+    `## ${profile.summary}`, profile.intro, profile.homeStory.join("\n\n"), profile.homeCurrent,
+    "## Background", profile.about.join("\n\n"),
     "## Current work", currentWork,
     "## Working together", profile.collaboration.description, profile.collaboration.approach, profile.collaboration.invitation,
     "## Where I can help", profile.capabilities.map((item) => `### ${item.name}\n\n${item.description}`).join("\n\n"),

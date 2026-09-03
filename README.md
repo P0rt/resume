@@ -13,6 +13,18 @@ Create a production build with `npm run build`. The build writes the site to `di
 
 Vercel builds the `main` branch from GitHub with the settings in `vercel.json`. GitHub Actions validates the tests and production build without publishing to GitHub Pages.
 
+## Deployment
+
+- Vercel project: [serzhooo-6913 / resume](https://vercel.com/serzhooo-6913/resume)
+- Git repository: [P0rt/resume](https://github.com/P0rt/resume), production branch `main`
+- Vercel production URL: [resume-ecru-beta-38.vercel.app](https://resume-ecru-beta-38.vercel.app/)
+- Primary domain: `sergei-parfenov.com`; `www.sergei-parfenov.com` redirects to it with HTTP 308.
+- Build command: `npm run build`; output directory: `dist`; application preset: Other.
+
+Push a commit to `main` to start a production deployment. Check the Vercel dashboard for the final Ready status before announcing a publication. GitHub Actions runs validation separately; it is not a deployment gate.
+
+DNS stays at GoDaddy. Vercel supplied these targets on September 3, 2026: `A @ → 216.198.79.1` and `CNAME www → 107e0173c2bab476.vercel-dns-017.com.`. Before changing DNS in the future, confirm the current targets in the project's Domains settings. Preserve nameservers, mail records, and other unrelated DNS records.
+
 ## Articles
 
 Article source files live in `content/articles`. Create a draft with:

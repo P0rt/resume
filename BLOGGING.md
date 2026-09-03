@@ -17,7 +17,7 @@ The new Markdown file appears in `content/articles` with `published: false`. The
 3. Check the stable `slug` before first publication. Do not change it later.
 4. Add useful tags and optional `coverImage`.
 5. Set `published: true`.
-6. Run `npm test` and `npm run build`.
+6. For a DEV-hosted `coverImage`, run `npm run images:import`, then `npm test` and `npm run build`.
 7. Commit and push to `main`.
 
 The build creates all of this automatically:
@@ -34,6 +34,14 @@ The build creates all of this automatically:
 - A searchable, readable document in the public MCP endpoint
 
 Unpublished drafts are excluded from every public representation and from the server bundle. Keep actual publication and update dates: do not change dates just to suggest freshness. The build preserves the original article punctuation in HTML and Markdown.
+
+## Cover images
+
+Keep the original `coverImage` URL in front matter. `npm run images:import` saves missing public DEV cover images into `content/images/covers/` without modifying Markdown or replacing existing snapshots. Commit those source files with the article. Other image hosts require an explicitly reviewed importer change; redirects, credentials and non-image responses are rejected.
+
+Normal builds are offline: `scripts/build-images.mjs` generates responsive WebP derivatives in `dist/assets/optimized/` from the committed sources. The browser chooses the right width; covers load eagerly with high priority. Generated filenames are content-versioned and cached immutably. If a source has not been imported yet, the build warns and keeps the original remote image, so it does not silently remove the cover or break publication. Import it before shipping.
+
+Portrait derivatives come from the original light/blue photos in `src/assets/`, preserve the existing centre crop, and use matching native theme-aware responsive preloads. Do not replace the originals, change the visual layout, or add a client-side image library for resizing.
 
 ## Article formatting
 

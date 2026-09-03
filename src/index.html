@@ -29,8 +29,7 @@
   <link rel="alternate" type="application/rss+xml" title="Writing by Sergei Parfenov" href="https://sergei-parfenov.com/rss.xml">
   {{SITE_ICONS}}
   <link rel="preload" href="./assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="./assets/portrait-blue.jpg" as="image" media="(prefers-color-scheme: dark)" fetchpriority="high">
-  <link rel="preload" href="./assets/portrait-light.webp" as="image" media="(prefers-color-scheme: light)" fetchpriority="high">
+  {{PORTRAIT_PRELOADS}}
   <link rel="stylesheet" href="./styles/index.css">
   <link rel="stylesheet" href="./styles/home.css">
   <title>Sergei Parfenov | AI/ML engineer, CTO, writer</title>
@@ -49,10 +48,7 @@
             <p class="home-lead">{{PROFILE_INTRO}}</p>
           </div>
           <figure class="home-portrait">
-            <picture>
-              <source srcset="./assets/portrait-blue.jpg" media="(prefers-color-scheme: dark)" width="1006" height="1006">
-              <img src="./assets/portrait-light.webp" alt="Portrait of Sergei Parfenov" width="1114" height="1412" fetchpriority="high">
-            </picture>
+            {{PORTRAIT_PICTURE}}
           </figure>
         </div>
         <div class="home-letter">

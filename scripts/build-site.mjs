@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import { renderArticle } from "./render-article.mjs";
 import { buildIcons } from "./build-icons.mjs";
+import { buildImages } from "./build-images.mjs";
 import { DOMAIN, profile, homeSchema, workSchema, blogSchema, articleSchema, writeAgentFiles } from "./site-metadata.mjs";
 
 const ROOT = process.cwd();
@@ -148,9 +149,10 @@ function archiveMarkup(articles) {
 
 async function articleDocument(article, older, newer) {
   const body = await renderArticle(article.content);
+  const image = images.covers.get(article.coverImage);
   const cover = article.coverImage ? `
     <figure class="article-cover" data-reveal>
-      <img src="${escapeHtml(article.coverImage)}" alt="" loading="eager">
+      <img src="${escapeHtml(image?.src || article.coverImage)}"${image ? ` srcset="${image.srcset}" sizes="${image.sizes}" width="${image.width}" height="${image.height}"` : ""} alt="" loading="eager" fetchpriority="high">
     </figure>` : "";
   const sourceLink = article.sourceUrl ? `
     <p class="source-line">First published on <a href="${escapeHtml(article.sourceUrl)}" target="_blank" rel="noopener noreferrer">DEV Community <span aria-hidden="true">↗</span></a></p>` : "";
@@ -279,11 +281,17 @@ await fs.rm(DIST_DIR, { recursive: true, force: true });
 await fs.mkdir(DIST_DIR, { recursive: true });
 
 const articles = await loadArticles();
+const images = await buildImages(ROOT, DIST_DIR, articles);
 const siteIcons = `<link rel="icon" href="/assets/favicon.ico" sizes="16x16 32x32 48x48 64x64 128x128 256x256" type="image/x-icon">
   <link rel="icon" href="/assets/favicon-96.png" sizes="96x96" type="image/png">
   <link rel="icon" href="/assets/favicon.svg" sizes="any" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180">`;
 const replacements = {
+  "{{PORTRAIT_PRELOADS}}": [["dark", images.dark], ["light", images.light]].map(([theme, image]) => `<link rel="preload" href="${image.src}" as="image" type="image/webp" media="(prefers-color-scheme: ${theme})" imagesrcset="${image.srcset}" imagesizes="${image.sizes}" fetchpriority="high">`).join("\n  "),
+  "{{PORTRAIT_PICTURE}}": `<picture>
+              <source srcset="${images.dark.srcset}" sizes="${images.dark.sizes}" media="(prefers-color-scheme: dark)" type="image/webp" width="${images.dark.width}" height="${images.dark.height}">
+              <img src="${images.light.src}" srcset="${images.light.srcset}" sizes="${images.light.sizes}" alt="Portrait of Sergei Parfenov" width="${images.light.width}" height="${images.light.height}" fetchpriority="high">
+            </picture>`,
   "{{SITE_ICONS}}": siteIcons,
   "{{PROFILE_SCHEMA}}": homeSchema(),
   "{{WORK_SCHEMA}}": workSchema(),

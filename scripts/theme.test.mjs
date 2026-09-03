@@ -55,11 +55,15 @@ test("the portrait follows the system theme with native picture sources and matc
   const html = await readFile(new URL("../dist/index.html", import.meta.url), "utf8");
   const portrait = html.match(/<figure class="home-portrait">([\s\S]*?)<\/figure>/)?.[1];
   assert.ok(portrait?.includes("<picture>"));
-  assert.match(portrait, /<source srcset="\.\/assets\/portrait-blue\.jpg" media="\(prefers-color-scheme: dark\)"/);
-  assert.match(portrait, /<img src="\.\/assets\/portrait-light\.webp" alt="Portrait of Sergei Parfenov"/);
+  assert.match(portrait, /<source srcset="\/assets\/optimized\/portrait-blue-[^"]+" sizes="[^"]+" media="\(prefers-color-scheme: dark\)"/);
+  assert.match(portrait, /<img src="\/assets\/optimized\/portrait-light-[^"]+"[^>]+alt="Portrait of Sergei Parfenov"/);
   assert.equal((portrait.match(/<img\s/g) || []).length, 1);
   for (const [file, theme] of [["portrait-blue.jpg", "dark"], ["portrait-light.webp", "light"]]) {
-    assert.ok(html.includes(`<link rel="preload" href="./assets/${file}" as="image" media="(prefers-color-scheme: ${theme})"`));
+    const preload = [...html.matchAll(/<link rel="preload"[^>]+as="image"[^>]*>/g)].map((match) => match[0]).find((tag) => tag.includes(`prefers-color-scheme: ${theme}`));
+    const source = theme === "dark" ? portrait.match(/<source[^>]+>/)[0] : portrait.match(/<img[^>]+>/)[0];
+    assert.equal(preload.match(/imagesrcset="([^"]+)"/)[1], source.match(/srcset="([^"]+)"/)[1]);
+    assert.equal(preload.match(/imagesizes="([^"]+)"/)[1], source.match(/sizes="([^"]+)"/)[1]);
+    assert.ok(preload.includes('fetchpriority="high"'));
     assert.ok((await readFile(new URL(`../dist/assets/${file}`, import.meta.url))).length > 0);
   }
   assert.ok(html.includes('<meta property="og:image" content="https://sergei-parfenov.com/assets/portrait-blue.jpg">'));

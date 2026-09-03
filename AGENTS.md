@@ -23,7 +23,7 @@
 - Homepage: large portrait, name and a concise but substantive narrative in one reading column. Only a mention/link to the blog below the introduction; no article feed, full CV, header menu or top blog link.
 - Detailed career, education, projects and collaboration belong on `/work-together/`. Blog is separate at `/blog.html`.
 - Theme follows browser/OS `prefers-color-scheme`, including live changes. No manual switch, localStorage override or forced dark mode.
-- Native `<picture>`: monochrome `portrait-light.webp` for light mode, original `portrait-blue.jpg` for dark; preserve frame/size and theme-aware preloads. Social previews keep the blue photo.
+- Native `<picture>`: monochrome `portrait-light.webp` for light mode, original `portrait-blue.jpg` for dark; preserve frame/size and theme-aware preloads. `scripts/build-images.mjs` makes responsive WebP derivatives with matching `srcset` / `imagesrcset`; keep originals untouched. Social previews keep the blue photo.
 - Favicon: the user's neon-green three-eyed smile, smoothly redrawn in `src/assets/favicon.svg`. Preserve all three eyes. `scripts/build-icons.mjs` renders PNG, multi-size ICO and Apple fallbacks automatically; edit only the SVG master.
 - Footer location is `Barcelona, <current year> ☯︎`, not a subtitle under the name. Music/Spotify is hidden for now. Do not publish `src/assets/resume.pdf`.
 - Motion stays subtle and respects reduced motion. Article text and highlighting must work without JavaScript; copy controls are progressive enhancements.
@@ -44,6 +44,7 @@
 - Every article keeps its permanent `/blog/<slug>/` URL. Do not rename a published slug, rewrite source text or refresh dates without a content reason.
 - Label fenced code blocks (`python`, `js`, `bash`, `json`, etc.). Highlighting is static and dual-theme; unrecognised languages fall back to plain text without breaking publication.
 - `npm run articles:sync` can overwrite DEV-sourced local articles. Use only for an explicitly requested refresh, not as a routine build step.
+- For new DEV-hosted covers run `npm run images:import` and commit `content/images/covers/` sources. Normal builds must stay offline; only published covers are generated into public assets. Keep original front-matter URLs and text unchanged. Check payloads, theme switching, image requests and clean mobile Lighthouse when changing image delivery; do not trade image quality or typography for a score.
 - Existing DEV copies have canonicals pointing to the matching personal-site URLs. Local metadata does not update DEV; modify external publications only when requested, preserving their content.
 - Preserve self-canonicals, one article H1, author identity, JSON-LD, RSS, sitemap, Markdown alternates, JSON catalogs and stable MCP document IDs. Do not promise Google rankings or indexing.
 - Drafts must never enter HTML, feeds, catalogs, Markdown output or the MCP bundle. MCP only exposes published content; no arbitrary file/URL fetching, account access, mutations or secrets.

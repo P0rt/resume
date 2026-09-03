@@ -9,7 +9,8 @@
     "html": "node ./scripts/build-site.mjs",
     "build": "npm run html",
     "articles:sync": "node ./scripts/sync-dev.mjs",
-    "article:new": "node ./scripts/new-article.mjs"
+    "article:new": "node ./scripts/new-article.mjs",
+    "images:import": "node ./scripts/import-images.mjs"
   },
   "repository": {
     "type": "git",

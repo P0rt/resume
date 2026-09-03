@@ -13,6 +13,7 @@ export const person = {
   image: profile.image,
   jobTitle: profile.role,
   description: profile.description,
+  homeLocation: { "@type": "Place", name: profile.location },
   sameAs: profile.sameAs,
   worksFor: profile.currentRoles.map(({ organization }) => ({ "@type": "Organization", name: organization })),
   knowsAbout: ["Artificial intelligence", "Machine learning", "AI agents", "Model evaluation", "Product engineering", "Educational technology"],
@@ -53,7 +54,9 @@ export function articleSchema(article) {
 }
 
 export function profileMarkdown(articleCount) {
-  return `# ${profile.name}\n\n${profile.role}\n\n${profile.description}\n\nCanonical URL: ${DOMAIN}/\nAlso known as: ${profile.alternateNames.join(", ")}\n\n## Current work\n\n${profile.currentRoles.map((job) => `- ${job.role}, ${job.organization}`).join("\n")}\n\n## Focus\n\n${profile.capabilities.map((item) => `- ${item.name}: ${item.description}`).join("\n")}\n\n## Experience\n\n${profile.experience.map((job) => `### ${job.company}\n\n${job.role} | ${job.period}\n\n${job.description || job.positions.map((position) => `- ${position.company}: ${position.description}`).join("\n")}${job.url ? `\n\n${job.url}` : ""}`).join("\n\n")}\n\n## Writing\n\n${articleCount} published articles: ${DOMAIN}/blog.html\n${profile.audience}. Articles are also published on DEV.\n\n## Music\n\n${profile.music.description}\n${profile.music.url}\n\n## Contact and profiles\n\nEmail: ${profile.email}\n${profile.sameAs.join("\n")}\n`;
+  const currentWork = profile.currentRoles.map((job) => `### ${job.organization}\n\n${job.role}\n\n${job.description}\n\n${job.url}`).join("\n\n");
+  const experience = profile.experience.map((job) => `### ${job.company}\n\n${job.role} | ${job.period}\n\n${job.description || job.positions.map((position) => `- ${position.company}: ${position.description}`).join("\n")}${job.highlights ? `\n\n${job.highlights.join("\n\n")}` : ""}${job.url ? `\n\n${job.url}` : ""}`).join("\n\n");
+  return `# ${profile.name}\n\n${profile.role}\n\n${profile.description}\n\nCanonical URL: ${DOMAIN}/\nAlso known as: ${profile.alternateNames.join(", ")}\nBased in: ${profile.location}\n\n## ${profile.summary}\n\n${profile.about.join("\n\n")}\n\n## Current work\n\n${currentWork}\n\n## Working together\n\n${profile.collaboration.description}\n\n${profile.collaboration.approach}\n\n${profile.collaboration.invitation}\n\n## Where I can help\n\n${profile.capabilities.map((item) => `### ${item.name}\n\n${item.description}`).join("\n\n")}\n\n## Open projects\n\n${profile.projects.map((project) => `### ${project.name}\n\n${project.description}\n\n${project.url}`).join("\n\n")}\n\n## Experience\n\n${experience}\n\n## Writing\n\n${profile.writing}\n\n${articleCount} published articles: ${DOMAIN}/blog.html\nArticles are also published on DEV.\n\n## Music\n\n${profile.music.description}\n${profile.music.url}\n\n## Contact and profiles\n\nEmail: ${profile.email}\n${profile.sameAs.join("\n")}\n`;
 }
 
 export function articleMetadata(article) {

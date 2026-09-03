@@ -2,7 +2,7 @@
 
 Personal site, article archive, and career profile for [sergei-parfenov.com](https://sergei-parfenov.com).
 
-The homepage contains the full profile and expanded career history. Its only top controls are the blog link and a persistent dark-theme switch. Articles keep their own URLs. The resume PDF is retained in `src/assets/resume.pdf` for later use but is excluded from the public build.
+The homepage is a three-column personal notebook: biography, current work, writing and music, followed by collaboration areas and the expanded career history. It becomes a single reading column on phones. Its only top controls are the blog link and a persistent dark-theme switch. The full blog is a separate page; articles keep their own URLs. The resume PDF is retained in `src/assets/resume.pdf` for later use but is excluded from the public build.
 
 ## Local development
 
@@ -44,6 +44,10 @@ See `BLOGGING.md` for the publishing and canonical URL workflow.
 ## SEO and agent access
 
 Public profile fields live in `content/profile.json`; the homepage, Person/ProfilePage schema and agent-readable profile use that same source. Each article has an explicit author, BlogPosting/BreadcrumbList data, canonical URL and Markdown alternate. The sitemap excludes noindex utility pages and uses actual article modification dates.
+
+Edit biography paragraphs, collaboration copy, current work, open projects and experience in `content/profile.json`. Experience entries can include `highlights` for additional paragraphs. A build publishes the same content to HTML, `profile.json`, `index.md` and the MCP snapshot. The profile-specific layout lives in `src/styles/profile.css`; shared controls and article typography live in `src/styles/index.css`.
+
+The September 2026 editorial revision takes its reading-oriented layout cues from [Sergey Nugaev’s homepage](https://sergeynugaev.com/) and [collaboration page](https://sergeynugaev.com/work-together), not his biography, pricing or achievements. Copy is based on Sergei’s supplied career information, his [DEV profile](https://dev.to/p0rt), [GitHub profile](https://github.com/P0rt), public experiment repositories and articles, and [Aliwio](https://aliwio.com). The user supplied four LinkedIn recommendations as background for the writing: rapid AI hypothesis testing, learning personalisation and retention, Mastery Depth Tracker, technical leadership and communicating with non-technical colleagues. These insights are incorporated into the copy; the recommendations are not displayed as quotes, and no authors, precise retention gains, rates or availability were invented.
 
 The read-only MCP endpoint is `https://sergei-parfenov.com/mcp`. `MCP.md` documents connection options, tools, static Markdown/JSON alternatives and security limits. The function is bundled from published content only. `npm test` validates both SEO output and MCP behavior before deployment.
 

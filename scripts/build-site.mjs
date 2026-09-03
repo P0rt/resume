@@ -272,6 +272,16 @@ const replacements = {
   "{{PROFILE_ROLE}}": escapeHtml(profile.role),
   "{{PROFILE_DESCRIPTION}}": escapeHtml(profile.description),
   "{{PROFILE_SUMMARY}}": escapeHtml(profile.summary),
+  "{{PROFILE_LOCATION}}": escapeHtml(profile.location),
+  "{{PROFILE_EMAIL}}": escapeHtml(profile.email),
+  "{{PROFILE_ABOUT}}": profile.about.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("\n"),
+  "{{PROFILE_WRITING}}": escapeHtml(profile.writing),
+  "{{COLLABORATION_TITLE}}": escapeHtml(profile.collaboration.title),
+  "{{COLLABORATION_DESCRIPTION}}": escapeHtml(profile.collaboration.description),
+  "{{COLLABORATION_APPROACH}}": escapeHtml(profile.collaboration.approach),
+  "{{COLLABORATION_INVITATION}}": escapeHtml(profile.collaboration.invitation),
+  "{{PROFILE_NOW}}": profile.currentRoles.map((job) => `<div class="now-role"><h3><a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.organization)}</a> · ${escapeHtml(job.role)}</h3><p>${escapeHtml(job.description)}</p></div>`).join("\n"),
+  "{{PROFILE_PROJECTS}}": profile.projects.map((project) => `<article class="open-project"><h4><a href="${escapeHtml(project.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(project.name)} <span aria-hidden="true">↗</span></a></h4><p>${escapeHtml(project.description)}</p></article>`).join("\n"),
   "{{PROFILE_CURRENT}}": profile.currentRoles.map((job) => `${escapeHtml(job.role)}, ${escapeHtml(job.organization)}`).join("<br>"),
   "{{PROFILE_FOCUS}}": escapeHtml(profile.focus),
   "{{PROFILE_AUDIENCE}}": escapeHtml(profile.audience),
@@ -279,10 +289,10 @@ const replacements = {
   "{{PROFILE_PLAYLIST}}": escapeHtml(profile.music.url),
   "{{PROFILE_CAPABILITIES}}": profile.capabilities.map((item) => `<div><dt>${escapeHtml(item.name)}</dt><dd>${escapeHtml(item.description)}</dd></div>`).join("\n"),
   "{{PROFILE_EXPERIENCE}}": profile.experience.map((job) => `<article class="experience-item">
-    <header class="experience-heading"><h3 class="experience-company">${escapeHtml(job.company)}</h3><p>${escapeHtml(job.role)}</p><p class="experience-date">${escapeHtml(job.period)}</p></header>
+    <header class="experience-heading"><h3 class="experience-company">${job.url ? `<a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.company)}</a>` : escapeHtml(job.company)}</h3><p>${escapeHtml(job.role)}</p><p class="experience-date">${escapeHtml(job.period)}</p></header>
     <div class="experience-body${job.positions ? " experience-body-grid" : ""}">${job.positions
       ? job.positions.map((position) => `<p><strong>${escapeHtml(position.company)}</strong><br>${escapeHtml(position.description)}</p>`).join("")
-      : `<p>${escapeHtml(job.description)}</p>${job.url ? `<a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">Visit ${escapeHtml(job.company)} <span aria-hidden="true">↗</span></a>` : ""}`}</div>
+      : `<p>${escapeHtml(job.description)}</p>${(job.highlights || []).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}`}</div>
   </article>`).join("\n"),
   "{{HOME_CONTROLS}}": pageControls("./blog.html", "Blog"),
   "{{BLOG_CONTROLS}}": pageControls("/", "Home", "←"),

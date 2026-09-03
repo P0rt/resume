@@ -69,6 +69,33 @@ test("Markdown, JSON and MCP agree and preserve original article text", async ()
   assert.ok((await read("llms.txt")).includes(`${origin}/mcp`));
 });
 
+test("the detailed profile stays consistent across the page, JSON, Markdown and MCP", async () => {
+  const home = await read("index.html");
+  const bio = JSON.parse(await read("profile.json"));
+  const markdown = await read("index.md");
+  const htmlText = (text) => text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
+  const paragraphs = [
+    ...bio.about,
+    bio.writing,
+    ...Object.values(bio.collaboration),
+    ...bio.capabilities.flatMap((item) => [item.name, item.description]),
+    ...bio.projects.flatMap((item) => [item.name, item.description, item.url]),
+    ...bio.experience.flatMap((job) => [job.description, ...(job.highlights || [])]).filter(Boolean),
+  ];
+  for (const text of paragraphs) {
+    assert.ok(home.includes(htmlText(text)), `Missing visible profile content: ${text}`);
+    // The collaboration heading is rendered as a stable section name in Markdown.
+    if (text !== bio.collaboration.title) assert.ok(markdown.includes(text), `Missing agent content: ${text}`);
+  }
+  assert.deepEqual(snapshot.profile, bio);
+  assert.ok(home.includes("Mastery Depth Tracker"));
+  assert.ok(home.includes('id="work-together"'));
+  assert.ok(!home.includes("writing-lead"), "Article feed belongs on the separate blog");
+  assert.ok(!home.includes("<blockquote"), "Recommendations inform the copy, not a testimonial section");
+  assert.equal((home.match(/<h1(?:\s|>)/g) || []).length, 1);
+  assert.ok((await read("blog.html")).includes('class="archive-list"'));
+});
+
 test("404 assets and return links use absolute paths even for nested missing URLs", async () => {
   const page = await read("404.html");
   assert.ok(page.includes('href="/assets/favicon.ico"'));

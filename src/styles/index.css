@@ -14,7 +14,7 @@
   --ink: #15171a;
   --muted: #5f6268;
   --line: #b9bcc0;
-  --grid: rgb(21 23 26 / 8%);
+  --grid: rgb(21 23 26 / 4%);
   --accent: #2458d6;
   --accent-strong: #1947b8;
   --accent-ink: #f8f9ff;
@@ -23,6 +23,7 @@
   --page-gutter: clamp(24px, 5vw, 72px);
   --page-max: 1296px;
   --measure: 68ch;
+  --font-editorial: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
 }
 
 :root[data-theme="dark"] {
@@ -33,7 +34,7 @@
   --ink: #f1f1ed;
   --muted: #aaadb2;
   --line: #484c52;
-  --grid: rgb(241 241 237 / 7%);
+  --grid: rgb(241 241 237 / 4%);
   --accent: #7898ff;
   --accent-strong: #91aaff;
   --accent-ink: #11162b;
@@ -49,7 +50,7 @@
     --ink: #f1f1ed;
     --muted: #aaadb2;
     --line: #484c52;
-    --grid: rgb(241 241 237 / 7%);
+    --grid: rgb(241 241 237 / 4%);
     --accent: #7898ff;
     --accent-strong: #91aaff;
     --accent-ink: #11162b;
@@ -252,8 +253,9 @@ a:focus-visible {
   margin: 0;
   max-width: 14ch;
   font-size: clamp(48px, 6vw, 72px);
-  font-weight: 760;
-  letter-spacing: -.065em;
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  letter-spacing: -.035em;
   line-height: 1;
 }
 
@@ -793,9 +795,10 @@ a:focus-visible {
   max-width: 20ch;
   margin: 40px 0 0;
   font-size: clamp(42px, 4.7vw, 56px);
-  font-weight: 760;
-  letter-spacing: -.062em;
-  line-height: 1.03;
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  letter-spacing: -.035em;
+  line-height: 1.1;
 }
 
 .article-deck {

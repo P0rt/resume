@@ -2,8 +2,14 @@
   "name": "Sergei Parfenov",
   "alternateNames": ["Сергей Парфенов", "Sergey Parfenov", "P0rt"],
   "role": "AI/ML Engineer and CTO",
-  "description": "Sergei Parfenov is an AI/ML engineer, CTO, and writer building reliable AI systems, products, and learning experiences.",
-  "summary": "I build production AI systems, evaluation pipelines, and learning products.",
+  "description": "Sergei Parfenov is an AI/ML engineer and CTO in Barcelona. He builds AI products, evaluates agents and models, and writes about the engineering behind them.",
+  "summary": "From a model to a working product.",
+  "location": "Barcelona, Spain",
+  "about": [
+    "I’m an AI/ML engineer and CTO based in Barcelona. I work across the whole system: the model, the infrastructure behind it, and the interface people use.",
+    "I’m interested in what happens after the demo: an agent loses context, an API hits a limit, a convincing answer turns out to be wrong. I build evaluations and feedback loops to understand those failures and make the system more dependable.",
+    "My background is in software engineering and education. At Yandex Praktikum and TripleTen, I helped turn technical knowledge into courses, code checks and learning products. I connect the technical decisions to what people need from the product — and explain the trade-offs without asking everyone in the room to be an engineer."
+  ],
   "image": "https://sergei-parfenov.com/assets/portrait-blue.jpg",
   "email": "sergey.paarfenov@gmail.com",
   "sameAs": [
@@ -12,21 +18,34 @@
     "https://www.linkedin.com/in/sergey-p-721b25171/"
   ],
   "currentRoles": [
-    {"organization": "Aliwio", "role": "CTO"},
-    {"organization": "TripleTen", "role": "AI/ML Engineer"}
+    {"organization": "Aliwio", "role": "CTO", "url": "https://aliwio.com", "description": "Building a veterinary CRM for independent clinics — from the technical architecture to the product itself."},
+    {"organization": "TripleTen", "role": "AI/ML Engineer", "url": "https://tripleten.com", "description": "Building AI-powered learning experiences: personalisation, code verification and feedback that helps students keep making progress."}
   ],
   "focus": "Agents, evaluation, learning systems",
   "audience": "Nearly 10k subscribers",
+  "writing": "I write about AI engineering: experiments, systems that break, and what the measurements actually tell us. My writing reaches nearly 10k subscribers.",
+  "collaboration": {
+    "title": "We could work together.",
+    "description": "An AI product to build, an agent to make reliable, or a learning experience to improve. These are the problems I like working on.",
+    "approach": "I start with a hypothesis and the smallest useful test. From there, I can build the system, coordinate the work and explain the trade-offs to the people making the decision.",
+    "invitation": "Tell me what you’re building, where you’re stuck and what a useful result would look like."
+  },
   "capabilities": [
-    {"name": "AI systems", "description": "Agents, RAG, evaluation, distillation"},
-    {"name": "Product", "description": "Learning systems, verification, feedback loops"},
-    {"name": "Engineering", "description": "Python, TypeScript, Node, React"}
+    {"name": "An AI idea worth testing", "description": "Turn an uncertain idea into a focused experiment. Build a working prototype, test the hypothesis and use what we learn to decide what deserves a full product — before committing to a big build."},
+    {"name": "From prototype to product", "description": "Connect the model, the data, a scalable backend and the interface. I can work across the implementation and help the team make decisions about quality, latency, cost and scope."},
+    {"name": "Agents you can evaluate", "description": "Find out why an agent fails, not just whether its answer looks plausible. Build checks around tool use, memory, retrieval and recovery, with traces you can inspect and tests you can repeat."},
+    {"name": "Smaller models, measured trade-offs", "description": "Explore distillation and fine-tuning for a narrow task. Compare the smaller model with a baseline on quality, speed and memory before deciding whether the trade is worth it."},
+    {"name": "Learning, personalisation & retention", "description": "Turn student needs into product decisions: where someone lacks confidence, needs more practice or gets stuck. Build the tracking, feedback and AI features around that — then connect the learning experience to retention."}
+  ],
+  "projects": [
+    {"name": "Screenshot model distillation", "description": "A 7B-to-2B vision-model experiment, with a reproducible training and evaluation pipeline. A small proof of concept, including where the metrics misled me.", "url": "https://github.com/P0rt/vlm-distill-screenshots"},
+    {"name": "Agent memory & provenance", "description": "An experiment harness for measuring how memory compaction changes an agent’s decisions — including results that contradicted my own hypothesis.", "url": "https://github.com/P0rt/provenance-compaction-lab"}
   ],
   "experience": [
-    {"company": "Aliwio", "role": "CTO", "period": "Current", "description": "Technical founder responsible for the model, pipeline, and product."},
-    {"company": "TripleTen", "role": "AI/ML Engineer", "period": "Dec 2020 to present", "description": "Build AI and ML systems for the learning experience, including evaluation, automated code verification, and training hints. Earlier launched the US QA Engineering faculty with a 70% activation rate and helped hundreds of students enter the field.", "url": "https://tripleten.com"},
-    {"company": "Yandex Praktikum", "role": "Technical Product Manager and writer", "period": "Mar 2018 to Dec 2020", "description": "Helped launch the Web Developer faculty, authored technical courses, and created the platform test architecture."},
-    {"company": "Thingyfy", "role": "Full Stack Developer", "period": "Oct 2019 to Dec 2021", "description": "Built startup products with React, TypeScript, Node, Python, and GitLab."},
+    {"company": "Aliwio", "role": "CTO", "period": "Current", "description": "I’m responsible for the technical architecture and product engineering of a CRM for independent veterinary clinics.", "url": "https://aliwio.com"},
+    {"company": "TripleTen", "role": "AI/ML Engineer", "period": "Dec 2020 to present", "description": "I helped shape the AI-driven learning personalisation strategy and built features that improved student retention, backed by scalable backend systems.", "highlights": ["On the Mastery Depth Tracker, I worked at the intersection of product and engineering: measuring learners’ confidence across skills and identifying where they needed more practice.", "My work also includes evaluation, automated code verification, training hints and internal AI experiments. Earlier, I led the US QA Engineering course launch, with a 70% activation rate, and helped hundreds of students enter the field."], "url": "https://tripleten.com"},
+    {"company": "Yandex Praktikum", "role": "Technical Product Manager and writer", "period": "Mar 2018 to Dec 2020", "description": "I helped launch the Web Developer faculty, wrote technical courses and created the platform’s test architecture."},
+    {"company": "Thingyfy", "role": "Full Stack Developer", "period": "Oct 2019 to Dec 2021", "description": "I built startup products with React, TypeScript, Node, Python and GitLab."},
     {"company": "Earlier work", "role": "Engineer and teacher", "period": "2016 to 2019", "positions": [
       {"company": "European Gymnasium", "description": "Computer science and web development."},
       {"company": "Sravni", "description": "Insurance products built in React."},

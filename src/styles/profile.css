@@ -1,0 +1,407 @@
+/* A personal notebook: three reading columns, not a stack of landing-page cards. */
+.profile-page {
+  letter-spacing: -.005em;
+}
+
+.profile-sheet {
+  padding-top: 64px;
+  padding-bottom: 80px;
+}
+
+.profile-columns {
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(0, 1.2fr) minmax(0, 1fr);
+  align-items: start;
+  column-gap: clamp(32px, 4.2vw, 64px);
+}
+
+.profile-intro {
+  padding-bottom: 72px;
+}
+
+.profile-work {
+  padding-top: 56px;
+  border-top: 1px solid var(--line);
+}
+
+.profile-sheet h1,
+.profile-sheet h2 {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+
+.profile-sheet h1 {
+  max-width: 9ch;
+  margin: 12px 0 16px;
+  font-size: clamp(42px, 4.6vw, 60px);
+  line-height: 1.02;
+}
+
+.profile-sheet h2 {
+  margin: 0 0 24px;
+  font-size: 28px;
+  line-height: 1.15;
+}
+
+.profile-story > h2 {
+  max-width: 18ch;
+  font-size: 36px;
+  line-height: 1.1;
+}
+
+.profile-sheet p {
+  margin: 0 0 24px;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.profile-sheet .folio-label {
+  margin: 0;
+  color: var(--muted);
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+
+.profile-sheet .identity-role {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.profile-portrait {
+  position: relative;
+  max-width: 280px;
+  margin: 32px 0 12px;
+}
+
+.profile-portrait img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.profile-portrait figcaption {
+  margin-top: 12px;
+  color: var(--muted);
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.profile-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 20px;
+}
+
+.profile-socials a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  font-size: 13px;
+}
+
+.profile-sheet a {
+  color: var(--accent);
+}
+
+.profile-sheet a:hover {
+  color: var(--accent-strong);
+}
+
+.profile-notes > section + section {
+  margin-top: 40px;
+}
+
+.now-role + .now-role {
+  margin-top: 24px;
+}
+
+.profile-sheet .now-role h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.profile-sheet .now-role p {
+  margin: 0;
+  font-size: 15px;
+}
+
+.notebook-link {
+  position: relative;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  column-gap: 8px;
+  font-size: 15px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.notebook-link::after {
+  position: absolute;
+  inset: auto 0 6px;
+  height: 1px;
+  background: currentColor;
+  content: "";
+  transform: rotate(-1deg);
+  transform-origin: left;
+}
+
+.notebook-link > span {
+  display: inline-block;
+}
+
+.note-caption {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.open-work {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.open-project {
+  margin-top: 20px;
+}
+
+.open-project h4 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 550;
+  line-height: 1.5;
+}
+
+.profile-sheet .open-project p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.contact-note {
+  margin-top: 40px;
+}
+
+.contact-note p {
+  margin-bottom: 8px;
+}
+
+.email-link {
+  display: inline;
+  padding-block: 12px;
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+}
+
+.email-link::after {
+  display: none;
+}
+
+.help-list {
+  margin: 0;
+}
+
+.help-list > div + div {
+  margin-top: 32px;
+}
+
+.help-list dt {
+  margin-bottom: 8px;
+  font-weight: 650;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.help-list dd {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.career-list .experience-item {
+  margin-bottom: 32px;
+  border: 0;
+}
+
+.career-list .experience-heading {
+  display: flex;
+  min-height: 0;
+  padding: 0;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.career-list .experience-date {
+  order: -1;
+  margin: 0;
+  color: var(--muted);
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.career-list .experience-company {
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+
+.career-list .experience-heading > p:not(.experience-date) {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.career-list .experience-body {
+  padding: 12px 0 0;
+  color: var(--ink);
+}
+
+.career-list .experience-body p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.career-list .experience-body p + p {
+  margin-top: 12px;
+}
+
+.career-list .experience-body-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.profile-page .site-footer {
+  font-size: 12px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .identity,
+  .profile-story,
+  .profile-notes {
+    animation: notebook-enter 600ms both;
+  }
+
+  .profile-story { animation-delay: 80ms; }
+  .profile-notes { animation-delay: 160ms; }
+
+  .notebook-link > span {
+    transition: transform 200ms ease;
+  }
+
+  .notebook-link:is(:hover, :focus-visible) > span {
+    transform: translate(3px, -3px);
+  }
+
+  .notebook-link:is(:hover, :focus-visible)::after {
+    animation: notebook-underline 320ms ease both;
+  }
+
+  .profile-portrait img {
+    transition: box-shadow 240ms ease, transform 240ms ease;
+  }
+
+  .profile-portrait:hover img {
+    box-shadow: 6px 6px 0 var(--accent);
+    transform: translate(-3px, -3px);
+  }
+}
+
+@keyframes notebook-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes notebook-underline {
+  from { transform: rotate(-1deg) scaleX(.1); }
+  to { transform: rotate(-1deg) scaleX(1); }
+}
+
+@media (max-width: 1000px) {
+  .profile-columns {
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    gap: 48px 40px;
+  }
+
+  .profile-notes {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+  }
+
+  .profile-notes > section + section {
+    margin-top: 0;
+  }
+
+  .career-note {
+    grid-column: 1 / -1;
+  }
+
+  .career-list {
+    columns: 2;
+    column-gap: 40px;
+  }
+
+  .career-list .experience-item {
+    break-inside: avoid;
+  }
+}
+
+@media (max-width: 640px) {
+  .profile-sheet {
+    padding-top: 48px;
+    padding-bottom: 40px;
+  }
+
+  .profile-columns,
+  .profile-notes {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+  }
+
+  .profile-sheet h1 {
+    max-width: none;
+    font-size: 48px;
+  }
+
+  .profile-portrait {
+    max-width: 240px;
+  }
+
+  .profile-story > h2 {
+    max-width: 20ch;
+    font-size: 32px;
+  }
+
+  .profile-intro {
+    padding-bottom: 48px;
+  }
+
+  .profile-work {
+    padding-top: 48px;
+  }
+
+  .career-list {
+    columns: auto;
+  }
+}

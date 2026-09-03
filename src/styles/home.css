@@ -1,7 +1,7 @@
-/* A single-column personal introduction, not a hero plus a directory.
-   The blue portrait is the only visual accent; typography carries the story. */
+/* A large portrait opens the page beside the introduction.
+   The story continues in one reading column, with no header or directory. */
 .home-page {
-  --page-max: 800px;
+  --page-max: 960px;
   --page-gutter: 48px;
   --home-ease: cubic-bezier(.22, 1, .36, 1);
   letter-spacing: 0;
@@ -12,20 +12,21 @@
   padding-bottom: 32px;
 }
 
-.home-identity {
-  display: flex;
+.home-opening {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
   align-items: center;
-  gap: 24px;
+  gap: 48px;
   margin-bottom: 40px;
 }
 
 .home-identity h1 {
   margin: 0;
   font-family: var(--font-editorial);
-  font-size: 48px;
+  font-size: 60px;
   font-weight: 400;
   letter-spacing: -.035em;
-  line-height: 1.1;
+  line-height: 1;
   text-wrap: balance;
 }
 
@@ -37,8 +38,7 @@
 }
 
 .home-portrait {
-  width: 96px;
-  flex: 0 0 96px;
+  width: 100%;
   margin: 0;
 }
 
@@ -56,13 +56,17 @@
   text-wrap: pretty;
 }
 
-.home-letter .home-lead {
-  margin-bottom: 32px;
-  font-size: 24px;
-  font-weight: 500;
-  line-height: 32px;
-  letter-spacing: -.02em;
+.home-identity .home-lead {
+  margin: 24px 0 0;
+  font-size: 20px;
+  font-weight: 450;
+  line-height: 28px;
   text-wrap: pretty;
+}
+
+.home-letter,
+.home-writing {
+  max-width: 704px;
 }
 
 .home-letter a,
@@ -135,7 +139,7 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .home-identity,
+  .home-opening,
   .home-letter,
   .home-writing {
     animation: home-enter 700ms var(--home-ease) both;
@@ -170,11 +174,11 @@
 @media (max-width: 767px) {
   .home-page { --page-gutter: 24px; }
   .home-sheet { padding-top: 40px; padding-bottom: 24px; }
-  .home-identity { gap: 16px; margin-bottom: 32px; }
+  .home-opening { grid-template-columns: minmax(0, 1fr); gap: 24px; margin-bottom: 32px; }
   .home-identity h1 { font-size: 36px; line-height: 40px; letter-spacing: -.035em; }
-  .home-identity .home-location { margin-top: 4px; }
-  .home-portrait { width: 72px; flex-basis: 72px; }
-  .home-letter .home-lead { font-size: 24px; line-height: 32px; }
+  .home-identity .home-location { margin-top: 8px; }
+  .home-portrait { grid-row: 1; width: 192px; }
+  .home-identity .home-lead { font-size: 20px; line-height: 28px; }
   .home-letter p { font-size: 16px; line-height: 24px; }
   .home-writing { margin-top: 24px; }
   .home-page .home-footer { grid-template-columns: minmax(0, 1fr); gap: 8px; padding-block: 16px; }

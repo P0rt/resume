@@ -292,6 +292,7 @@ const replacements = {
   "{{PROFILE_CURRENT_LINKS}}": profile.currentRoles.map((job) => `${escapeHtml(job.role)} at <a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.organization)}</a>.`).join("<br>"),
   "{{PROFILE_LOCATION}}": escapeHtml(profile.location),
   "{{PROFILE_EMAIL}}": escapeHtml(profile.email),
+  "{{PROFILE_LINKEDIN}}": escapeHtml(profile.sameAs.find((url) => url.startsWith("https://www.linkedin.com/in/"))),
   "{{PROFILE_ABOUT}}": profile.about.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("\n"),
   "{{PROFILE_WRITING}}": escapeHtml(profile.writing),
   "{{COLLABORATION_TITLE}}": escapeHtml(profile.collaboration.title),
@@ -306,6 +307,11 @@ const replacements = {
   "{{PROFILE_MUSIC}}": escapeHtml(profile.music.description),
   "{{PROFILE_PLAYLIST}}": escapeHtml(profile.music.url),
   "{{PROFILE_CAPABILITIES}}": profile.capabilities.map((item) => `<div><dt>${escapeHtml(item.name)}</dt><dd>${escapeHtml(item.description)}</dd></div>`).join("\n"),
+  "{{PROFILE_EDUCATION}}": profile.education.map((item) => `<article class="education-item">
+    <h3>${escapeHtml(item.institution)}</h3>
+    <p>${escapeHtml(item.program)}</p>
+    <p class="education-meta">${escapeHtml(item.qualification)} · ${escapeHtml(item.period)}</p>
+  </article>`).join("\n"),
   "{{PROFILE_EXPERIENCE}}": profile.experience.map((job) => `<article class="experience-item">
     <header class="experience-heading"><h3 class="experience-company">${job.url ? `<a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.company)}</a>` : escapeHtml(job.company)}</h3><p>${escapeHtml(job.role)}</p><p class="experience-date">${escapeHtml(job.period)}</p></header>
     <div class="experience-body${job.positions ? " experience-body-grid" : ""}">${job.positions

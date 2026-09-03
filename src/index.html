@@ -42,17 +42,17 @@
   <main id="main" class="section-shell home-sheet">
     <div id="top">
       <section class="home-intro" id="about" aria-labelledby="profile-name">
-        <div class="home-identity">
-          <figure class="home-portrait">
-          <img src="./assets/portrait-blue.jpg" alt="Sergei Parfenov against a blue background" width="1006" height="1006" fetchpriority="high">
-          </figure>
-          <div>
+        <div class="home-opening">
+          <div class="home-identity">
             <h1 id="profile-name">{{PROFILE_NAME}}</h1>
             <p class="home-location">{{PROFILE_LOCATION}}</p>
+            <p class="home-lead">{{PROFILE_INTRO}}</p>
           </div>
+          <figure class="home-portrait">
+            <img src="./assets/portrait-blue.jpg" alt="Sergei Parfenov against a blue background" width="1006" height="1006" fetchpriority="high">
+          </figure>
         </div>
         <div class="home-letter">
-          <p class="home-lead">{{PROFILE_INTRO}}</p>
           <div class="home-story">{{PROFILE_HOME_STORY}}</div>
           <p class="home-current">{{PROFILE_HOME_CURRENT}}</p>
           <a class="home-link" href="/work-together/">Experience &amp; working together <span aria-hidden="true">↗</span></a>
@@ -71,7 +71,7 @@
       <a href="mailto:{{PROFILE_EMAIL}}">Email ↗</a>
       <a href="https://github.com/P0rt" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a href="https://dev.to/p0rt" target="_blank" rel="noopener noreferrer">DEV</a>
-      <a href="https://www.linkedin.com/in/sergey-p-721b25171/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="{{PROFILE_LINKEDIN}}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       <a href="./privacy.html">Privacy</a>
     </div>
     <span>© <span data-current-year>2026</span> Sergei Parfenov</span>

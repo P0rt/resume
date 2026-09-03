@@ -122,6 +122,43 @@ test("404 assets and return links use absolute paths even for nested missing URL
   assert.ok(page.includes('href="/"'));
 });
 
+test("LinkedIn uses the corrected canonical profile across pages and agent output", async () => {
+  const linkedin = "https://www.linkedin.com/in/sergei--parfenov/";
+  const bio = JSON.parse(await read("profile.json"));
+  assert.ok(bio.sameAs.includes(linkedin));
+  assert.ok(snapshot.profile.sameAs.includes(linkedin));
+  assert.ok(snapshot.profileMarkdown.includes(linkedin));
+  for (const file of ["index.html", "work-together/index.html"]) {
+    assert.ok((await read(file)).includes(`href="${linkedin}"`));
+  }
+  for (const file of ["index.html", "work-together/index.html", "blog.html", ...snapshot.articles.map((article) => `blog/${article.id}/index.html`), "profile.json", "index.md"]) {
+    assert.ok(!(await read(file)).includes("sergey-p-721b25171"), `Outdated LinkedIn URL in ${file}`);
+    assert.ok((await read(file)).includes(linkedin), `Missing LinkedIn identity in ${file}`);
+  }
+});
+
+test("education distinguishes the Stanford course from the university degree", async () => {
+  const bio = JSON.parse(await read("profile.json"));
+  const work = await read("work-together/index.html");
+  const markdown = await read("index.md");
+  assert.deepEqual(bio.education.map(({ kind, startDate, endDate }) => [kind, startDate, endDate]), [
+    ["course", "2024-04", "2024-06"], ["degree", "2005", "2010"],
+  ]);
+  assert.equal(bio.education[0].program, "CS231n: Deep Learning for Computer Vision");
+  assert.equal(bio.education[1].program, "Computer Information Systems");
+  assert.deepEqual(snapshot.profile.education, bio.education);
+  for (const item of bio.education) {
+    for (const field of ["institution", "program", "qualification", "period"]) {
+      assert.ok(work.includes(item[field]));
+      assert.ok(markdown.includes(item[field]));
+    }
+  }
+  assert.ok(work.includes('id="education"'));
+  assert.ok(!(await read("index.html")).includes('class="education-note"'));
+  const person = graph(work).find((item) => item["@type"] === "Person");
+  assert.deepEqual(person.alumniOf.map((item) => item.name), [bio.education[1].institution]);
+});
+
 test("career corrections stay accurate in every public representation", async () => {
   const bio = JSON.parse(await read("profile.json"));
   const work = await read("work-together/index.html");
@@ -176,6 +213,7 @@ test("homepage reads as a personal introduction without directory rows or header
   const styles = await read("styles/home.css");
   assert.ok(home.includes('class="home-intro"'));
   assert.ok(home.includes('class="home-identity"'));
+  assert.ok(home.includes('class="home-opening"'));
   assert.ok(home.includes('class="home-letter"'));
   assert.ok(!home.includes('class="profile-columns'));
   assert.ok(!home.includes('class="home-row"'));
@@ -186,6 +224,8 @@ test("homepage reads as a personal introduction without directory rows or header
   assert.ok(styles.includes("max-width: 767px"));
   assert.match(styles, /\.home-identity h1\s*\{[^}]*font-family: var\(--font-editorial\)/);
   assert.match(styles, /\.home-writing h2\s*\{[^}]*font-family: var\(--font-editorial\)/);
+  assert.match(styles, /grid-template-columns: minmax\(0, 1fr\) 240px/);
+  assert.match(styles, /\.home-portrait\s*\{[^}]*width: 192px/);
 });
 
 test("drafts never reach HTML, Markdown, catalogs or the MCP bundle", async () => {

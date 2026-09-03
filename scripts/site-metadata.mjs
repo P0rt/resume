@@ -15,6 +15,7 @@ export const person = {
   description: profile.description,
   homeLocation: { "@type": "Place", name: profile.location },
   sameAs: profile.sameAs,
+  alumniOf: profile.education.filter((item) => item.kind === "degree").map((item) => ({ "@type": "CollegeOrUniversity", name: item.institution })),
   worksFor: profile.currentRoles.map(({ organization }) => ({ "@type": "Organization", name: organization })),
   knowsAbout: ["Artificial intelligence", "Machine learning", "AI agents", "Model evaluation", "Product engineering", "Educational technology"],
 };
@@ -75,6 +76,7 @@ export function profileMarkdown(articleCount) {
     "## Where I can help", profile.capabilities.map((item) => `### ${item.name}\n\n${item.description}`).join("\n\n"),
     "## Open projects", profile.projects.map((project) => `### ${project.name}\n\n${project.description}\n\n${project.url}`).join("\n\n"),
     "## Experience", experience,
+    "## Education & courses", profile.education.map((item) => `### ${item.institution}\n\n${item.program}\n\n${item.qualification} | ${item.period}`).join("\n\n"),
     "## Writing", profile.writing,
     `${articleCount} published articles: ${DOMAIN}/blog.html\nArticles are also published on DEV.`,
     "## Music", `${profile.music.description}\n${profile.music.url}`,

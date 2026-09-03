@@ -306,6 +306,36 @@
   font-size: 12px;
 }
 
+.education-note {
+  margin-top: 64px;
+}
+
+.education-item + .education-item {
+  margin-top: 32px;
+}
+
+.education-item h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 24px;
+  text-wrap: pretty;
+}
+
+.profile-sheet .education-item p {
+  margin: 0 0 8px;
+  font-size: 16px;
+  line-height: 24px;
+  text-wrap: pretty;
+}
+
+.profile-sheet .education-item .education-meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 20px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .identity,
   .profile-story,

@@ -35,6 +35,14 @@ The build creates all of this automatically:
 
 Unpublished drafts are excluded from every public representation and from the server bundle. Keep actual publication and update dates: do not change dates just to suggest freshness. The build preserves the original article punctuation in HTML and Markdown.
 
+## Article formatting
+
+Start the body with prose or an `##` heading; the page already supplies the article title as its H1. Use `##` for sections and `###` for subsections. Headings receive stable, unique permalinks automatically. Use descriptive link text, image alt text and simple Markdown tables with a header row.
+
+Label fenced code blocks with a language, for example `python`, `js`, `ts`, `bash`, `json` or `yaml`. Use `text` for logs and diagrams. Shiki highlights code at build time for both system themes; there is no browser-side highlighting dependency. Unsupported languages safely fall back to plain text. Preserve indentation and keep lines reasonably short, though long lines and tables can scroll horizontally without widening the page. Copy buttons copy only code, and are hidden when JavaScript is unavailable.
+
+The reading layout is in `src/styles/blog.css`, isolated from the homepage. Before publishing, check the archive and the actual article on mobile and desktop, in light and dark mode. See `AGENTS.md` for the project's design and editorial constraints.
+
 ## Republish on DEV
 
 Publish the personal-site version first. Then add this to the DEV front matter:

@@ -1,7 +1,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
-import { marked } from "marked";
+import { renderArticle } from "./render-article.mjs";
 import { DOMAIN, profile, homeSchema, workSchema, blogSchema, articleSchema, writeAgentFiles } from "./site-metadata.mjs";
 
 const ROOT = process.cwd();
@@ -105,12 +105,12 @@ function articleRow(article, className = "") {
   return `
     <article class="post-row ${className}" data-reveal>
       <a class="post-row-link" href="./blog/${escapeHtml(article.slug)}/">
-        <time datetime="${escapeHtml(article.date)}">${escapeHtml(humanDate(article.date))}</time>
-        <span class="post-row-copy">
-          <span class="post-row-title">${escapeHtml(article.title)}</span>
-          <span class="post-row-description">${escapeHtml(article.description)}</span>
-        </span>
-        <span class="post-row-meta">${escapeHtml(tags)}<br>${article.readingTime} min</span>
+        <div class="post-row-date"><time datetime="${escapeHtml(article.date)}">${escapeHtml(humanDate(article.date))}</time><span>${article.readingTime} min read</span></div>
+        <div class="post-row-copy">
+          <h3 class="post-row-title">${escapeHtml(article.title)}</h3>
+          <p class="post-row-description">${escapeHtml(article.description)}</p>
+          <span class="post-row-meta">${tags}</span>
+        </div>
       </a>
     </article>`;
 }
@@ -145,11 +145,11 @@ function archiveMarkup(articles) {
     </section>`).join("");
 }
 
-function articleDocument(article, older, newer) {
-  const body = marked.parse(article.content, { gfm: true });
+async function articleDocument(article, older, newer) {
+  const body = await renderArticle(article.content);
   const cover = article.coverImage ? `
     <figure class="article-cover" data-reveal>
-      <img src="${escapeHtml(article.coverImage)}" alt="" width="1000" height="500" loading="eager">
+      <img src="${escapeHtml(article.coverImage)}" alt="" loading="eager">
     </figure>` : "";
   const sourceLink = article.sourceUrl ? `
     <p class="source-line">First published on <a href="${escapeHtml(article.sourceUrl)}" target="_blank" rel="noopener noreferrer">DEV Community <span aria-hidden="true">↗</span></a></p>` : "";
@@ -188,6 +188,7 @@ function articleDocument(article, older, newer) {
   <link rel="icon" href="../../assets/favicon.ico" sizes="any">
   <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../../styles/index.css">
+  <link rel="stylesheet" href="../../styles/blog.css">
   <title>${escapeHtml(article.title)} | Sergei Parfenov</title>
   <script>document.documentElement.classList.add("js");</script>
   <script type="application/ld+json">${structuredData}</script>
@@ -198,16 +199,15 @@ function articleDocument(article, older, newer) {
   <main id="main">
     <article>
       <header class="article-header section-shell">
-        <a class="back-link" href="../../blog.html">← All writing</a>
         <h1>${escapeHtml(article.title)}</h1>
         <p class="article-deck">${escapeHtml(article.description)}</p>
         <div class="article-meta-line">
           <a href="/" rel="author">${escapeHtml(profile.name)}</a>
           <time datetime="${escapeHtml(article.date)}">${escapeHtml(humanDate(article.date))}</time>
           <span>${article.readingTime} min read</span>
-          <span class="article-tags">${tags}</span>
-          <button type="button" data-copy-url>Copy URL</button>
+          <button type="button" data-copy-url hidden>Copy link</button>
         </div>
+        <div class="article-tags" aria-label="Topics">${tags}</div>
       </header>
       ${cover}
       <div class="article-prose section-shell" data-article-body>${body}</div>
@@ -222,6 +222,7 @@ function articleDocument(article, older, newer) {
     <a href="../../blog.html">Writing</a>
     <span>© <span data-current-year>${new Date().getFullYear()}</span></span>
   </footer>
+  <span class="copy-status visually-hidden" role="status" aria-live="polite"></span>
   <script src="../../scripts/main.js"></script>
 </body>
 </html>`;
@@ -346,7 +347,7 @@ for (let index = 0; index < articles.length; index += 1) {
   const article = articles[index];
   const target = path.join(DIST_DIR, "blog", article.slug, "index.html");
   await fs.mkdir(path.dirname(target), { recursive: true });
-  await fs.writeFile(target, articleDocument(article, articles[index + 1], articles[index - 1]), "utf8");
+  await fs.writeFile(target, await articleDocument(article, articles[index + 1], articles[index - 1]), "utf8");
 }
 
 await Promise.all([

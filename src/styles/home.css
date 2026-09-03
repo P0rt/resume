@@ -1,0 +1,193 @@
+/* One reading surface. The portrait belongs to the introduction, not a sidebar.
+   Design variance 5 / motion 4 / density 4: compact, with an old-web link language.
+   Keep the existing graph paper, blue accent and native static-site architecture. */
+.home-page {
+  --page-max: 1056px;
+  --page-gutter: 48px;
+  --home-ease: cubic-bezier(.22, 1, .36, 1);
+}
+
+.home-sheet {
+  padding-top: 64px;
+  padding-bottom: 48px;
+}
+
+.home-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 224px;
+  align-items: start;
+  gap: 48px;
+}
+
+.home-intro h1 {
+  margin: 0;
+  font-size: 60px;
+  font-weight: 600;
+  letter-spacing: -.04em;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.home-intro .home-role {
+  margin: 16px 0 32px;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.home-sheet p {
+  text-wrap: pretty;
+}
+
+.home-bio {
+  max-width: 54ch;
+  margin: 0 0 16px;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.home-portrait {
+  margin: 0;
+}
+
+.home-portrait img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.home-portrait figcaption {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.home-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-size: 16px;
+  line-height: 24px;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+}
+
+.home-link span {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.home-link:hover,
+.home-current a:hover {
+  color: var(--accent-strong);
+}
+
+.home-directory {
+  margin-top: 48px;
+  border-top: 1px solid var(--line);
+}
+
+.home-row {
+  display: grid;
+  grid-template-columns: 144px minmax(0, 1fr);
+  gap: 32px;
+  padding-top: 32px;
+}
+
+.home-row h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 24px;
+}
+
+.home-row p {
+  max-width: 60ch;
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.home-current {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.home-current a {
+  color: var(--accent);
+}
+
+.home-page .home-footer {
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-height: 96px;
+  border-top: 0;
+  gap: 24px;
+  font-size: 12px;
+}
+
+.home-footer .footer-links {
+  gap: 0 24px;
+}
+
+.home-footer a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-intro-copy,
+  .home-portrait,
+  .home-row {
+    animation: home-enter 700ms var(--home-ease) both;
+  }
+
+  .home-portrait { animation-delay: 80ms; }
+  .home-row:nth-child(1) { animation-delay: 120ms; }
+  .home-row:nth-child(2) { animation-delay: 160ms; }
+  .home-row:nth-child(3) { animation-delay: 200ms; }
+
+  .home-portrait img,
+  .home-link span {
+    transition: transform 400ms var(--home-ease);
+  }
+
+  .home-portrait:hover img {
+    transform: rotate(2deg) translateY(-4px);
+  }
+
+  .home-link:is(:hover, :focus-visible) span {
+    transform: translate(3px, -3px);
+  }
+
+  .home-link:active {
+    transform: translateY(1px);
+  }
+}
+
+@keyframes home-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1023px) {
+  .home-page { --page-gutter: 32px; }
+  .home-intro { grid-template-columns: minmax(0, 1fr) 192px; gap: 32px; }
+  .home-intro h1 { font-size: 48px; }
+}
+
+@media (max-width: 767px) {
+  .home-page { --page-gutter: 24px; }
+  .home-sheet { padding-top: 40px; padding-bottom: 24px; }
+  .home-intro { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .home-intro h1 { max-width: 12ch; font-size: 48px; }
+  .home-intro .home-role { margin-block: 16px 24px; font-size: 18px; }
+  .home-bio { font-size: 16px; line-height: 24px; }
+  .home-portrait { width: 192px; }
+  .home-directory { margin-top: 32px; }
+  .home-row { grid-template-columns: minmax(0, 1fr); gap: 8px; padding-top: 24px; }
+  .home-page .home-footer { grid-template-columns: minmax(0, 1fr); gap: 8px; padding-block: 24px; }
+}

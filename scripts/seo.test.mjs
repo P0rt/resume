@@ -51,7 +51,7 @@ test("sitemap has only indexable canonical pages with genuine article dates", as
 test("Markdown, JSON and MCP agree and preserve original article text", async () => {
   const catalog = JSON.parse(await read("articles.json"));
   assert.equal(catalog.articles.length, snapshot.articles.length);
-  assert.equal(JSON.parse(await read("profile.json")).experience.length, 5);
+  assert.equal(JSON.parse(await read("profile.json")).experience.length, snapshot.profile.experience.length);
   assert.equal(await read("index.md"), snapshot.profileMarkdown);
   for (const article of snapshot.articles) {
     const metadata = catalog.articles.find((item) => item.id === article.id);
@@ -113,6 +113,64 @@ test("404 assets and return links use absolute paths even for nested missing URL
   assert.ok(page.includes('href="/assets/favicon.ico"'));
   assert.ok(page.includes('href="/styles/index.css"'));
   assert.ok(page.includes('href="/"'));
+});
+
+test("career corrections stay accurate in every public representation", async () => {
+  const bio = JSON.parse(await read("profile.json"));
+  const work = await read("work-together/index.html");
+  const home = await read("index.html");
+  const markdown = await read("index.md");
+  assert.deepEqual(bio.currentRoles.map((job) => [job.organization, job.role]), [["Aliwio", "CTO"], ["Symptomato", "CTO"]]);
+  assert.deepEqual(bio.experience.filter((job) => job.status === "current").map((job) => job.company), ["Aliwio", "Symptomato"]);
+  const tripleten = bio.experience.find((job) => job.company === "TripleTen");
+  assert.equal(tripleten.status, "past");
+  assert.equal(tripleten.role, "AI Engineer");
+  assert.equal(tripleten.startDate, "2021-12");
+  assert.equal(tripleten.endDate, "2026-01");
+  assert.equal(tripleten.period, "Dec 2021 to Jan 2026");
+  const iawy = bio.experience.find((job) => job.company === "IAWY");
+  assert.equal(iawy.role, "Co-Founder and CPO");
+  assert.equal(iawy.period, "Aug 2023 to Jul 2024");
+  assert.equal(iawy.startDate, "2023-08");
+  assert.equal(iawy.endDate, "2024-07");
+  assert.ok(iawy.description.includes("two bootcamps in Latin America"));
+  for (const [company, role, startDate, endDate] of [
+    ["Aliwio", "CTO", "2026-02", undefined],
+    ["Symptomato", "CTO", "2026-01", undefined],
+    ["Retailhub", "AI Researcher", "2023-10", "2024-01"],
+    ["Yandex Praktikum", "Software Engineer", "2018-03", "2021-12"],
+    ["Thingyfy", "Software Engineer", "2019-10", "2020-10"],
+    ["Yandex School of Data Analysis", "Learning Specialist", "2018-10", "2020-01"],
+    ["Sravni.ru", "Software Engineer", "2017-11", "2018-10"],
+  ]) {
+    const job = bio.experience.find((entry) => entry.company === company);
+    assert.equal(job.role, role);
+    assert.equal(job.startDate, startDate);
+    assert.equal(job.endDate, endDate);
+  }
+  for (const text of [work, markdown]) {
+    for (const fact of ["11th", "7,000–10,000", "before ChatGPT", "8.4 seconds to 0.6 seconds", "140 legacy", "100,000 items", "2.5 hours to 18 minutes", "97.8%", "IAWY", "Symptomato", iawy.coverage.url]) assert.ok(text.includes(fact), `Missing career fact: ${fact}`);
+    assert.ok(!text.includes("Dec 2020 to present"));
+  }
+  assert.ok(!home.includes('href="https://tripleten.com"'));
+  assert.ok(home.includes('href="https://symptomato.com"'));
+  const pages = [home, work, await read("blog.html"), await read(`blog/${snapshot.articles[0].id}/index.html`)];
+  for (const page of pages) {
+    const nodes = graph(page);
+    const person = nodes.find((item) => item["@type"] === "Person") || nodes.find((item) => item["@type"] === "ProfilePage")?.mainEntity || nodes.find((item) => item["@type"] === "BlogPosting")?.author;
+    assert.deepEqual(person.worksFor.map((job) => job.name), ["Aliwio", "Symptomato"]);
+  }
+});
+
+test("homepage uses a single reading flow without the old three-column layout", async () => {
+  const home = await read("index.html");
+  const styles = await read("styles/home.css");
+  assert.ok(home.includes('class="home-intro"'));
+  assert.ok(home.includes('class="home-directory"'));
+  assert.ok(!home.includes('class="profile-columns'));
+  assert.equal((home.match(/class="home-row"/g) || []).length, 3);
+  assert.ok(styles.includes("prefers-reduced-motion: no-preference"));
+  assert.ok(styles.includes("max-width: 767px"));
 });
 
 test("drafts never reach HTML, Markdown, catalogs or the MCP bundle", async () => {

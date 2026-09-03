@@ -29,67 +29,65 @@
   <link rel="alternate" type="application/rss+xml" title="Writing by Sergei Parfenov" href="https://sergei-parfenov.com/rss.xml">
   <link rel="icon" href="./assets/favicon.ico" sizes="any">
   <link rel="preload" href="./assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="./assets/portrait-blue.jpg" as="image">
+  <link rel="preload" href="./assets/portrait-blue.jpg" as="image" fetchpriority="high">
   <link rel="stylesheet" href="./styles/index.css">
-  <link rel="stylesheet" href="./styles/profile.css">
+  <link rel="stylesheet" href="./styles/home.css">
   <title>Sergei Parfenov | AI/ML engineer, CTO, writer</title>
   <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
   <script type="application/ld+json">{{PROFILE_SCHEMA}}</script>
 </head>
-<body class="profile-page">
+<body class="home-page">
   <a class="skip-link" href="#main">Skip to content</a>
 
   {{HOME_CONTROLS}}
 
-  <main id="main" class="section-shell profile-sheet">
-    <div class="profile-columns profile-intro" id="top">
-      <section class="identity" aria-labelledby="profile-name">
-        <p class="folio-label">Hello, I’m</p>
-        <h1 id="profile-name">{{PROFILE_NAME}}</h1>
-        <p class="identity-role">{{PROFILE_ROLE}}</p>
-        <figure class="profile-portrait">
+  <main id="main" class="section-shell home-sheet">
+    <div id="top">
+      <section class="home-intro" id="about" aria-labelledby="profile-name">
+        <div class="home-intro-copy">
+          <h1 id="profile-name">{{PROFILE_NAME}}</h1>
+          <p class="home-role">{{PROFILE_ROLE}}</p>
+          <p class="home-bio">{{PROFILE_INTRO}}</p>
+          <a class="home-link" href="/work-together/">Experience &amp; working together <span aria-hidden="true">↗</span></a>
+        </div>
+        <figure class="home-portrait">
           <img src="./assets/portrait-blue.jpg" alt="Sergei Parfenov against a blue background" width="1006" height="1006" fetchpriority="high">
           <figcaption>{{PROFILE_LOCATION}}</figcaption>
         </figure>
-        <div class="profile-socials" aria-label="Social profiles">
-          <a href="https://github.com/P0rt" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-          <a href="https://www.linkedin.com/in/sergey-p-721b25171/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
-          <a href="mailto:{{PROFILE_EMAIL}}">Email ↗</a>
-        </div>
       </section>
 
-      <section class="profile-story" id="about" aria-labelledby="about-title">
-        <h2 id="about-title">{{PROFILE_SUMMARY}}</h2>
-        <p>{{PROFILE_INTRO}}</p>
-        <p class="compact-current">{{PROFILE_CURRENT_LINKS}}</p>
-        <a class="notebook-link" href="/work-together/">Experience &amp; working together <span aria-hidden="true">↗</span></a>
-      </section>
-
-      <div class="profile-notes">
-        <section id="writing" aria-labelledby="writing-title">
-          <h2 id="writing-title">I write, too.</h2>
-          <p>{{PROFILE_BLOG_INTRO}}</p>
-          <a class="notebook-link" href="./blog.html">Read the blog <span aria-hidden="true">↗</span></a>
+      <div class="home-directory">
+        <section class="home-row" aria-labelledby="now-title">
+          <h2 id="now-title">Now</h2>
+          <div class="home-current">{{PROFILE_CURRENT_LINKS}}</div>
         </section>
-        <section id="personal" aria-labelledby="personal-title">
-          <h2 id="personal-title">And collect music.</h2>
-          <p>{{PROFILE_MUSIC}}</p>
-          <a class="notebook-link" href="{{PROFILE_PLAYLIST}}" target="_blank" rel="noopener noreferrer">A playlist for you <span aria-hidden="true">↗</span></a>
+        <section class="home-row" id="writing" aria-labelledby="writing-title">
+          <h2 id="writing-title">Writing</h2>
+          <div>
+            <p>{{PROFILE_BLOG_INTRO}}</p>
+            <a class="home-link" href="./blog.html">Read the blog <span aria-hidden="true">↗</span></a>
+          </div>
+        </section>
+        <section class="home-row" id="personal" aria-labelledby="personal-title">
+          <h2 id="personal-title">Off the clock</h2>
+          <div>
+            <p>{{PROFILE_MUSIC}}</p>
+            <a class="home-link" href="{{PROFILE_PLAYLIST}}" target="_blank" rel="noopener noreferrer">A playlist for you <span aria-hidden="true">↗</span></a>
+          </div>
         </section>
       </div>
     </div>
-
   </main>
 
-  <footer class="site-footer section-shell">
-    <a href="#top">Sergei Parfenov</a>
+  <footer class="site-footer section-shell home-footer">
     <div class="footer-links">
+      <a href="mailto:{{PROFILE_EMAIL}}">Email ↗</a>
       <a href="https://github.com/P0rt" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a href="https://dev.to/p0rt" target="_blank" rel="noopener noreferrer">DEV</a>
       <a href="https://www.linkedin.com/in/sergey-p-721b25171/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       <a href="./privacy.html">Privacy</a>
     </div>
-    <span>© <span data-current-year>2026</span></span>
+    <span>© <span data-current-year>2026</span> Sergei Parfenov</span>
   </footer>
   <script src="./scripts/main.js"></script>
 </body>

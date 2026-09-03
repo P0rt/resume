@@ -4,6 +4,7 @@ import matter from "gray-matter";
 
 const contentDir = path.resolve("content/articles");
 const distDir = path.resolve("dist");
+const profile = JSON.parse(await fs.readFile(path.resolve("content/profile.json"), "utf8"));
 const filenames = (await fs.readdir(contentDir)).filter((filename) => filename.endsWith(".md"));
 const slugs = new Set();
 const publishedSlugs = new Set();
@@ -45,7 +46,7 @@ validateControls(index, "home", "./blog.html");
 validateControls(work, "work-together", "/");
 validateControls(await fs.readFile(path.join(distDir, "blog.html"), "utf8"), "blog", "/");
 if (/<details\b|<summary\b/.test(index)) throw new Error("Homepage information is still collapsed");
-if ((work.match(/<article class="experience-item">/g) || []).length !== 5) throw new Error("Experience entry is missing from work-together");
+if ((work.match(/<article class="experience-item">/g) || []).length !== profile.experience.length) throw new Error("Experience entry is missing from work-together");
 if (/experience-item|open-project|help-list/.test(index)) throw new Error("Detailed content must not appear on the compact homepage");
 if (/href="(?:\.\/|\/)blog\//.test(index)) throw new Error("Homepage must link to the blog, not individual articles");
 if (!index.includes('href="/work-together/"')) throw new Error("Missing link to the detailed profile");
@@ -55,7 +56,7 @@ for (const section of ["about", "writing", "personal"]) {
 if (await fs.access(path.join(distDir, "assets/resume.pdf")).then(() => true, () => false)) {
   throw new Error("The resume PDF is still being published");
 }
-if (!work.includes("AI/ML Engineer")) throw new Error("TripleTen role is missing");
+if (!work.includes("AI Engineer")) throw new Error("TripleTen role is missing");
 if (work.includes("Practicum USA")) throw new Error("Standalone Practicum USA entry still exists");
 if (!index.includes("open.spotify.com/playlist/6kX9RuLad2D5hsX86fjvgg")) throw new Error("Spotify playlist is missing");
 if (!index.includes("portrait-blue.jpg")) throw new Error("New portrait is missing");

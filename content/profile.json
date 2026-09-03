@@ -1,16 +1,17 @@
 {
   "name": "Sergei Parfenov",
   "alternateNames": ["Сергей Парфенов", "Sergey Parfenov", "P0rt"],
-  "role": "AI/ML Engineer and CTO",
-  "description": "Sergei Parfenov is an AI/ML engineer and CTO in Barcelona. He builds AI products, evaluates agents and models, and writes about the engineering behind them.",
-  "summary": "From a model to a working product.",
-  "intro": "I build AI products and learning systems. I connect engineering with product decisions — from the first experiment to the backend and interface people rely on.",
+  "role": "CTO and AI/ML Engineer",
+  "description": "Sergei Parfenov, CTO at Aliwio and Symptomato. Early Yandex Praktikum team member building AI products, learning infrastructure and automated project assessment.",
+  "summary": "Engineer. Product builder. CTO.",
+  "intro": "I joined Yandex Praktikum as team member #11. I designed test architecture for a coding trainer used by 7,000–10,000 students a day and built ML for project assessment before ChatGPT.",
   "blogIntro": "I write about AI engineering, experiments and things that break. Nearly 10k subscribers.",
   "location": "Barcelona, Spain",
   "about": [
-    "I’m an AI/ML engineer and CTO based in Barcelona. I work across the whole system: the model, the infrastructure behind it, and the interface people use.",
-    "I’m interested in what happens after the demo: an agent loses context, an API hits a limit, a convincing answer turns out to be wrong. I build evaluations and feedback loops to understand those failures and make the system more dependable.",
-    "My background is in software engineering and education. At Yandex Praktikum and TripleTen, I helped turn technical knowledge into courses, code checks and learning products. I connect the technical decisions to what people need from the product — and explain the trade-offs without asking everyone in the room to be an engineer."
+    "I joined Yandex Praktikum as the 11th person on the team and helped build the product from its earliest stages. I worked across multiple components, designed the test architecture for its coding trainer, used by 7,000–10,000 students a day, and developed an ML model to assess student project submissions. This was before ChatGPT.",
+    "I also helped launch the QA Engineering programme in the US. At TripleTen, my work connected AI, backend engineering and the learning experience, including personalisation and the Mastery Depth Tracker.",
+    "I spent about a year developing IAWY, a startup for automated review of student project work. We launched the product in two bootcamps in Latin America.",
+    "Today I’m CTO at two projects: Aliwio, a veterinary CRM, and Symptomato, a service combining AI intake with human health specialists. I’m based in Barcelona and work across product decisions, architecture and implementation."
   ],
   "image": "https://sergei-parfenov.com/assets/portrait-blue.jpg",
   "email": "sergey.paarfenov@gmail.com",
@@ -21,36 +22,40 @@
   ],
   "currentRoles": [
     {"organization": "Aliwio", "role": "CTO", "url": "https://aliwio.com", "description": "Building a veterinary CRM for independent clinics — from the technical architecture to the product itself."},
-    {"organization": "TripleTen", "role": "AI/ML Engineer", "url": "https://tripleten.com", "description": "Building AI-powered learning experiences: personalisation, code verification and feedback that helps students keep making progress."}
+    {"organization": "Symptomato", "role": "CTO", "url": "https://symptomato.com", "description": "Leading technology for a service where AI gathers context before a human health specialist joins the conversation."}
   ],
   "focus": "Agents, evaluation, learning systems",
   "audience": "Nearly 10k subscribers",
   "writing": "I write about AI engineering: experiments, systems that break, and what the measurements actually tell us. My writing reaches nearly 10k subscribers.",
   "collaboration": {
     "title": "We could work together.",
-    "description": "An AI product to build, an agent to make reliable, or a learning experience to improve. These are the problems I like working on.",
-    "approach": "I start with a hypothesis and the smallest useful test. From there, I can build the system, coordinate the work and explain the trade-offs to the people making the decision.",
+    "description": "An early product to build, an AI hypothesis to test, or a system that needs to work for thousands of people. I bring the engineering and product decisions together.",
+    "approach": "I can turn an idea into a testable first version, work through the architecture and implementation, and help the team decide what to build next. I explain the technical trade-offs in terms of the product and the people using it.",
     "invitation": "Tell me what you’re building, where you’re stuck and what a useful result would look like."
   },
   "capabilities": [
     {"name": "An AI idea worth testing", "description": "Turn an uncertain idea into a focused experiment. Build a working prototype, test the hypothesis and use what we learn to decide what deserves a full product — before committing to a big build."},
-    {"name": "From prototype to product", "description": "Connect the model, the data, a scalable backend and the interface. I can work across the implementation and help the team make decisions about quality, latency, cost and scope."},
+    {"name": "Building an early product", "description": "Work across the first version, architecture, backend and interface. Make decisions with the team about what to build now, what to leave out and how to take the product into real use."},
     {"name": "Agents you can evaluate", "description": "Find out why an agent fails, not just whether its answer looks plausible. Build checks around tool use, memory, retrieval and recovery, with traces you can inspect and tests you can repeat."},
     {"name": "Smaller models, measured trade-offs", "description": "Explore distillation and fine-tuning for a narrow task. Compare the smaller model with a baseline on quality, speed and memory before deciding whether the trade is worth it."},
-    {"name": "Learning, personalisation & retention", "description": "Turn student needs into product decisions: where someone lacks confidence, needs more practice or gets stuck. Build the tracking, feedback and AI features around that — then connect the learning experience to retention."}
+    {"name": "Learning platforms & automated assessment", "description": "Design test architecture for coding trainers, ML assessment of project submissions, and feedback that helps students make progress. Connect those systems to the curriculum, learner confidence and retention."}
   ],
   "projects": [
     {"name": "Screenshot model distillation", "description": "A 7B-to-2B vision-model experiment, with a reproducible training and evaluation pipeline. A small proof of concept, including where the metrics misled me.", "url": "https://github.com/P0rt/vlm-distill-screenshots"},
     {"name": "Agent memory & provenance", "description": "An experiment harness for measuring how memory compaction changes an agent’s decisions — including results that contradicted my own hypothesis.", "url": "https://github.com/P0rt/provenance-compaction-lab"}
   ],
   "experience": [
-    {"company": "Aliwio", "role": "CTO", "period": "Current", "description": "I’m responsible for the technical architecture and product engineering of a CRM for independent veterinary clinics.", "url": "https://aliwio.com"},
-    {"company": "TripleTen", "role": "AI/ML Engineer", "period": "Dec 2020 to present", "description": "I helped shape the AI-driven learning personalisation strategy and built features that improved student retention, backed by scalable backend systems.", "highlights": ["On the Mastery Depth Tracker, I worked at the intersection of product and engineering: measuring learners’ confidence across skills and identifying where they needed more practice.", "My work also includes evaluation, automated code verification, training hints and internal AI experiments. Earlier, I led the US QA Engineering course launch, with a 70% activation rate, and helped hundreds of students enter the field."], "url": "https://tripleten.com"},
-    {"company": "Yandex Praktikum", "role": "Technical Product Manager and writer", "period": "Mar 2018 to Dec 2020", "description": "I helped launch the Web Developer faculty, wrote technical courses and created the platform’s test architecture."},
-    {"company": "Thingyfy", "role": "Full Stack Developer", "period": "Oct 2019 to Dec 2021", "description": "I built startup products with React, TypeScript, Node, Python and GitLab."},
+    {"company": "Aliwio", "role": "CTO", "period": "Feb 2026 to present", "startDate": "2026-02", "status": "current", "description": "I’m responsible for the technical architecture and product engineering of a CRM for independent veterinary clinics.", "url": "https://aliwio.com"},
+    {"company": "Symptomato", "role": "CTO", "period": "Jan 2026 to present", "startDate": "2026-01", "status": "current", "description": "I lead technology at Symptomato. The service uses an AI assistant to gather context, then brings a human health specialist into the conversation.", "url": "https://symptomato.com"},
+    {"company": "TripleTen", "role": "AI Engineer", "period": "Dec 2021 to Jan 2026", "startDate": "2021-12", "endDate": "2026-01", "status": "past", "description": "I built AI assessment, retrieval and tutoring systems, working from architecture through production releases.", "highlights": ["Designed and implemented a plan and execute assessment system. Reduced grading latency from 8.4 seconds to 0.6 seconds, a 14× speedup, and replaced 140 legacy text-area quizzes.", "Built a Kafka based CMS vectorization pipeline processing 100,000 items a day. Delivered semantic search end to end, increasing search engagement by 9% and reducing time to content by 18%.", "Built automatic practice generation that cut task authoring from 2.5 hours to 18 minutes. Shipped an internal VS Code plugin that reduced average support time per student issue by 27%.", "Worked on Voice Mode for AI Tutor (Dot), connecting WebRTC, speech recognition, an LLM and speech synthesis. Helped bring it to a stable release with 97.8% successful sessions and a 1.3 second median first response.", "I helped shape learning personalisation and built features that improved student retention. On the Mastery Depth Tracker, I connected product and engineering to measure learners’ confidence and identify where they needed more practice. I also helped launch the QA Engineering programme in the US."], "url": "https://tripleten.com"},
+    {"company": "IAWY", "role": "Co-Founder and CPO", "period": "Aug 2023 to Jul 2024", "startDate": "2023-08", "endDate": "2024-07", "status": "past", "description": "I co-founded and developed IAWY, a startup for automated review of student project submissions. I defined the product vision and roadmap for an AI tutor that integrated into existing learning platforms. We successfully launched it in two bootcamps in Latin America.", "coverage": {"label": "IAWY in Tech.eu · 22 February 2024", "url": "https://tech.eu/2024/02/22/8-impact-driven-startups-worth-following/"}},
+    {"company": "Retailhub", "role": "AI Researcher", "period": "Oct 2023 to Jan 2024", "startDate": "2023-10", "endDate": "2024-01", "status": "past", "description": "Designed a product listing enrichment pipeline: normalizing input data, extracting attributes, generating structured features and writing natural language descriptions."},
+    {"company": "Yandex Praktikum", "role": "Software Engineer", "period": "Mar 2018 to Dec 2021", "startDate": "2018-03", "endDate": "2021-12", "status": "past", "description": "I was the 11th person to join the team and one of the people who built the product from its earliest stages, contributing across multiple components.", "highlights": ["I designed the test architecture for the coding trainer used by 7,000–10,000 students a day.", "I developed an ML model for assessing student project submissions before ChatGPT, and contributed to the launch of the Web Developer programme."]},
+    {"company": "Thingyfy", "role": "Software Engineer", "period": "Oct 2019 to Oct 2020", "startDate": "2019-10", "endDate": "2020-10", "status": "past", "description": "Built startup products with React and TypeScript, focusing on adaptability and scalability."},
+    {"company": "Yandex School of Data Analysis", "role": "Learning Specialist", "period": "Oct 2018 to Jan 2020", "startDate": "2018-10", "endDate": "2020-01", "status": "past", "description": "Worked as a learning specialist in Moscow."},
+    {"company": "Sravni.ru", "role": "Software Engineer", "period": "Nov 2017 to Oct 2018", "startDate": "2017-11", "endDate": "2018-10", "status": "past", "description": "Built insurance products in React."},
     {"company": "Earlier work", "role": "Engineer and teacher", "period": "2016 to 2019", "positions": [
       {"company": "European Gymnasium", "description": "Computer science and web development."},
-      {"company": "Sravni", "description": "Insurance products built in React."},
       {"company": "Spaces", "description": "Commercial property product engineering."},
       {"company": "MCS", "description": "Arduino, Swift, Python, web, and VR teaching."}
     ]}

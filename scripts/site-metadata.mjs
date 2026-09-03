@@ -64,7 +64,7 @@ export function articleSchema(article) {
 
 export function profileMarkdown(articleCount) {
   const currentWork = profile.currentRoles.map((job) => `### ${job.organization}\n\n${job.role}\n\n${job.description}\n\n${job.url}`).join("\n\n");
-  const experience = profile.experience.map((job) => `### ${job.company}\n\n${job.role} | ${job.period}\n\n${job.description || job.positions.map((position) => `- ${position.company}: ${position.description}`).join("\n")}${job.highlights ? `\n\n${job.highlights.join("\n\n")}` : ""}${job.url ? `\n\n${job.url}` : ""}`).join("\n\n");
+  const experience = profile.experience.map((job) => `### ${job.company}\n\n${job.role} | ${job.period}\n\n${job.description || job.positions.map((position) => `- ${position.company}: ${position.description}`).join("\n")}${job.highlights ? `\n\n${job.highlights.join("\n\n")}` : ""}${job.url ? `\n\n${job.url}` : ""}${job.coverage ? `\n\n[${job.coverage.label}](${job.coverage.url})` : ""}`).join("\n\n");
   return [
     `# ${profile.name}`, profile.role, profile.description,
     `Canonical profile URL: ${DOMAIN}/\nDetailed experience and collaboration: ${DOMAIN}/work-together/\nAlso known as: ${profile.alternateNames.join(", ")}\nBased in: ${profile.location}`,

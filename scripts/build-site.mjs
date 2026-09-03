@@ -296,7 +296,7 @@ const replacements = {
     <header class="experience-heading"><h3 class="experience-company">${job.url ? `<a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.company)}</a>` : escapeHtml(job.company)}</h3><p>${escapeHtml(job.role)}</p><p class="experience-date">${escapeHtml(job.period)}</p></header>
     <div class="experience-body${job.positions ? " experience-body-grid" : ""}">${job.positions
       ? job.positions.map((position) => `<p><strong>${escapeHtml(position.company)}</strong><br>${escapeHtml(position.description)}</p>`).join("")
-      : `<p>${escapeHtml(job.description)}</p>${(job.highlights || []).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}`}</div>
+      : `<p>${escapeHtml(job.description)}</p>${(job.highlights || []).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}${job.coverage ? `<p><a href="${escapeHtml(job.coverage.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.coverage.label)} <span aria-hidden="true">↗</span></a></p>` : ""}`}</div>
   </article>`).join("\n"),
   "{{HOME_CONTROLS}}": pageControls("./blog.html", "Blog"),
   "{{BLOG_CONTROLS}}": pageControls("/", "Home", "←"),

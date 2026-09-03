@@ -98,6 +98,8 @@ test("the detailed profile stays consistent across the page, JSON, Markdown and 
   }
   assert.ok(markdown.includes(bio.homeCurrent));
   assert.ok(!home.includes("Mastery Depth Tracker"));
+  assert.ok(!home.includes("I joined Yandex Praktikum"));
+  assert.ok(work.includes("I joined Yandex Praktikum"));
   assert.ok(!home.includes("open-project"));
   assert.ok(!home.includes("help-list"));
   assert.ok(!home.includes("experience-item"));

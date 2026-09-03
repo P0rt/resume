@@ -4,6 +4,8 @@ Personal site, article archive, and career profile for [sergei-parfenov.com](htt
 
 For agents working on this project, start with [AGENTS.md](AGENTS.md): source map, design decisions, editorial accuracy and publishing safeguards.
 
+The favicon is the user's green three-eyed smile, redrawn as a small vector in `src/assets/favicon.svg`. Each build renders its 16–256px ICO, 96px PNG and opaque 180px Apple touch icon with Sharp. All pages share the same root-relative icon links. Edit the SVG master, not generated `dist/` fallbacks.
+
 The homepage is a compact personal notebook: an introduction with a photo, current roles and a mention of the blog. It has no header controls or music block. Theme follows the browser or operating system, including live preference changes; old saved theme overrides are ignored. Detailed biography, projects, collaboration areas and career history live at `/work-together/`, linked from the introduction. The full blog is a separate page; individual article and project links do not appear on the homepage. Articles keep their own URLs. The resume PDF is retained in `src/assets/resume.pdf` for later use but is excluded from the public build.
 
 ## Local development

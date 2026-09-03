@@ -28,6 +28,7 @@
   "devDependencies": {
     "gray-matter": "^4.0.3",
     "marked": "^18.0.11",
+    "sharp": "^0.35.4",
     "shiki": "^4.4.3"
   }
 }

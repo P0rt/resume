@@ -24,6 +24,7 @@
 - Detailed career, education, projects and collaboration belong on `/work-together/`. Blog is separate at `/blog.html`.
 - Theme follows browser/OS `prefers-color-scheme`, including live changes. No manual switch, localStorage override or forced dark mode.
 - Native `<picture>`: monochrome `portrait-light.webp` for light mode, original `portrait-blue.jpg` for dark; preserve frame/size and theme-aware preloads. Social previews keep the blue photo.
+- Favicon: the user's neon-green three-eyed smile, smoothly redrawn in `src/assets/favicon.svg`. Preserve all three eyes. `scripts/build-icons.mjs` renders PNG, multi-size ICO and Apple fallbacks automatically; edit only the SVG master.
 - Footer location is `Barcelona, <current year> ☯︎`, not a subtitle under the name. Music/Spotify is hidden for now. Do not publish `src/assets/resume.pdf`.
 - Motion stays subtle and respects reduced motion. Article text and highlighting must work without JavaScript; copy controls are progressive enhancements.
 - Polish reading measure, paragraph rhythm, lists, long titles, code and tables. Do not rewrite an article merely to make its layout easier.

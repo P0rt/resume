@@ -2,6 +2,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { renderArticle } from "./render-article.mjs";
+import { buildIcons } from "./build-icons.mjs";
 import { DOMAIN, profile, homeSchema, workSchema, blogSchema, articleSchema, writeAgentFiles } from "./site-metadata.mjs";
 
 const ROOT = process.cwd();
@@ -185,7 +186,7 @@ async function articleDocument(article, older, newer) {
   <link rel="alternate" type="text/markdown" href="${escapeHtml(article.canonicalUrl)}index.md" title="Article as Markdown">
   <link rel="describedby" type="text/plain" href="${DOMAIN}/llms.txt" title="Agent reading guide">
   <link rel="alternate" type="application/rss+xml" title="Writing by Sergei Parfenov" href="${DOMAIN}/rss.xml">
-  <link rel="icon" href="../../assets/favicon.ico" sizes="any">
+  {{SITE_ICONS}}
   <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../../styles/index.css">
   <link rel="stylesheet" href="../../styles/blog.css">
@@ -278,7 +279,12 @@ await fs.rm(DIST_DIR, { recursive: true, force: true });
 await fs.mkdir(DIST_DIR, { recursive: true });
 
 const articles = await loadArticles();
+const siteIcons = `<link rel="icon" href="/assets/favicon.ico" sizes="16x16 32x32 48x48 64x64 128x128 256x256" type="image/x-icon">
+  <link rel="icon" href="/assets/favicon-96.png" sizes="96x96" type="image/png">
+  <link rel="icon" href="/assets/favicon.svg" sizes="any" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180">`;
 const replacements = {
+  "{{SITE_ICONS}}": siteIcons,
   "{{PROFILE_SCHEMA}}": homeSchema(),
   "{{WORK_SCHEMA}}": workSchema(),
   "{{BLOG_SCHEMA}}": blogSchema(articles),
@@ -347,7 +353,8 @@ for (let index = 0; index < articles.length; index += 1) {
   const article = articles[index];
   const target = path.join(DIST_DIR, "blog", article.slug, "index.html");
   await fs.mkdir(path.dirname(target), { recursive: true });
-  await fs.writeFile(target, await articleDocument(article, articles[index + 1], articles[index - 1]), "utf8");
+  const html = (await articleDocument(article, articles[index + 1], articles[index - 1])).replace("{{SITE_ICONS}}", siteIcons);
+  await fs.writeFile(target, html, "utf8");
 }
 
 await Promise.all([
@@ -363,6 +370,7 @@ await Promise.all([
   fs.writeFile(path.join(DIST_DIR, "robots.txt"), `User-agent: *\nAllow: /\nSitemap: ${DOMAIN}/sitemap.xml\n`, "utf8"),
 ]);
 
+await buildIcons(path.join(SRC_DIR, "assets/favicon.svg"), DIST_DIR);
 await writeAgentFiles(articles, DIST_DIR);
 
 console.log(`Built ${articles.length} article pages.`);

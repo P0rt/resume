@@ -51,6 +51,20 @@ test("CSS honors the system theme even without JavaScript or with a stale theme 
   assert.ok(!/\[data-theme|\.theme-toggle|\.theme-thumb/.test(styles));
 });
 
+test("the portrait follows the system theme with native picture sources and matching preloads", async () => {
+  const html = await readFile(new URL("../dist/index.html", import.meta.url), "utf8");
+  const portrait = html.match(/<figure class="home-portrait">([\s\S]*?)<\/figure>/)?.[1];
+  assert.ok(portrait?.includes("<picture>"));
+  assert.match(portrait, /<source srcset="\.\/assets\/portrait-blue\.jpg" media="\(prefers-color-scheme: dark\)"/);
+  assert.match(portrait, /<img src="\.\/assets\/portrait-light\.webp" alt="Portrait of Sergei Parfenov"/);
+  assert.equal((portrait.match(/<img\s/g) || []).length, 1);
+  for (const [file, theme] of [["portrait-blue.jpg", "dark"], ["portrait-light.webp", "light"]]) {
+    assert.ok(html.includes(`<link rel="preload" href="./assets/${file}" as="image" media="(prefers-color-scheme: ${theme})"`));
+    assert.ok((await readFile(new URL(`../dist/assets/${file}`, import.meta.url))).length > 0);
+  }
+  assert.ok(html.includes('<meta property="og:image" content="https://sergei-parfenov.com/assets/portrait-blue.jpg">'));
+});
+
 test("content stays visible with reduced motion or without IntersectionObserver", () => {
   for (const reducedMotion of [false, true]) assert.ok(setup({ reducedMotion }).revealed.has("is-visible"));
 });

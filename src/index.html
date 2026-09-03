@@ -29,7 +29,8 @@
   <link rel="alternate" type="application/rss+xml" title="Writing by Sergei Parfenov" href="https://sergei-parfenov.com/rss.xml">
   <link rel="icon" href="./assets/favicon.ico" sizes="any">
   <link rel="preload" href="./assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="./assets/portrait-blue.jpg" as="image" fetchpriority="high">
+  <link rel="preload" href="./assets/portrait-blue.jpg" as="image" media="(prefers-color-scheme: dark)" fetchpriority="high">
+  <link rel="preload" href="./assets/portrait-light.webp" as="image" media="(prefers-color-scheme: light)" fetchpriority="high">
   <link rel="stylesheet" href="./styles/index.css">
   <link rel="stylesheet" href="./styles/home.css">
   <title>Sergei Parfenov | AI/ML engineer, CTO, writer</title>
@@ -48,7 +49,10 @@
             <p class="home-lead">{{PROFILE_INTRO}}</p>
           </div>
           <figure class="home-portrait">
-            <img src="./assets/portrait-blue.jpg" alt="Sergei Parfenov against a blue background" width="1006" height="1006" fetchpriority="high">
+            <picture>
+              <source srcset="./assets/portrait-blue.jpg" media="(prefers-color-scheme: dark)" width="1006" height="1006">
+              <img src="./assets/portrait-light.webp" alt="Portrait of Sergei Parfenov" width="1114" height="1412" fetchpriority="high">
+            </picture>
           </figure>
         </div>
         <div class="home-letter">

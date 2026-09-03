@@ -6,6 +6,7 @@ const contentDir = path.resolve("content/articles");
 const distDir = path.resolve("dist");
 const filenames = (await fs.readdir(contentDir)).filter((filename) => filename.endsWith(".md"));
 const slugs = new Set();
+const publishedSlugs = new Set();
 
 function validateControls(html, page, destination) {
   const header = html.match(/<header class="page-controls section-shell">([\s\S]*?)<\/header>/)?.[1];
@@ -27,6 +28,7 @@ for (const filename of filenames) {
   if (!slug || slugs.has(slug)) throw new Error(`Missing or duplicate slug in ${filename}`);
   slugs.add(slug);
   if (parsed.data.published === false) continue;
+  publishedSlugs.add(slug);
 
   const built = path.join(distDir, "blog", slug, "index.html");
   const html = await fs.readFile(built, "utf8");
@@ -39,7 +41,7 @@ for (const filename of filenames) {
 
 const index = await fs.readFile(path.join(distDir, "index.html"), "utf8");
 validateControls(index, "home", "./blog.html");
-validateControls(await fs.readFile(path.join(distDir, "blog.html"), "utf8"), "blog", "./index.html");
+validateControls(await fs.readFile(path.join(distDir, "blog.html"), "utf8"), "blog", "/");
 if (/<details\b|<summary\b/.test(index)) throw new Error("Homepage information is still collapsed");
 if ((index.match(/<article class="experience-item">/g) || []).length !== 5) throw new Error("Experience entry is missing");
 for (const section of ["about", "writing", "experience", "personal"]) {
@@ -54,10 +56,10 @@ if (!index.includes("open.spotify.com/playlist/6kX9RuLad2D5hsX86fjvgg")) throw n
 if (!index.includes("portrait-blue.jpg")) throw new Error("New portrait is missing");
 
 const articlePages = await fs.readdir(path.join(distDir, "blog"));
-if (articlePages.length !== slugs.size) throw new Error("Not every article has its own output directory");
+if (articlePages.length !== publishedSlugs.size) throw new Error("Not every published article has its own output directory");
 
 for (const filename of ["index.html", "blog.html", "rss.xml", "sitemap.xml", "robots.txt"]) {
   await fs.access(path.join(distDir, filename));
 }
 
-console.log(`Validated the single-page profile, minimal controls, unpublished PDF, and ${slugs.size} unique article URLs.`);
+console.log(`Validated the single-page profile, minimal controls, unpublished PDF, and ${publishedSlugs.size} unique article URLs.`);

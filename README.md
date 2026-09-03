@@ -40,3 +40,11 @@ Set `published: true` in its front matter when it is ready. The stable public UR
 Refresh articles originally published on DEV with `npm run articles:sync`. The importer preserves local-first articles and only updates files whose `source` is `dev`.
 
 See `BLOGGING.md` for the publishing and canonical URL workflow.
+
+## SEO and agent access
+
+Public profile fields live in `content/profile.json`; the homepage, Person/ProfilePage schema and agent-readable profile use that same source. Each article has an explicit author, BlogPosting/BreadcrumbList data, canonical URL and Markdown alternate. The sitemap excludes noindex utility pages and uses actual article modification dates.
+
+The read-only MCP endpoint is `https://sergei-parfenov.com/mcp`. `MCP.md` documents connection options, tools, static Markdown/JSON alternatives and security limits. The function is bundled from published content only. `npm test` validates both SEO output and MCP behavior before deployment.
+
+For Google, keep the domain verified in Search Console, submit `https://sergei-parfenov.com/sitemap.xml`, and use URL Inspection for the homepage and representative articles. Submission and structured data do not guarantee indexing, rich results or rankings. Update the canonical URL on existing DEV copies to the corresponding personal-site URL when the personal site should be the preferred version; local metadata cannot change DEV's canonical settings.

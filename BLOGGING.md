@@ -29,6 +29,11 @@ The build creates all of this automatically:
 - An entry in the blog archive
 - An entry in `rss.xml`
 - An entry in `sitemap.xml`
+- A complete Markdown alternate at `/blog/<slug>/index.md`
+- An entry in `/articles.json` and `/llms.txt`
+- A searchable, readable document in the public MCP endpoint
+
+Unpublished drafts are excluded from every public representation and from the server bundle. Keep actual publication and update dates: do not change dates just to suggest freshness. The build preserves the original article punctuation in HTML and Markdown.
 
 ## Republish on DEV
 

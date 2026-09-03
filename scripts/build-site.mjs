@@ -2,12 +2,12 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { marked } from "marked";
+import { DOMAIN, profile, homeSchema, blogSchema, articleSchema, writeAgentFiles } from "./site-metadata.mjs";
 
 const ROOT = process.cwd();
 const SRC_DIR = path.join(ROOT, "src");
 const DIST_DIR = path.join(ROOT, "dist");
 const ARTICLES_DIR = path.join(ROOT, "content/articles");
-const DOMAIN = "https://sergei-parfenov.com";
 
 function escapeHtml(value = "") {
   return String(value)
@@ -22,13 +22,9 @@ function escapeXml(value = "") {
   return escapeHtml(value);
 }
 
-function normalizeTypography(value = "") {
-  return String(value).replace(/[\u2013\u2014]/g, "-");
-}
-
 function isoDate(value) {
   const date = value instanceof Date ? value : new Date(value);
-  if (Number.isNaN(date.getTime())) return new Date().toISOString();
+  if (!value || Number.isNaN(date.getTime())) throw new Error(`Invalid publication date: ${value}`);
   return date.toISOString();
 }
 
@@ -61,17 +57,22 @@ function pageControls(href, label, arrow = "↗") {
 }
 
 async function loadArticles() {
+  const slugs = new Set();
   const filenames = (await fs.readdir(ARTICLES_DIR)).filter((filename) => filename.endsWith(".md"));
   const articles = await Promise.all(filenames.map(async (filename) => {
     const raw = await fs.readFile(path.join(ARTICLES_DIR, filename), "utf8");
     const parsed = matter(raw);
+    if (parsed.data.published === false) return null;
     const slug = parsed.data.slug || filename.replace(/\.md$/, "");
-    const content = normalizeTypography(parsed.content);
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || slugs.has(slug)) throw new Error(`Invalid or duplicate slug: ${slug}`);
+    slugs.add(slug);
+    if (!parsed.data.title?.trim() || !parsed.data.description?.trim()) throw new Error(`Missing article metadata: ${filename}`);
+    const content = parsed.content;
 
     return {
       ...parsed.data,
-      title: normalizeTypography(parsed.data.title),
-      description: normalizeTypography(parsed.data.description),
+      title: parsed.data.title,
+      description: parsed.data.description,
       slug,
       content,
       date: isoDate(parsed.data.date),
@@ -83,7 +84,7 @@ async function loadArticles() {
   }));
 
   return articles
-    .filter((article) => article.published !== false)
+    .filter(Boolean)
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
@@ -144,26 +145,7 @@ function articleDocument(article, older, newer) {
   const newerLink = newer ? `<a href="../${escapeHtml(newer.slug)}/"><span>Next</span>${escapeHtml(newer.title)}</a>` : "<span></span>";
   const tags = article.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("");
   const socialImage = article.coverImage || `${DOMAIN}/assets/portrait-blue.jpg`;
-  const structuredData = JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: article.title,
-    description: article.description,
-    datePublished: article.date,
-    dateModified: article.updated,
-    mainEntityOfPage: article.canonicalUrl,
-    image: socialImage,
-    author: {
-      "@type": "Person",
-      name: "Sergei Parfenov",
-      url: `${DOMAIN}/`,
-    },
-    publisher: {
-      "@type": "Person",
-      name: "Sergei Parfenov",
-      url: `${DOMAIN}/`,
-    },
-  }).replaceAll("<", "\\u003c");
+  const structuredData = articleSchema(article);
 
   return `<!doctype html>
 <html lang="${escapeHtml(article.language || "en")}">
@@ -171,8 +153,11 @@ function articleDocument(article, older, newer) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="${escapeHtml(article.description)}">
+  <meta name="author" content="${escapeHtml(profile.name)}">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="theme-color" content="#f7f7f4" data-theme-color>
   <meta property="og:type" content="article">
+  <meta property="og:site_name" content="${escapeHtml(profile.name)}">
   <meta property="og:title" content="${escapeHtml(article.title)}">
   <meta property="og:description" content="${escapeHtml(article.description)}">
   <meta property="og:image" content="${escapeHtml(socialImage)}">
@@ -180,7 +165,13 @@ function articleDocument(article, older, newer) {
   <meta property="article:published_time" content="${escapeHtml(article.date)}">
   <meta property="article:modified_time" content="${escapeHtml(article.updated)}">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtml(article.title)}">
+  <meta name="twitter:description" content="${escapeHtml(article.description)}">
+  <meta name="twitter:image" content="${escapeHtml(socialImage)}">
   <link rel="canonical" href="${escapeHtml(article.canonicalUrl)}">
+  <link rel="author" href="${DOMAIN}/">
+  <link rel="alternate" type="text/markdown" href="${escapeHtml(article.canonicalUrl)}index.md" title="Article as Markdown">
+  <link rel="describedby" type="text/plain" href="${DOMAIN}/llms.txt" title="Agent reading guide">
   <link rel="alternate" type="application/rss+xml" title="Writing by Sergei Parfenov" href="${DOMAIN}/rss.xml">
   <link rel="icon" href="../../assets/favicon.ico" sizes="any">
   <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -199,6 +190,7 @@ function articleDocument(article, older, newer) {
         <h1>${escapeHtml(article.title)}</h1>
         <p class="article-deck">${escapeHtml(article.description)}</p>
         <div class="article-meta-line">
+          <a href="/" rel="author">${escapeHtml(profile.name)}</a>
           <time datetime="${escapeHtml(article.date)}">${escapeHtml(humanDate(article.date))}</time>
           <span>${article.readingTime} min read</span>
           <span class="article-tags">${tags}</span>
@@ -214,7 +206,7 @@ function articleDocument(article, older, newer) {
     </article>
   </main>
   <footer class="site-footer section-shell">
-    <a href="../../index.html">Sergei Parfenov</a>
+    <a href="/">Sergei Parfenov</a>
     <a href="../../blog.html">Writing</a>
     <span>© <span data-current-year>${new Date().getFullYear()}</span></span>
   </footer>
@@ -234,8 +226,9 @@ function rssDocument(articles) {
     </item>`).join("");
 
   return `<?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
+    <atom:link href="${DOMAIN}/rss.xml" rel="self" type="application/rss+xml" />
     <title>Writing by Sergei Parfenov</title>
     <link>${DOMAIN}/blog.html</link>
     <description>Essays on AI systems, agents, infrastructure, and product engineering.</description>
@@ -245,15 +238,16 @@ function rssDocument(articles) {
 }
 
 function sitemapDocument(articles) {
-  const staticPages = ["/", "/blog.html", "/privacy.html"];
+  // Utility pages are noindex. Do not invent lastmod dates for static pages.
+  const staticPages = ["/", "/blog.html"];
   const urls = [
-    ...staticPages.map((pathname) => ({ url: `${DOMAIN}${pathname}`, updated: articles[0]?.updated })),
+    ...staticPages.map((pathname) => ({ url: `${DOMAIN}${pathname}` })),
     ...articles.map((article) => ({ url: article.canonicalUrl, updated: article.updated })),
   ];
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map((item) => `  <url><loc>${escapeXml(item.url)}</loc><lastmod>${isoDate(item.updated).slice(0, 10)}</lastmod></url>`).join("\n")}
+${urls.map((item) => `  <url><loc>${escapeXml(item.url)}</loc>${item.updated ? `<lastmod>${isoDate(item.updated)}</lastmod>` : ""}</url>`).join("\n")}
 </urlset>`;
 }
 
@@ -272,8 +266,26 @@ await fs.mkdir(DIST_DIR, { recursive: true });
 
 const articles = await loadArticles();
 const replacements = {
+  "{{PROFILE_SCHEMA}}": homeSchema(),
+  "{{BLOG_SCHEMA}}": blogSchema(articles),
+  "{{PROFILE_NAME}}": escapeHtml(profile.name),
+  "{{PROFILE_ROLE}}": escapeHtml(profile.role),
+  "{{PROFILE_DESCRIPTION}}": escapeHtml(profile.description),
+  "{{PROFILE_SUMMARY}}": escapeHtml(profile.summary),
+  "{{PROFILE_CURRENT}}": profile.currentRoles.map((job) => `${escapeHtml(job.role)}, ${escapeHtml(job.organization)}`).join("<br>"),
+  "{{PROFILE_FOCUS}}": escapeHtml(profile.focus),
+  "{{PROFILE_AUDIENCE}}": escapeHtml(profile.audience),
+  "{{PROFILE_MUSIC}}": escapeHtml(profile.music.description),
+  "{{PROFILE_PLAYLIST}}": escapeHtml(profile.music.url),
+  "{{PROFILE_CAPABILITIES}}": profile.capabilities.map((item) => `<div><dt>${escapeHtml(item.name)}</dt><dd>${escapeHtml(item.description)}</dd></div>`).join("\n"),
+  "{{PROFILE_EXPERIENCE}}": profile.experience.map((job) => `<article class="experience-item">
+    <header class="experience-heading"><h3 class="experience-company">${escapeHtml(job.company)}</h3><p>${escapeHtml(job.role)}</p><p class="experience-date">${escapeHtml(job.period)}</p></header>
+    <div class="experience-body${job.positions ? " experience-body-grid" : ""}">${job.positions
+      ? job.positions.map((position) => `<p><strong>${escapeHtml(position.company)}</strong><br>${escapeHtml(position.description)}</p>`).join("")
+      : `<p>${escapeHtml(job.description)}</p>${job.url ? `<a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">Visit ${escapeHtml(job.company)} <span aria-hidden="true">↗</span></a>` : ""}`}</div>
+  </article>`).join("\n"),
   "{{HOME_CONTROLS}}": pageControls("./blog.html", "Blog"),
-  "{{BLOG_CONTROLS}}": pageControls("./index.html", "Home", "←"),
+  "{{BLOG_CONTROLS}}": pageControls("/", "Home", "←"),
   "{{ARTICLE_COUNT}}": String(articles.length),
   "{{FEATURED_ARTICLES}}": featuredWriting(articles),
   "{{ARTICLE_ARCHIVE}}": archiveMarkup(articles),
@@ -310,5 +322,7 @@ await Promise.all([
   fs.writeFile(path.join(DIST_DIR, "sitemap.xml"), sitemapDocument(articles), "utf8"),
   fs.writeFile(path.join(DIST_DIR, "robots.txt"), `User-agent: *\nAllow: /\nSitemap: ${DOMAIN}/sitemap.xml\n`, "utf8"),
 ]);
+
+await writeAgentFiles(articles, DIST_DIR);
 
 console.log(`Built ${articles.length} article pages.`);

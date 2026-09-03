@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node ./scripts/serve.mjs",
-    "test": "npm run build && node ./scripts/validate-site.mjs && node --test ./scripts/theme.test.mjs",
+    "test": "npm run build && node ./scripts/validate-site.mjs && node --test ./scripts/*.test.mjs",
     "html": "node ./scripts/build-site.mjs",
     "build": "npm run html",
     "articles:sync": "node ./scripts/sync-dev.mjs",
@@ -21,6 +21,10 @@
     "url": "https://github.com/P0rt/resume/issues"
   },
   "homepage": "https://sergei-parfenov.com",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "4.5.4"
+  },
   "devDependencies": {
     "gray-matter": "^4.0.3",
     "marked": "^18.0.11"

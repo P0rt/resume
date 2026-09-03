@@ -3,15 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Sergei Parfenov is an AI/ML engineer, CTO, and writer building reliable AI systems, products, and learning experiences.">
+  <meta name="description" content="{{PROFILE_DESCRIPTION}}">
+  <meta name="author" content="{{PROFILE_NAME}}">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="theme-color" content="#f7f7f4" data-theme-color>
   <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="Sergei Parfenov">
+  <meta property="og:locale" content="en_US">
   <meta property="og:title" content="Sergei Parfenov | AI/ML engineer, CTO, writer">
   <meta property="og:description" content="AI/ML Engineer and CTO building production AI systems, evaluation pipelines, and learning products.">
   <meta property="og:image" content="https://sergei-parfenov.com/assets/portrait-blue.jpg">
+  <meta property="og:image:alt" content="Sergei Parfenov against a blue background">
+  <meta property="og:image:width" content="1006">
+  <meta property="og:image:height" content="1006">
   <meta property="og:url" content="https://sergei-parfenov.com/">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sergei Parfenov | AI/ML engineer, CTO, writer">
+  <meta name="twitter:description" content="{{PROFILE_DESCRIPTION}}">
+  <meta name="twitter:image" content="https://sergei-parfenov.com/assets/portrait-blue.jpg">
+  <meta name="twitter:image:alt" content="Portrait of Sergei Parfenov">
   <link rel="canonical" href="https://sergei-parfenov.com/">
+  <link rel="alternate" type="text/markdown" href="https://sergei-parfenov.com/index.md" title="Profile as Markdown">
+  <link rel="alternate" type="application/json" href="https://sergei-parfenov.com/profile.json" title="Structured profile">
+  <link rel="describedby" type="text/plain" href="https://sergei-parfenov.com/llms.txt" title="Agent reading guide">
   <link rel="alternate" type="application/rss+xml" title="Writing by Sergei Parfenov" href="https://sergei-parfenov.com/rss.xml">
   <link rel="icon" href="./assets/favicon.ico" sizes="any">
   <link rel="preload" href="./assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -19,23 +33,7 @@
   <link rel="stylesheet" href="./styles/index.css">
   <title>Sergei Parfenov | AI/ML engineer, CTO, writer</title>
   <script>document.documentElement.classList.add("js");try{const t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Sergei Parfenov",
-      "url": "https://sergei-parfenov.com/",
-      "image": "https://sergei-parfenov.com/assets/portrait-blue.jpg",
-      "jobTitle": "AI/ML Engineer and CTO",
-      "description": "AI/ML engineer, CTO, and writer working across models, product systems, and education.",
-      "sameAs": [
-        "https://github.com/P0rt",
-        "https://dev.to/p0rt",
-        "https://www.linkedin.com/in/sergey-p-721b25171/"
-      ],
-      "knowsAbout": ["Artificial intelligence", "Machine learning", "AI agents", "Product engineering", "Educational technology"]
-    }
-  </script>
+  <script type="application/ld+json">{{PROFILE_SCHEMA}}</script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -45,9 +43,9 @@
   <main id="main">
     <section class="hero section-shell" id="top" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <h1 id="hero-title" class="hero-title">Sergei Parfenov</h1>
-        <p class="hero-role hero-enter">AI/ML Engineer and CTO</p>
-        <p class="hero-summary hero-enter">I build production AI systems, evaluation pipelines, and learning products.</p>
+        <h1 id="hero-title" class="hero-title">{{PROFILE_NAME}}</h1>
+        <p class="hero-role hero-enter">{{PROFILE_ROLE}}</p>
+        <p class="hero-summary hero-enter">{{PROFILE_SUMMARY}}</p>
       </div>
 
       <figure class="hero-portrait" aria-label="Portrait of Sergei Parfenov">
@@ -57,10 +55,10 @@
 
     <section class="facts section-shell" aria-label="Profile facts" data-reveal>
       <dl class="fact-grid">
-        <div><dt>Current</dt><dd>CTO, Aliwio<br>AI/ML Engineer, TripleTen</dd></div>
-        <div><dt>Focus</dt><dd>Agents, evaluation, learning systems</dd></div>
+        <div><dt>Current</dt><dd>{{PROFILE_CURRENT}}</dd></div>
+        <div><dt>Focus</dt><dd>{{PROFILE_FOCUS}}</dd></div>
         <div><dt>Writing</dt><dd>{{ARTICLE_COUNT}} articles</dd></div>
-        <div><dt>Audience</dt><dd>Nearly 10k subscribers</dd></div>
+        <div><dt>Audience</dt><dd>{{PROFILE_AUDIENCE}}</dd></div>
       </dl>
     </section>
 
@@ -71,9 +69,7 @@
       </header>
 
       <dl class="capability-list" data-reveal>
-        <div><dt>AI systems</dt><dd>Agents, RAG, evaluation, distillation</dd></div>
-        <div><dt>Product</dt><dd>Learning systems, verification, feedback loops</dd></div>
-        <div><dt>Engineering</dt><dd>Python, TypeScript, Node, React</dd></div>
+        {{PROFILE_CAPABILITIES}}
       </dl>
     </section>
 
@@ -95,34 +91,7 @@
       </header>
 
       <div class="experience-list" data-reveal>
-        <article class="experience-item">
-          <header class="experience-heading"><h3 class="experience-company">Aliwio</h3><p>CTO</p><p class="experience-date">Current</p></header>
-          <div class="experience-body"><p>Technical founder responsible for the model, pipeline, and product.</p></div>
-        </article>
-        <article class="experience-item">
-          <header class="experience-heading"><h3 class="experience-company">TripleTen</h3><p>AI/ML Engineer</p><p class="experience-date">Dec 2020 to present</p></header>
-          <div class="experience-body">
-            <p>Build AI and ML systems for the learning experience, including evaluation, automated code verification, and training hints. Earlier launched the US QA Engineering faculty with a 70% activation rate and helped hundreds of students enter the field.</p>
-            <a href="https://tripleten.com" target="_blank" rel="noopener noreferrer">Visit TripleTen <span aria-hidden="true">↗</span></a>
-          </div>
-        </article>
-        <article class="experience-item">
-          <header class="experience-heading"><h3 class="experience-company">Yandex Praktikum</h3><p>Technical Product Manager and writer</p><p class="experience-date">Mar 2018 to Dec 2020</p></header>
-          <div class="experience-body"><p>Helped launch the Web Developer faculty, authored technical courses, and created the platform test architecture.</p></div>
-        </article>
-        <article class="experience-item">
-          <header class="experience-heading"><h3 class="experience-company">Thingyfy</h3><p>Full Stack Developer</p><p class="experience-date">Oct 2019 to Dec 2021</p></header>
-          <div class="experience-body"><p>Built startup products with React, TypeScript, Node, Python, and GitLab.</p></div>
-        </article>
-        <article class="experience-item">
-          <header class="experience-heading"><h3 class="experience-company">Earlier work</h3><p>Engineer and teacher</p><p class="experience-date">2016 to 2019</p></header>
-          <div class="experience-body experience-body-grid">
-            <p><strong>European Gymnasium</strong><br>Computer science and web development.</p>
-            <p><strong>Sravni</strong><br>Insurance products built in React.</p>
-            <p><strong>Spaces</strong><br>Commercial property product engineering.</p>
-            <p><strong>MCS</strong><br>Arduino, Swift, Python, web, and VR teaching.</p>
-          </div>
-        </article>
+        {{PROFILE_EXPERIENCE}}
       </div>
     </section>
 
@@ -138,8 +107,8 @@
         </article>
         <article>
           <h3>Music</h3>
-          <p>I collect themed playlists on Spotify.</p>
-          <a class="text-link" href="https://open.spotify.com/playlist/6kX9RuLad2D5hsX86fjvgg?si=f7ac7e7e3f264f68" target="_blank" rel="noopener noreferrer">Open playlist <span aria-hidden="true">↗</span></a>
+          <p>{{PROFILE_MUSIC}}</p>
+          <a class="text-link" href="{{PROFILE_PLAYLIST}}" target="_blank" rel="noopener noreferrer">Open playlist <span aria-hidden="true">↗</span></a>
         </article>
       </div>
     </section>

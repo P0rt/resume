@@ -2,7 +2,48 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "functions": {
+    "api/mcp.js": {
+      "includeFiles": ".generated/mcp-data.json",
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [{ "source": "/mcp", "destination": "/api/mcp" }],
+  "redirects": [
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/blog/:slug/index.html", "destination": "/blog/:slug/", "permanent": true },
+    { "source": "/blog", "destination": "/blog.html", "permanent": true },
+    { "source": "/blog/", "destination": "/blog.html", "permanent": true },
+    { "source": "/mcp/", "destination": "/mcp", "permanent": true }
+  ],
   "headers": [
+    {
+      "source": "/blog/:slug/index.md",
+      "headers": [
+        { "key": "Content-Type", "value": "text/markdown; charset=utf-8" },
+        { "key": "X-Robots-Tag", "value": "noindex, follow" },
+        { "key": "Link", "value": "<https://sergei-parfenov.com/blog/:slug/>; rel=\"canonical\"" }
+      ]
+    },
+    {
+      "source": "/index.md",
+      "headers": [
+        { "key": "Content-Type", "value": "text/markdown; charset=utf-8" },
+        { "key": "X-Robots-Tag", "value": "noindex, follow" },
+        { "key": "Link", "value": "<https://sergei-parfenov.com/>; rel=\"canonical\"" }
+      ]
+    },
+    {
+      "source": "/:file(profile|articles|mcp).json",
+      "headers": [
+        { "key": "Content-Type", "value": "application/json; charset=utf-8" },
+        { "key": "X-Robots-Tag", "value": "noindex, follow" }
+      ]
+    },
+    {
+      "source": "/llms.txt",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, follow" }]
+    },
     {
       "source": "/(.*)",
       "headers": [

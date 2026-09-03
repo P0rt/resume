@@ -1,0 +1,38 @@
+{
+  "name": "Sergei Parfenov",
+  "alternateNames": ["Сергей Парфенов", "Sergey Parfenov", "P0rt"],
+  "role": "AI/ML Engineer and CTO",
+  "description": "Sergei Parfenov is an AI/ML engineer, CTO, and writer building reliable AI systems, products, and learning experiences.",
+  "summary": "I build production AI systems, evaluation pipelines, and learning products.",
+  "image": "https://sergei-parfenov.com/assets/portrait-blue.jpg",
+  "email": "sergey.paarfenov@gmail.com",
+  "sameAs": [
+    "https://github.com/P0rt",
+    "https://dev.to/p0rt",
+    "https://www.linkedin.com/in/sergey-p-721b25171/"
+  ],
+  "currentRoles": [
+    {"organization": "Aliwio", "role": "CTO"},
+    {"organization": "TripleTen", "role": "AI/ML Engineer"}
+  ],
+  "focus": "Agents, evaluation, learning systems",
+  "audience": "Nearly 10k subscribers",
+  "capabilities": [
+    {"name": "AI systems", "description": "Agents, RAG, evaluation, distillation"},
+    {"name": "Product", "description": "Learning systems, verification, feedback loops"},
+    {"name": "Engineering", "description": "Python, TypeScript, Node, React"}
+  ],
+  "experience": [
+    {"company": "Aliwio", "role": "CTO", "period": "Current", "description": "Technical founder responsible for the model, pipeline, and product."},
+    {"company": "TripleTen", "role": "AI/ML Engineer", "period": "Dec 2020 to present", "description": "Build AI and ML systems for the learning experience, including evaluation, automated code verification, and training hints. Earlier launched the US QA Engineering faculty with a 70% activation rate and helped hundreds of students enter the field.", "url": "https://tripleten.com"},
+    {"company": "Yandex Praktikum", "role": "Technical Product Manager and writer", "period": "Mar 2018 to Dec 2020", "description": "Helped launch the Web Developer faculty, authored technical courses, and created the platform test architecture."},
+    {"company": "Thingyfy", "role": "Full Stack Developer", "period": "Oct 2019 to Dec 2021", "description": "Built startup products with React, TypeScript, Node, Python, and GitLab."},
+    {"company": "Earlier work", "role": "Engineer and teacher", "period": "2016 to 2019", "positions": [
+      {"company": "European Gymnasium", "description": "Computer science and web development."},
+      {"company": "Sravni", "description": "Insurance products built in React."},
+      {"company": "Spaces", "description": "Commercial property product engineering."},
+      {"company": "MCS", "description": "Arduino, Swift, Python, web, and VR teaching."}
+    ]}
+  ],
+  "music": {"description": "I collect themed playlists on Spotify.", "url": "https://open.spotify.com/playlist/6kX9RuLad2D5hsX86fjvgg?si=f7ac7e7e3f264f68"}
+}

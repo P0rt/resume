@@ -22,6 +22,22 @@ function escapeXml(value = "") {
   return escapeHtml(value);
 }
 
+const profileLinks = new Map([
+  ["Yandex Praktikum", "https://practicum.yandex.ru/"],
+  ["TripleTen", profile.experience.find((job) => job.company === "TripleTen").url],
+  ["Tech.eu", profile.experience.find((job) => job.company === "IAWY").coverage.url],
+  ...profile.currentRoles.map((job) => [job.organization, job.url]),
+]);
+
+function linkedProfileText(value) {
+  // Split plain text before escaping; never search inside generated anchor markup.
+  let segments = [{ text: value }];
+  for (const [label, url] of profileLinks) {
+    segments = segments.flatMap((segment) => segment.url ? [segment] : segment.text.split(label).flatMap((text, index) => index ? [{ text: label, url }, { text }] : [{ text }]));
+  }
+  return segments.map(({ text, url }) => url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(text)}</a>` : escapeHtml(text)).join("");
+}
+
 function isoDate(value) {
   const date = value instanceof Date ? value : new Date(value);
   if (!value || Number.isNaN(date.getTime())) throw new Error(`Invalid publication date: ${value}`);
@@ -270,8 +286,8 @@ const replacements = {
   "{{PROFILE_DESCRIPTION}}": escapeHtml(profile.description),
   "{{PROFILE_SUMMARY}}": escapeHtml(profile.summary),
   "{{PROFILE_INTRO}}": escapeHtml(profile.intro),
-  "{{PROFILE_HOME_STORY}}": profile.homeStory.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("\n"),
-  "{{PROFILE_HOME_CURRENT}}": profile.currentRoles.reduce((text, job) => text.replaceAll(escapeHtml(job.organization), `<a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.organization)}</a>`), escapeHtml(profile.homeCurrent)),
+  "{{PROFILE_HOME_STORY}}": profile.homeStory.map((paragraph) => `<p>${linkedProfileText(paragraph)}</p>`).join("\n"),
+  "{{PROFILE_HOME_CURRENT}}": linkedProfileText(profile.homeCurrent),
   "{{PROFILE_BLOG_INTRO}}": escapeHtml(profile.blogIntro),
   "{{PROFILE_CURRENT_LINKS}}": profile.currentRoles.map((job) => `${escapeHtml(job.role)} at <a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.organization)}</a>.`).join("<br>"),
   "{{PROFILE_LOCATION}}": escapeHtml(profile.location),

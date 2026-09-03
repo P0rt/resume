@@ -4,11 +4,12 @@
   "role": "CTO and AI/ML Engineer",
   "description": "Sergei Parfenov, CTO at Aliwio and Symptomato. Early Yandex Praktikum team member building AI products, learning infrastructure and automated project assessment.",
   "summary": "Engineering, product and the work in between.",
-  "intro": "I’m an engineer, founder and CTO. I build AI products, lead technical teams and stay close to the code.",
+  "intro": "Over the past decade, my work has grown from software engineering into building AI products, launching a startup and leading technical teams.",
   "homeStory": [
-    "At TripleTen, I built AI assessment, search and tutoring systems, and helped launch the QA programme in the US. I also co-founded IAWY, an AI tutor we launched in two Latin American bootcamps."
+    "I was part of the early team behind Yandex Praktikum. At TripleTen, I built AI assessment, search and tutoring systems, and helped launch the QA programme in the US. One of those assessment systems made grading 14 times faster.",
+    "I also co-founded IAWY, an AI tutor that reviews student projects and supports learners. We launched it in two bootcamps in Latin America. The project was featured in Tech.eu."
   ],
-  "homeCurrent": "Today I’m CTO at Aliwio and Symptomato, building software for veterinary clinics and a service that connects AI intake with human health specialists.",
+  "homeCurrent": "Today I’m CTO at Aliwio and Symptomato, working on veterinary software and a healthcare service that combines AI with human expertise.",
   "blogIntro": "I share experiments, technical deep dives and what I learn building AI systems. Nearly 10k subscribers follow my writing.",
   "location": "Barcelona, Spain",
   "about": [

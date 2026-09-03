@@ -93,7 +93,7 @@ test("the detailed profile stays consistent across the page, JSON, Markdown and 
   assert.ok(home.includes(htmlText(bio.intro)));
   assert.ok(home.includes(htmlText(bio.blogIntro)));
   for (const paragraph of bio.homeStory) {
-    assert.ok(home.includes(htmlText(paragraph)));
+    assert.ok(home.replace(/<[^>]*>/g, "").includes(htmlText(paragraph)));
     assert.ok(markdown.includes(paragraph));
   }
   assert.ok(markdown.includes(bio.homeCurrent));
@@ -159,7 +159,9 @@ test("career corrections stay accurate in every public representation", async ()
     for (const fact of ["11th", "7,000–10,000", "before ChatGPT", "8.4 seconds to 0.6 seconds", "140 legacy", "100,000 items", "2.5 hours to 18 minutes", "97.8%", "IAWY", "Symptomato", iawy.coverage.url]) assert.ok(text.includes(fact), `Missing career fact: ${fact}`);
     assert.ok(!text.includes("Dec 2020 to present"));
   }
-  assert.ok(!home.includes('href="https://tripleten.com"'));
+  assert.ok(home.includes('href="https://tripleten.com"'));
+  assert.ok(home.includes('href="https://practicum.yandex.ru/"'));
+  assert.ok(home.includes(`href="${iawy.coverage.url}"`));
   assert.ok(home.includes('href="https://symptomato.com"'));
   const pages = [home, work, await read("blog.html"), await read(`blog/${snapshot.articles[0].id}/index.html`)];
   for (const page of pages) {

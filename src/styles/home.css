@@ -65,7 +65,7 @@
   text-wrap: pretty;
 }
 
-.home-current a,
+.home-letter a,
 .home-link {
   color: var(--accent);
   text-decoration-thickness: 1px;
@@ -86,7 +86,7 @@
 }
 
 .home-link:hover,
-.home-current a:hover {
+.home-letter a:hover {
   color: var(--accent-strong);
   text-decoration-thickness: 2px;
 }

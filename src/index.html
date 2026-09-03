@@ -40,21 +40,7 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <nav class="site-nav" aria-label="Primary navigation">
-      <a class="wordmark" href="#top" aria-label="Sergei Parfenov, back to top">SP</a>
-      <div class="nav-menu">
-        <a href="#about">About</a>
-        <a href="./blog.html">Writing</a>
-        <a href="#experience">Experience</a>
-        <a href="#personal">Personal</a>
-      </div>
-      <div class="nav-tools">
-        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme"><span data-theme-label>Theme</span></button>
-        <a href="./assets/resume.pdf" download>Resume</a>
-      </div>
-    </nav>
-  </header>
+  {{HOME_CONTROLS}}
 
   <main id="main">
     <section class="hero section-shell" id="top" aria-labelledby="hero-title">
@@ -62,9 +48,6 @@
         <h1 id="hero-title" class="hero-title">Sergei Parfenov</h1>
         <p class="hero-role hero-enter">AI/ML Engineer and CTO</p>
         <p class="hero-summary hero-enter">I build production AI systems, evaluation pipelines, and learning products.</p>
-        <div class="hero-actions hero-enter">
-          <a class="button" href="{{LATEST_ARTICLE_URL}}">Latest article</a>
-        </div>
       </div>
 
       <figure class="hero-portrait" aria-label="Portrait of Sergei Parfenov">
@@ -101,7 +84,7 @@
       </header>
       <div class="writing-layout">{{FEATURED_ARTICLES}}</div>
       <footer class="writing-footer" data-reveal>
-        <p>{{ARTICLE_COUNT}} articles. Every article has its own URL and RSS entry.</p>
+        <p>{{ARTICLE_COUNT}} articles</p>
         <a class="button button-secondary" href="./blog.html">All articles</a>
       </footer>
     </section>
@@ -112,34 +95,34 @@
       </header>
 
       <div class="experience-list" data-reveal>
-        <details class="experience-item" open>
-          <summary><span class="experience-company">Aliwio</span><span>CTO</span><span>Current</span></summary>
+        <article class="experience-item">
+          <header class="experience-heading"><h3 class="experience-company">Aliwio</h3><p>CTO</p><p class="experience-date">Current</p></header>
           <div class="experience-body"><p>Technical founder responsible for the model, pipeline, and product.</p></div>
-        </details>
-        <details class="experience-item">
-          <summary><span class="experience-company">TripleTen</span><span>AI/ML Engineer</span><span>Dec 2020 to present</span></summary>
+        </article>
+        <article class="experience-item">
+          <header class="experience-heading"><h3 class="experience-company">TripleTen</h3><p>AI/ML Engineer</p><p class="experience-date">Dec 2020 to present</p></header>
           <div class="experience-body">
             <p>Build AI and ML systems for the learning experience, including evaluation, automated code verification, and training hints. Earlier launched the US QA Engineering faculty with a 70% activation rate and helped hundreds of students enter the field.</p>
             <a href="https://tripleten.com" target="_blank" rel="noopener noreferrer">Visit TripleTen <span aria-hidden="true">↗</span></a>
           </div>
-        </details>
-        <details class="experience-item">
-          <summary><span class="experience-company">Yandex Praktikum</span><span>Technical Product Manager and writer</span><span>Mar 2018 to Dec 2020</span></summary>
+        </article>
+        <article class="experience-item">
+          <header class="experience-heading"><h3 class="experience-company">Yandex Praktikum</h3><p>Technical Product Manager and writer</p><p class="experience-date">Mar 2018 to Dec 2020</p></header>
           <div class="experience-body"><p>Helped launch the Web Developer faculty, authored technical courses, and created the platform test architecture.</p></div>
-        </details>
-        <details class="experience-item">
-          <summary><span class="experience-company">Thingyfy</span><span>Full Stack Developer</span><span>Oct 2019 to Dec 2021</span></summary>
+        </article>
+        <article class="experience-item">
+          <header class="experience-heading"><h3 class="experience-company">Thingyfy</h3><p>Full Stack Developer</p><p class="experience-date">Oct 2019 to Dec 2021</p></header>
           <div class="experience-body"><p>Built startup products with React, TypeScript, Node, Python, and GitLab.</p></div>
-        </details>
-        <details class="experience-item">
-          <summary><span class="experience-company">Earlier work</span><span>Engineer and teacher</span><span>2016 to 2019</span></summary>
+        </article>
+        <article class="experience-item">
+          <header class="experience-heading"><h3 class="experience-company">Earlier work</h3><p>Engineer and teacher</p><p class="experience-date">2016 to 2019</p></header>
           <div class="experience-body experience-body-grid">
             <p><strong>European Gymnasium</strong><br>Computer science and web development.</p>
             <p><strong>Sravni</strong><br>Insurance products built in React.</p>
             <p><strong>Spaces</strong><br>Commercial property product engineering.</p>
             <p><strong>MCS</strong><br>Arduino, Swift, Python, web, and VR teaching.</p>
           </div>
-        </details>
+        </article>
       </div>
     </section>
 

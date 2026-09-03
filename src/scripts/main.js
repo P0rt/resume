@@ -1,13 +1,13 @@
 const root = document.documentElement;
 const themeButton = document.querySelector("[data-theme-toggle]");
-const themeLabel = document.querySelector("[data-theme-label]");
 const themeColors = document.querySelectorAll("[data-theme-color]");
 const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function storedTheme() {
   try {
-    return localStorage.getItem("theme");
+    const theme = localStorage.getItem("theme");
+    return theme === "light" || theme === "dark" ? theme : null;
   } catch (error) {
     return null;
   }
@@ -19,10 +19,9 @@ function activeTheme() {
 
 function updateThemeControl() {
   const current = activeTheme();
-  const next = current === "dark" ? "Light" : "Dark";
   themeColors.forEach((meta) => meta.setAttribute("content", current === "dark" ? "#131416" : "#f7f7f4"));
-  if (themeLabel) themeLabel.textContent = next;
-  themeButton?.setAttribute("aria-label", `Use ${next.toLowerCase()} theme`);
+  themeButton?.setAttribute("aria-checked", String(current === "dark"));
+  if (themeButton) themeButton.hidden = false;
 }
 
 themeButton?.addEventListener("click", () => {
@@ -40,6 +39,14 @@ systemTheme.addEventListener("change", () => {
   if (!storedTheme()) updateThemeControl();
 });
 
+window.addEventListener("storage", (event) => {
+  if (event.key !== "theme" && event.key !== null) return;
+  const theme = storedTheme();
+  if (theme) root.dataset.theme = theme;
+  else delete root.dataset.theme;
+  updateThemeControl();
+});
+
 updateThemeControl();
 
 const revealItems = document.querySelectorAll("[data-reveal]");
@@ -55,16 +62,6 @@ if (reduceMotion || !("IntersectionObserver" in window)) {
   }, { rootMargin: "0px 0px -12%", threshold: 0.08 });
   revealItems.forEach((item) => revealObserver.observe(item));
 }
-
-const experienceItems = document.querySelectorAll(".experience-item");
-experienceItems.forEach((item) => {
-  item.addEventListener("toggle", () => {
-    if (!item.open) return;
-    experienceItems.forEach((other) => {
-      if (other !== item) other.open = false;
-    });
-  });
-});
 
 document.querySelectorAll("[data-current-year]").forEach((element) => {
   element.textContent = String(new Date().getFullYear());

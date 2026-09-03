@@ -2,6 +2,8 @@
 
 Personal site, article archive, and career profile for [sergei-parfenov.com](https://sergei-parfenov.com).
 
+The homepage contains the full profile and expanded career history. Its only top controls are the blog link and a persistent dark-theme switch. Articles keep their own URLs. The resume PDF is retained in `src/assets/resume.pdf` for later use but is excluded from the public build.
+
 ## Local development
 
 ```bash

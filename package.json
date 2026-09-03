@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node ./scripts/serve.mjs",
-    "test": "npm run build && node ./scripts/validate-site.mjs",
+    "test": "npm run build && node ./scripts/validate-site.mjs && node --test ./scripts/theme.test.mjs",
     "html": "node ./scripts/build-site.mjs",
     "build": "npm run html",
     "articles:sync": "node ./scripts/sync-dev.mjs",

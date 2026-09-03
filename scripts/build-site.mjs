@@ -50,6 +50,16 @@ function absoluteArticleUrl(slug) {
   return `${DOMAIN}/blog/${slug}/`;
 }
 
+function pageControls(href, label, arrow = "↗") {
+  return `<header class="page-controls section-shell">
+    <a class="page-link" href="${escapeHtml(href)}">${escapeHtml(label)} <span aria-hidden="true">${arrow}</span></a>
+    <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Dark theme" data-theme-toggle hidden>
+      <span aria-hidden="true">Dark</span>
+      <span class="theme-track" aria-hidden="true"><span class="theme-thumb"></span></span>
+    </button>
+  </header>`;
+}
+
 async function loadArticles() {
   const filenames = (await fs.readdir(ARTICLES_DIR)).filter((filename) => filename.endsWith(".md"));
   const articles = await Promise.all(filenames.map(async (filename) => {
@@ -181,20 +191,7 @@ function articleDocument(article, older, newer) {
 </head>
 <body class="article-page">
   <a class="skip-link" href="#main">Skip to article</a>
-  <header class="site-header">
-    <nav class="site-nav" aria-label="Article navigation">
-      <a class="wordmark" href="../../index.html" aria-label="Sergei Parfenov, home">SP</a>
-      <div class="nav-menu">
-        <a href="../../index.html#about">About</a>
-        <a href="../../blog.html" aria-current="page">Writing</a>
-        <a href="../../index.html#experience">Experience</a>
-      </div>
-      <div class="nav-tools">
-        <button class="theme-toggle" type="button" data-theme-toggle><span data-theme-label>Theme</span></button>
-        <a href="../../assets/resume.pdf" download>Resume</a>
-      </div>
-    </nav>
-  </header>
+  ${pageControls("../../blog.html", "Blog", "←")}
   <main id="main">
     <article>
       <header class="article-header section-shell">
@@ -275,10 +272,11 @@ await fs.mkdir(DIST_DIR, { recursive: true });
 
 const articles = await loadArticles();
 const replacements = {
+  "{{HOME_CONTROLS}}": pageControls("./blog.html", "Blog"),
+  "{{BLOG_CONTROLS}}": pageControls("./index.html", "Home", "←"),
   "{{ARTICLE_COUNT}}": String(articles.length),
   "{{FEATURED_ARTICLES}}": featuredWriting(articles),
   "{{ARTICLE_ARCHIVE}}": archiveMarkup(articles),
-  "{{LATEST_ARTICLE_URL}}": articles[0] ? `./blog/${articles[0].slug}/` : "./blog.html",
 };
 
 for (const filename of await walk(SRC_DIR)) {
@@ -301,7 +299,11 @@ for (let index = 0; index < articles.length; index += 1) {
 }
 
 await Promise.all([
-  fs.cp(path.join(SRC_DIR, "assets"), path.join(DIST_DIR, "assets"), { recursive: true }),
+  fs.cp(path.join(SRC_DIR, "assets"), path.join(DIST_DIR, "assets"), {
+    recursive: true,
+    // Keep the source resume for later, but do not publish it.
+    filter: (source) => source !== path.join(SRC_DIR, "assets", "resume.pdf"),
+  }),
   fs.cp(path.join(SRC_DIR, "scripts"), path.join(DIST_DIR, "scripts"), { recursive: true }),
   fs.cp(path.join(SRC_DIR, "styles"), path.join(DIST_DIR, "styles"), { recursive: true }),
   fs.writeFile(path.join(DIST_DIR, "rss.xml"), rssDocument(articles), "utf8"),

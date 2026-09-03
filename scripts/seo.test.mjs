@@ -214,6 +214,8 @@ test("homepage reads as a personal introduction without directory rows or header
   assert.ok(home.includes('class="home-intro"'));
   assert.ok(home.includes('class="home-identity"'));
   assert.ok(home.includes('class="home-opening"'));
+  assert.ok(!home.includes('class="home-location"'));
+  assert.ok(home.includes('class="home-colophon">Barcelona, <span data-current-year>2026</span> <span aria-hidden="true">☯︎</span>'));
   assert.ok(home.includes('class="home-letter"'));
   assert.ok(!home.includes('class="profile-columns'));
   assert.ok(!home.includes('class="home-row"'));

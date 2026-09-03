@@ -14,7 +14,8 @@ const slug = title
   .toLowerCase()
   .replace(/[^a-z0-9]+/g, "-")
   .replace(/^-|-$/g, "")
-  .slice(0, 88);
+  .slice(0, 88)
+  .replace(/-$/, "");
 
 if (!slug) {
   console.error("The title needs at least one Latin letter or number to create a URL slug.");

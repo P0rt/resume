@@ -30,13 +30,6 @@
   text-wrap: balance;
 }
 
-.home-identity .home-location {
-  margin: 12px 0 0;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 20px;
-}
-
 .home-portrait {
   width: 100%;
   margin: 0;
@@ -176,7 +169,6 @@
   .home-sheet { padding-top: 40px; padding-bottom: 24px; }
   .home-opening { grid-template-columns: minmax(0, 1fr); gap: 24px; margin-bottom: 32px; }
   .home-identity h1 { font-size: 36px; line-height: 40px; letter-spacing: -.035em; }
-  .home-identity .home-location { margin-top: 8px; }
   .home-portrait { grid-row: 1; width: 192px; }
   .home-identity .home-lead { font-size: 20px; line-height: 28px; }
   .home-letter p { font-size: 16px; line-height: 24px; }

@@ -55,6 +55,8 @@ npm run articles:sync
 
 Imported files use `source: dev`, keep the original DEV URL in `sourceUrl`, and render at their own stable local URL. To consolidate search signals, update the canonical URL for each DEV copy to the matching local URL after the domain is live.
 
+The 22 existing DEV articles were aligned and verified on September 3, 2026. Keep their personal-site canonical URLs in DEV when editing or republishing them. Do not replace `sourceUrl` in the local Markdown: it is the link to the DEV discussion, not the preferred canonical source. Changing local front matter does not update DEV automatically.
+
 ## Before publishing
 
 - Keep the slug stable.

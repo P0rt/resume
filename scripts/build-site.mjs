@@ -27,6 +27,7 @@ function escapeXml(value = "") {
 const profileLinks = new Map([
   ["Yandex Praktikum", "https://practicum.yandex.ru/"],
   ["TripleTen", profile.experience.find((job) => job.company === "TripleTen").url],
+  ["Nebius Academy", "https://academy.nebius.com"],
   ["Tech.eu", profile.experience.find((job) => job.company === "IAWY").coverage.url],
   ...profile.currentRoles.map((job) => [job.organization, job.url]),
 ]);

@@ -228,6 +228,7 @@ test("career corrections stay accurate in every public representation", async ()
     assert.ok(!text.includes("Dec 2020 to present"));
   }
   assert.ok(home.includes('href="https://tripleten.com"'));
+  assert.ok(home.includes('href="https://academy.nebius.com"'));
   assert.ok(home.includes('href="https://practicum.yandex.ru/"'));
   assert.ok(!home.includes(`href="${iawy.coverage.url}"`));
   assert.ok(home.includes('href="https://symptomato.com"'));

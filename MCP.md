@@ -20,9 +20,11 @@ Some clients also require `type: "http"`; use that client's documented configura
 
 ## Tools
 
-- `get_profile`: biography, current roles, career history, skills and public contact links.
-- `search`: keyword search across the profile and all published articles. Accepts `query` and optional `limit` (1–20). Returns IDs, titles and canonical source URLs.
-- `fetch`: full Markdown text for an ID returned by search, or `profile`.
+- `get_profile`: biography, current roles, career history, skills and public contact links. Accepts an optional `locale`.
+- `search`: keyword search across the localized profile and all published articles. Accepts `query`, optional `limit` (1–20) and optional `locale`. Returns IDs, titles, languages and canonical source URLs.
+- `fetch`: full Markdown text for an ID returned by search, or `profile`. Accepts an optional `locale`; articles remain in their original language.
+
+Supported locale values are `en`, `es`, `fr`, `pt`, `ja`, `zh` and `ru`. If a tool call omits `locale`, the server uses the HTTP `Accept-Language` header when available and otherwise falls back to English. Explicit tool arguments take precedence.
 
 MCP resources expose the profile, article catalog and each article's Markdown. All tools have read-only, non-destructive, idempotent annotations. Results include canonical HTML URLs for attribution.
 
@@ -33,6 +35,7 @@ GET returns HTTP 405 intentionally: no long-lived SSE subscription is provided. 
 - `/llms.txt`: concise reading guide and article links.
 - `/index.md`: complete profile in Markdown.
 - `/profile.json`: structured public biography.
+- `/<locale>/index.md` and `/<locale>/profile.json`: translated profiles and work history for Spanish, French, Portuguese, Japanese, Simplified Chinese and Russian.
 - `/articles.json`: published article metadata and canonical/Markdown URLs.
 - `/blog/<slug>/index.md`: complete article, original text, author and dates.
 - `/mcp.json`: human/tool-readable connection information (site-specific, not a standard discovery manifest).
@@ -42,7 +45,7 @@ Machine-readable alternates have `noindex, follow` response headers to avoid com
 
 ## Updates and verification
 
-The build derives every representation from `content/profile.json` and published Markdown in `content/articles`. Drafts are omitted from the static output and the function's `.generated/mcp-data.json` bundle. Do not manually edit generated files.
+The build derives biographical facts from `content/profile.json`, translations from `content/locales/*.json`, and articles from published Markdown in `content/articles`. Drafts are omitted from the static output and the function's `.generated/mcp-data.json` bundle. Do not manually edit generated files.
 
 Run `npm test`. Tests include real MCP SDK negotiation over HTTP, tools/resources, concurrency, invalid requests, origin/host checks, body limits, canonical metadata, Markdown integrity and draft exclusion. `npm start` serves the website and `/mcp` locally.
 

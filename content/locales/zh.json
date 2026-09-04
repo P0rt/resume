@@ -1,0 +1,202 @@
+{
+  "htmlLang": "zh-Hans",
+  "hreflang": "zh-Hans",
+  "ogLocale": "zh_CN",
+  "languageName": "简体中文",
+  "seo": {
+    "homeTitle": "Sergei Parfenov｜联合创始人、CTO、AI/ML 工程师",
+    "workTitle": "合作方式｜Sergei Parfenov",
+    "workDescription": "与 Sergei Parfenov 合作构建 AI 产品、智能体评测、模型蒸馏和学习系统。这里介绍他的经验、工作方式和代表项目。"
+  },
+  "ui": {
+    "skip": "跳到正文",
+    "home": "首页",
+    "experienceLink": "工作经历与合作方式",
+    "blogTitle": "博客",
+    "email": "电子邮件",
+    "privacy": "隐私",
+    "portraitAlt": "Sergei Parfenov 的肖像",
+    "aboutTitle": "关于我的工作",
+    "openTitle": "公开项目",
+    "helpTitle": "我能提供的帮助",
+    "educationTitle": "教育与课程",
+    "experienceTitle": "一路走来",
+    "blog": "博客"
+  },
+  "markdown": {
+    "canonicalProfile": "个人资料规范网址",
+    "detailedExperience": "详细经历与合作方式",
+    "alsoKnownAs": "其他姓名",
+    "basedIn": "所在地",
+    "background": "背景",
+    "currentWork": "当前工作",
+    "workingTogether": "合作方式",
+    "whereHelp": "我能提供的帮助",
+    "openProjects": "公开项目",
+    "experience": "工作经历",
+    "education": "教育与课程",
+    "writing": "文章",
+    "publishedArticles": "篇已发布文章",
+    "articlesAlso": "文章也发布在 DEV。",
+    "reviewContributions": "公开审阅贡献",
+    "by": "作者",
+    "myRole": "我的贡献",
+    "music": "音乐",
+    "contact": "联系方式与个人主页"
+  },
+  "profile": {
+    "role": "Aliwio 联合创始人兼 CTO、AI/ML 工程师",
+    "description": "Sergei Parfenov 是 Aliwio 的联合创始人兼 CTO，也是 Symptomato 的技术顾问。他构建 AI 产品、学习系统和早期软件产品。",
+    "summary": "工程、产品，以及两者之间的工作。",
+    "intro": "过去十年，我一直从零开始构建产品：亲自编写软件、参与决定要做什么，并处理那些棘手的部分，直到产品真正对用户有用。",
+    "homeStory": [
+      "我加入 Yandex Praktikum 时，团队规模还很小。之后在 TripleTen 和 Nebius Academy，我继续构建支撑学习过程的系统。在 TripleTen，我开发了用于评测、搜索和辅导的 AI 工具。我还联合创办了 AI 辅导产品 IAWY，并在拉丁美洲的两家训练营成功上线。"
+    ],
+    "homeCurrent": "现在，我是 Aliwio 的联合创始人兼 CTO，负责为兽医诊所构建软件。我也担任 Symptomato 的技术顾问，参与设计一项服务：先由 AI 收集背景信息，再由医疗专业人员加入对话。",
+    "blogIntro": "我会分享实验、技术分析，以及构建 AI 系统过程中学到的东西。已有近一万名读者关注我的文章。",
+    "location": "西班牙巴塞罗那",
+    "about": [
+      "我是 Yandex Praktikum 团队的第 11 位成员，并从产品早期阶段参与建设。我负责过多个组件，设计了编程训练器的测试架构；该训练器每天有 7,000 到 10,000 名学生使用。我还开发了用于评估学生项目作业的 ML 模型。这些工作都发生在 ChatGPT 出现之前。",
+      "我也参与了美国 QA Engineering 项目的启动。在 TripleTen，我的工作连接了 AI、后端工程与学习体验，包括个性化学习和 Mastery Depth Tracker。",
+      "我用大约一年时间开发 IAWY，一家专注于自动评阅学生项目的创业公司。产品在拉丁美洲的两家训练营成功上线。",
+      "目前我是兽医诊所 CRM Aliwio 的联合创始人兼 CTO，也是 Symptomato 的技术顾问。Symptomato 将 AI 预问诊与医疗专业人员结合。我常驻巴塞罗那，工作横跨产品决策、系统架构和实现。"
+    ],
+    "writing": "我写 AI 工程：做过的实验、会出错的系统，以及指标究竟说明了什么。已有近一万名读者关注我的文章。",
+    "currentRoles": {
+      "Aliwio": {
+        "role": "联合创始人兼 CTO",
+        "description": "为独立兽医诊所构建 CRM，从技术架构到产品本身都深度参与。"
+      },
+      "Symptomato": {
+        "role": "技术顾问",
+        "description": "为一项医疗服务提供技术建议：先由 AI 收集背景信息，再由医疗专业人员加入对话。"
+      }
+    },
+    "contributions": {
+      "The Agentic Commerce Blueprint": {
+        "role": "公开审阅",
+        "summary": "一套面向 AI 智能体所使用的商业系统参考架构。",
+        "contribution": "我公开审阅了类型化溯源、拒绝信息如何传递到派生结论，以及如何通过检查把智能体行为约束在当前权限和系统状态之内。"
+      }
+    },
+    "collaboration": {
+      "title": "我们可以一起工作。",
+      "description": "无论是要做一个早期产品、验证一项 AI 假设，还是让一个系统真正服务数千名用户，我都会把工程判断与产品判断放在一起。",
+      "approach": "我可以把想法变成可验证的第一版，完成架构与实现，并帮助团队判断下一步该构建什么。我会从产品和真实用户的角度解释技术取舍。",
+      "invitation": "告诉我你在构建什么、卡在哪里，以及怎样的结果才算真正有用。"
+    },
+    "capabilities": {
+      "An AI idea worth testing": {
+        "name": "值得验证的 AI 想法",
+        "description": "把不确定的想法变成范围明确的实验。先做出可运行的原型，验证假设，再根据结果判断什么值得发展成完整产品，而不是一开始就投入大规模开发。"
+      },
+      "Building an early product": {
+        "name": "构建早期产品",
+        "description": "横跨第一版产品、架构、后端和界面，与团队一起决定现在要做什么、暂时不做什么，以及怎样让产品进入真实使用。"
+      },
+      "Agents you can evaluate": {
+        "name": "能够被评测的智能体",
+        "description": "不仅看智能体的回答是否像真的，还要找出它为什么失败。为工具调用、记忆、检索和恢复建立可检查的追踪记录与可重复的测试。"
+      },
+      "Smaller models, measured trade-offs": {
+        "name": "用数据衡量小模型的取舍",
+        "description": "针对明确任务探索模型蒸馏与微调。在质量、速度和内存上与基线模型比较，再决定这种取舍是否值得。"
+      },
+      "Learning platforms & automated assessment": {
+        "name": "学习平台与自动评测",
+        "description": "为编程训练器设计测试架构，用 ML 评估项目作业，并构建帮助学生继续前进的反馈机制，同时把这些系统与课程、学习者信心和留存联系起来。"
+      }
+    },
+    "projects": {
+      "Screenshot model distillation": {
+        "name": "面向截图任务的模型蒸馏",
+        "description": "一次将 7B 视觉模型蒸馏到 2B 的实验，包含可复现的训练与评测流程。这是一个小型概念验证，也记录了指标误导我的地方。"
+      },
+      "Agent memory & provenance": {
+        "name": "智能体记忆与溯源",
+        "description": "一套实验工具，用于测量记忆压缩如何改变智能体决策，其中也包括与我原先假设相反的结果。"
+      }
+    },
+    "experience": {
+      "Aliwio": {
+        "role": "联合创始人兼 CTO",
+        "period": "2026 年 2 月至今",
+        "description": "作为联合创始人兼 CTO，我负责一套面向独立兽医诊所的 CRM 的技术架构与产品工程。"
+      },
+      "Symptomato": {
+        "role": "技术顾问",
+        "period": "2026 年 1 月至今",
+        "description": "我为 Symptomato 提供技术建议。服务先通过 AI 助手收集背景信息，再让医疗专业人员加入对话。"
+      },
+      "TripleTen": {
+        "role": "AI 工程师",
+        "period": "2021 年 12 月至 2026 年 1 月",
+        "description": "我构建了 AI 评测、信息检索和辅导系统，从架构设计一直负责到生产发布。",
+        "highlights": [
+          "我设计并实现了一套采用规划与执行架构的 AI 评测系统，把评测延迟从 8.4 秒降到 0.6 秒，速度提升 14 倍，并替换了 140 个旧的文本问答题。",
+          "我构建了一条基于 Kafka 的 CMS 向量化流水线，每天处理 10 万条内容。我端到端交付了语义搜索，使搜索互动提升 9%，找到内容所需的时间减少 18%。",
+          "我构建了自动练习生成系统，把任务编写时间从 2.5 小时缩短到 18 分钟。我还发布了内部 VS Code 插件，使每个学生问题的平均支持时间减少 27%。",
+          "我参与开发 AI 导师 Dot 的语音模式，连接 WebRTC、语音识别、LLM 和语音合成，并帮助它达到稳定发布标准：成功会话占 97.8%，首次响应时间中位数为 1.3 秒。",
+          "我参与设计学习个性化并构建了改善学生留存的功能。在 Mastery Depth Tracker 项目中，我连接产品与工程，用于测量学习者信心并找出需要额外练习的领域。我也参与了美国 QA Engineering 项目的启动。"
+        ]
+      },
+      "IAWY": {
+        "role": "联合创始人兼 CPO",
+        "period": "2023 年 8 月至 2024 年 7 月",
+        "description": "我联合创办并开发了 IAWY，一家自动评阅学生项目的创业公司。我定义了可集成进现有学习平台的 AI 导师的产品愿景与路线图，并在拉丁美洲的两家训练营成功上线。",
+        "coverageLabel": "Tech.eu 对 IAWY 的报道 · 2024 年 2 月 22 日"
+      },
+      "Retailhub": {
+        "role": "AI 研究员",
+        "period": "2023 年 10 月至 2024 年 1 月",
+        "description": "我设计了商品信息增强流水线，包括输入数据标准化、属性提取、结构化特征生成和自然语言描述生成。"
+      },
+      "Yandex Praktikum": {
+        "role": "软件工程师",
+        "period": "2018 年 3 月至 2021 年 12 月",
+        "description": "我是第 11 位加入团队的成员，也是从早期阶段共同构建产品的人之一，参与过多个组件。",
+        "highlights": [
+          "我设计了编程训练器的测试架构，该训练器每天有 7,000 到 10,000 名学生使用。",
+          "我在 ChatGPT 出现之前开发了用于评估学生项目的 ML 模型，并参与启动 Web Development 项目。"
+        ]
+      },
+      "Thingyfy": {
+        "role": "软件工程师",
+        "period": "2019 年 10 月至 2020 年 10 月",
+        "description": "我使用 React 和 TypeScript 构建创业产品，重点关注适应性和可扩展性。"
+      },
+      "Yandex School of Data Analysis": {
+        "role": "学习专家",
+        "period": "2018 年 10 月至 2020 年 1 月",
+        "description": "我在莫斯科担任学习专家。"
+      },
+      "Sravni.ru": {
+        "role": "软件工程师",
+        "period": "2017 年 11 月至 2018 年 10 月",
+        "description": "我使用 React 构建保险产品。"
+      },
+      "Earlier work": {
+        "role": "工程师与教师",
+        "period": "2016 年至 2019 年",
+        "positions": {
+          "European Gymnasium": "计算机科学与 Web 开发。",
+          "Spaces": "商业地产产品工程。",
+          "MCS": "教授 Arduino、Swift、Python、Web 和 VR。"
+        }
+      }
+    },
+    "education": {
+      "Stanford University": {
+        "program": "CS231n：面向计算机视觉的深度学习",
+        "qualification": "课程",
+        "period": "2024 年 4 月至 6 月"
+      },
+      "Saint Petersburg State University of Finance and Economics": {
+        "program": "计算机信息系统",
+        "qualification": "学士学位",
+        "period": "2005 年至 2010 年"
+      }
+    },
+    "music": "我会整理不同主题的 Spotify 播放列表。"
+  }
+}

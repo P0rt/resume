@@ -22,11 +22,15 @@
 - Sergei explicitly likes the original serif headings: Iowan Old Style / Palatino / Georgia. Body is local Manrope; code and small technical labels use system monospace.
 - Homepage: large portrait, name and a concise but substantive narrative in one reading column. Only a mention/link to the blog below the introduction; no article feed, full CV, header menu or top blog link.
 - Detailed career, education, projects and collaboration belong on `/work-together/`. Blog is separate at `/blog.html`.
+- Home and work have static `es`, `fr`, `pt`, `ja`, `zh` and `ru` variants under `/<locale>/`. Facts remain in `content/profile.json`; translated prose lives in `content/locales/*.json`. Keep every locale complete and preserve reciprocal `hreflang`, self-canonicals, localized JSON-LD, sitemap entries and localized Markdown/JSON profile alternates.
+- Browser-language routing applies only to `/` and `/work-together/`, via `Accept-Language` and temporary redirects. Direct localized URLs never redirect. The blog and article bodies stay in their original language unless Sergei explicitly requests translations.
 - Theme follows browser/OS `prefers-color-scheme`, including live changes. No manual switch, localStorage override or forced dark mode.
+- Keep the homepage and `/work-together/` free of executable JavaScript. Their year is inserted at build time and their light/dark browser chrome uses native theme-color media queries. Blog/archive scripts remain progressive enhancements for reveal and copy controls.
 - Native `<picture>`: monochrome `portrait-light.webp` for light mode, original `portrait-blue.jpg` for dark; preserve frame/size and theme-aware preloads. `scripts/build-images.mjs` makes responsive WebP derivatives with matching `srcset` / `imagesrcset`; keep originals untouched. Social previews keep the blue photo.
 - Favicon: the user's neon-green three-eyed smile, smoothly redrawn in `src/assets/favicon.svg`. Preserve all three eyes. `scripts/build-icons.mjs` renders PNG, multi-size ICO and Apple fallbacks automatically; edit only the SVG master.
 - Footer location is `Barcelona, <current year> ☯︎`, not a subtitle under the name. Music/Spotify is hidden for now. Do not publish `src/assets/resume.pdf`.
 - Motion stays subtle and respects reduced motion. Article text and highlighting must work without JavaScript; copy controls are progressive enhancements.
+- Performance baseline: run Lighthouse in Navigation mode with a clean browser profile. The homepage should make no script request and hold 100 Performance with 0 ms TBT; do not trade typography or image quality for unweighted diagnostic suggestions or a noisy browser-side task.
 - Polish reading measure, paragraph rhythm, lists, long titles, code and tables. Do not rewrite an article merely to make its layout easier.
 
 ## Biographical accuracy
@@ -36,7 +40,7 @@
 - TripleTen is a **past** role: AI Engineer, December 2021–January 2026. No separate Practicum USA block.
 - Yandex Praktikum: 11th member of that product team, not of all Yandex and not a claimed co-founder. Trainer architecture served 7,000–10,000 students/day; ML project assessment preceded ChatGPT. Those detailed facts belong on the work page, not the compact homepage.
 - IAWY: Co-Founder/CPO, August 2023–July 2024; two LATAM bootcamp launches are user-supplied. Tech.eu coverage is sponsored accelerator coverage, not an award.
-- Stanford CS231n (April–June 2024) is a course, not a degree or alumni claim. The bachelor's degree is from Saint Petersburg State University of Finance and Economics (2005–2010).
+- Stanford CS231n (April–June 2024) is a course, not a degree or alumni claim; keep its course link at https://cs231n.stanford.edu/. The bachelor's degree is from Saint Petersburg State University of Finance and Economics (2005–2010).
 - Correct LinkedIn: https://www.linkedin.com/in/sergei--parfenov/ (double hyphen). Recommendations inform copy; do not display them as testimonials.
 - “The Agentic Commerce Blueprint” is by **Dimitrios S. Sfyris**; Sergei contributed public review feedback. Keep it in external contributions, not authored articles, RSS counts or academic credentials.
 
@@ -48,5 +52,6 @@
 - For new DEV-hosted covers run `npm run images:import` and commit `content/images/covers/` sources. Normal builds must stay offline; only published covers are generated into public assets. Keep original front-matter URLs and text unchanged. Check payloads, theme switching, image requests and clean mobile Lighthouse when changing image delivery; do not trade image quality or typography for a score.
 - Existing DEV copies have canonicals pointing to the matching personal-site URLs. Local metadata does not update DEV; modify external publications only when requested, preserving their content.
 - Preserve self-canonicals, one article H1, author identity, JSON-LD, RSS, sitemap, Markdown alternates, JSON catalogs and stable MCP document IDs. Do not promise Google rankings or indexing.
+- MCP profile tools accept explicit locales `en`, `es`, `fr`, `pt`, `ja`, `zh` and `ru`; HTTP `Accept-Language` is only a fallback. Keep localized profile resources at `/<locale>/profile.json` and `/<locale>/index.md`. Never pretend that article bodies were translated when they were not.
 - Drafts must never enter HTML, feeds, catalogs, Markdown output or the MCP bundle. MCP only exposes published content; no arbitrary file/URL fetching, account access, mutations or secrets.
 - Keep this file and other internal instructions outside public `src/` assets. More context: `README.md`, `BLOGGING.md`, `MCP.md`.

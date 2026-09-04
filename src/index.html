@@ -1,43 +1,43 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{PAGE_LANGUAGE}}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{{PROFILE_DESCRIPTION}}">
   <meta name="author" content="{{PROFILE_NAME}}">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-  <meta name="theme-color" content="#f7f7f4" data-theme-color>
+  <meta name="theme-color" content="#f7f7f4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#131416" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="profile">
   <meta property="og:site_name" content="Sergei Parfenov">
-  <meta property="og:locale" content="en_US">
-  <meta property="og:title" content="Sergei Parfenov | Co-Founder, CTO, AI/ML engineer">
+  <meta property="og:locale" content="{{PAGE_OG_LOCALE}}">
+  <meta property="og:title" content="{{PAGE_TITLE}}">
   <meta property="og:description" content="{{PROFILE_DESCRIPTION}}">
   <meta property="og:image" content="https://sergei-parfenov.com/assets/portrait-blue.jpg">
   <meta property="og:image:alt" content="Sergei Parfenov against a blue background">
   <meta property="og:image:width" content="1006">
   <meta property="og:image:height" content="1006">
-  <meta property="og:url" content="https://sergei-parfenov.com/">
+  <meta property="og:url" content="{{PAGE_CANONICAL}}">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Sergei Parfenov | Co-Founder, CTO, AI/ML engineer">
+  <meta name="twitter:title" content="{{PAGE_TITLE}}">
   <meta name="twitter:description" content="{{PROFILE_DESCRIPTION}}">
   <meta name="twitter:image" content="https://sergei-parfenov.com/assets/portrait-blue.jpg">
   <meta name="twitter:image:alt" content="Portrait of Sergei Parfenov">
-  <link rel="canonical" href="https://sergei-parfenov.com/">
-  <link rel="alternate" type="text/markdown" href="https://sergei-parfenov.com/index.md" title="Profile as Markdown">
-  <link rel="alternate" type="application/json" href="https://sergei-parfenov.com/profile.json" title="Structured profile">
+  <link rel="canonical" href="{{PAGE_CANONICAL}}">
+  {{PAGE_LANGUAGE_ALTERNATES}}
+  <link rel="alternate" type="text/markdown" href="{{PROFILE_MARKDOWN_URL}}" title="Profile as Markdown">
+  <link rel="alternate" type="application/json" href="{{PROFILE_JSON_URL}}" title="Structured profile">
   <link rel="describedby" type="text/plain" href="https://sergei-parfenov.com/llms.txt" title="Agent reading guide">
   <link rel="alternate" type="application/rss+xml" title="Writing by Sergei Parfenov" href="https://sergei-parfenov.com/rss.xml">
   {{SITE_ICONS}}
-  <link rel="preload" href="./assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   {{PORTRAIT_PRELOADS}}
-  <link rel="stylesheet" href="./styles/index.css">
-  <link rel="stylesheet" href="./styles/home.css">
-  <title>Sergei Parfenov | Co-Founder, CTO, AI/ML engineer</title>
-  <script>document.documentElement.classList.add("js");</script>
+  <link rel="stylesheet" href="/styles/index.css">
+  <link rel="stylesheet" href="/styles/home.css">
+  <title>{{PAGE_TITLE}}</title>
   <script type="application/ld+json">{{PROFILE_SCHEMA}}</script>
 </head>
 <body class="home-page">
-  <a class="skip-link" href="#main">Skip to content</a>
+  <a class="skip-link" href="#main">{{SKIP_LABEL}}</a>
 
   <main id="main" class="section-shell home-sheet">
     <div id="top">
@@ -54,12 +54,12 @@
         <div class="home-letter">
           <div class="home-story">{{PROFILE_HOME_STORY}}</div>
           <p class="home-current">{{PROFILE_HOME_CURRENT}}</p>
-          <a class="home-link" href="/work-together/">Experience &amp; working together <span aria-hidden="true">↗</span></a>
+          <a class="home-link" href="{{WORK_PATH}}">{{EXPERIENCE_LINK_LABEL}} <span aria-hidden="true">↗</span></a>
         </div>
       </section>
 
       <section class="home-writing" id="writing" aria-labelledby="writing-title">
-        <h2 id="writing-title"><a class="home-link" href="./blog.html">On the blog <span aria-hidden="true">↗</span></a></h2>
+        <h2 id="writing-title"><a class="home-link" href="/blog.html">{{BLOG_LINK_LABEL}} <span aria-hidden="true">↗</span></a></h2>
         <p>{{PROFILE_BLOG_INTRO}}</p>
       </section>
     </div>
@@ -67,14 +67,13 @@
 
   <footer class="site-footer section-shell home-footer">
     <div class="footer-links">
-      <a href="mailto:{{PROFILE_EMAIL}}">Email ↗</a>
+      <a href="mailto:{{PROFILE_EMAIL}}">{{EMAIL_LABEL}} ↗</a>
       <a href="https://github.com/P0rt" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a href="https://dev.to/p0rt" target="_blank" rel="noopener noreferrer">DEV</a>
       <a href="{{PROFILE_LINKEDIN}}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      <a href="./privacy.html">Privacy</a>
+      <a href="/privacy.html">{{PRIVACY_LABEL}}</a>
     </div>
-    <span class="home-colophon">Barcelona, <span data-current-year>2026</span> <span aria-hidden="true">☯︎</span></span>
+    <span class="home-colophon">Barcelona, {{CURRENT_YEAR}} <span aria-hidden="true">☯︎</span></span>
   </footer>
-  <script src="./scripts/main.js"></script>
 </body>
 </html>

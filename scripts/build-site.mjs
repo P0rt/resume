@@ -4,7 +4,10 @@ import matter from "gray-matter";
 import { renderArticle } from "./render-article.mjs";
 import { buildIcons } from "./build-icons.mjs";
 import { buildImages } from "./build-images.mjs";
-import { DOMAIN, profile, homeSchema, workSchema, blogSchema, articleSchema, writeAgentFiles } from "./site-metadata.mjs";
+import {
+  DOMAIN, profile, locales, localeCodes, localeHomeUrl, localeWorkUrl,
+  homeSchema, workSchema, blogSchema, articleSchema, writeAgentFiles,
+} from "./site-metadata.mjs";
 
 const ROOT = process.cwd();
 const SRC_DIR = path.join(ROOT, "src");
@@ -26,6 +29,7 @@ function escapeXml(value = "") {
 
 const profileLinks = new Map([
   ["Yandex Praktikum", "https://practicum.yandex.ru/"],
+  ["Яндекс Практикум", "https://practicum.yandex.ru/"],
   ["TripleTen", profile.experience.find((job) => job.company === "TripleTen").url],
   ["Nebius Academy", "https://academy.nebius.com"],
   ["Tech.eu", profile.experience.find((job) => job.company === "IAWY").coverage.url],
@@ -171,7 +175,8 @@ async function articleDocument(article, older, newer) {
   <meta name="description" content="${escapeHtml(article.description)}">
   <meta name="author" content="${escapeHtml(profile.name)}">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-  <meta name="theme-color" content="#f7f7f4" data-theme-color>
+  <meta name="theme-color" content="#f7f7f4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#131416" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="${escapeHtml(profile.name)}">
   <meta property="og:title" content="${escapeHtml(article.title)}">
@@ -190,7 +195,6 @@ async function articleDocument(article, older, newer) {
   <link rel="describedby" type="text/plain" href="${DOMAIN}/llms.txt" title="Agent reading guide">
   <link rel="alternate" type="application/rss+xml" title="Writing by Sergei Parfenov" href="${DOMAIN}/rss.xml">
   {{SITE_ICONS}}
-  <link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../../styles/index.css">
   <link rel="stylesheet" href="../../styles/blog.css">
   <title>${escapeHtml(article.title)} | Sergei Parfenov</title>
@@ -224,7 +228,7 @@ async function articleDocument(article, older, newer) {
   <footer class="site-footer section-shell">
     <a href="/">Sergei Parfenov</a>
     <a href="../../blog.html">Writing</a>
-    <span>© <span data-current-year>${new Date().getFullYear()}</span></span>
+    <span>© ${new Date().getFullYear()}</span>
   </footer>
   <span class="copy-status visually-hidden" role="status" aria-live="polite"></span>
   <script src="../../scripts/main.js"></script>
@@ -256,15 +260,22 @@ function rssDocument(articles) {
 
 function sitemapDocument(articles) {
   // Utility pages are noindex. Do not invent lastmod dates for static pages.
-  const staticPages = ["/", "/work-together/", "/blog.html"];
+  const alternateUrls = (page) => localeCodes.map((code) => ({
+    hreflang: locales[code].hreflang,
+    url: page === "home" ? localeHomeUrl(code) : localeWorkUrl(code),
+  })).concat({ hreflang: "x-default", url: page === "home" ? localeHomeUrl("en") : localeWorkUrl("en") });
   const urls = [
-    ...staticPages.map((pathname) => ({ url: `${DOMAIN}${pathname}` })),
+    ...localeCodes.flatMap((code) => [
+      { url: localeHomeUrl(code), alternates: alternateUrls("home") },
+      { url: localeWorkUrl(code), alternates: alternateUrls("work") },
+    ]),
+    { url: `${DOMAIN}/blog.html` },
     ...articles.map((article) => ({ url: article.canonicalUrl, updated: article.updated })),
   ];
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map((item) => `  <url><loc>${escapeXml(item.url)}</loc>${item.updated ? `<lastmod>${isoDate(item.updated)}</lastmod>` : ""}</url>`).join("\n")}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${urls.map((item) => `  <url><loc>${escapeXml(item.url)}</loc>${item.updated ? `<lastmod>${isoDate(item.updated)}</lastmod>` : ""}${(item.alternates || []).map((alternate) => `<xhtml:link rel="alternate" hreflang="${alternate.hreflang}" href="${escapeXml(alternate.url)}"/>`).join("")}</url>`).join("\n")}
 </urlset>`;
 }
 
@@ -287,75 +298,132 @@ const siteIcons = `<link rel="icon" href="/assets/favicon.ico" sizes="16x16 32x3
   <link rel="icon" href="/assets/favicon-96.png" sizes="96x96" type="image/png">
   <link rel="icon" href="/assets/favicon.svg" sizes="any" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180">`;
-const replacements = {
-  "{{PORTRAIT_PRELOADS}}": [["dark", images.dark], ["light", images.light]].map(([theme, image]) => `<link rel="preload" href="${image.src}" as="image" type="image/webp" media="(prefers-color-scheme: ${theme})" imagesrcset="${image.srcset}" imagesizes="${image.sizes}" fetchpriority="high">`).join("\n  "),
-  "{{PORTRAIT_PICTURE}}": `<picture>
+function languageAlternates(page) {
+  return localeCodes.map((code) => `<link rel="alternate" hreflang="${escapeHtml(locales[code].hreflang)}" href="${escapeHtml(page === "home" ? localeHomeUrl(code) : localeWorkUrl(code))}">`)
+    .concat(`<link rel="alternate" hreflang="x-default" href="${escapeHtml(page === "home" ? localeHomeUrl("en") : localeWorkUrl("en"))}">`).join("\n  ");
+}
+
+function portraitPicture(alt) {
+  return `<picture>
               <source srcset="${images.dark.srcset}" sizes="${images.dark.sizes}" media="(prefers-color-scheme: dark)" type="image/webp" width="${images.dark.width}" height="${images.dark.height}">
-              <img src="${images.light.src}" srcset="${images.light.srcset}" sizes="${images.light.sizes}" alt="Portrait of Sergei Parfenov" width="${images.light.width}" height="${images.light.height}" fetchpriority="high">
-            </picture>`,
+              <img src="${images.light.src}" srcset="${images.light.srcset}" sizes="${images.light.sizes}" alt="${escapeHtml(alt)}" width="${images.light.width}" height="${images.light.height}" fetchpriority="high">
+            </picture>`;
+}
+
+function replacementsFor(code = "en", page = "other") {
+  const locale = locales[code];
+  const localProfile = locale.profile;
+  const homePath = code === "en" ? "/" : `/${code}/`;
+  const workPath = code === "en" ? "/work-together/" : `/${code}/work-together/`;
+  const profileBase = code === "en" ? DOMAIN : `${DOMAIN}/${code}`;
+  const title = page === "work" ? locale.seo.workTitle : locale.seo.homeTitle;
+  const canonical = page === "work" ? localeWorkUrl(code) : localeHomeUrl(code);
+  return {
+  "{{PORTRAIT_PRELOADS}}": [["dark", images.dark], ["light", images.light]].map(([theme, image]) => `<link rel="preload" href="${image.src}" as="image" type="image/webp" media="(prefers-color-scheme: ${theme})" imagesrcset="${image.srcset}" imagesizes="${image.sizes}" fetchpriority="high">`).join("\n  "),
+  "{{PORTRAIT_PICTURE}}": portraitPicture(locale.ui.portraitAlt),
   "{{SITE_ICONS}}": siteIcons,
-  "{{PROFILE_SCHEMA}}": homeSchema(),
-  "{{WORK_SCHEMA}}": workSchema(),
+  "{{CURRENT_YEAR}}": String(new Date().getFullYear()),
+  "{{PAGE_LANGUAGE}}": escapeHtml(locale.htmlLang),
+  "{{PAGE_OG_LOCALE}}": escapeHtml(locale.ogLocale),
+  "{{PAGE_TITLE}}": escapeHtml(title),
+  "{{PAGE_CANONICAL}}": escapeHtml(canonical),
+  "{{PAGE_LANGUAGE_ALTERNATES}}": languageAlternates(page === "work" ? "work" : "home"),
+  "{{PROFILE_MARKDOWN_URL}}": `${profileBase}/index.md`,
+  "{{PROFILE_JSON_URL}}": `${profileBase}/profile.json`,
+  "{{WORK_SEO_DESCRIPTION}}": escapeHtml(locale.seo.workDescription),
+  "{{HOME_PATH}}": homePath,
+  "{{WORK_PATH}}": workPath,
+  "{{SKIP_LABEL}}": escapeHtml(locale.ui.skip),
+  "{{EXPERIENCE_LINK_LABEL}}": escapeHtml(locale.ui.experienceLink),
+  "{{BLOG_LINK_LABEL}}": escapeHtml(locale.ui.blogTitle),
+  "{{EMAIL_LABEL}}": escapeHtml(locale.ui.email),
+  "{{PRIVACY_LABEL}}": escapeHtml(locale.ui.privacy),
+  "{{ABOUT_TITLE}}": escapeHtml(locale.ui.aboutTitle),
+  "{{OPEN_TITLE}}": escapeHtml(locale.ui.openTitle),
+  "{{HELP_TITLE}}": escapeHtml(locale.ui.helpTitle),
+  "{{EDUCATION_TITLE}}": escapeHtml(locale.ui.educationTitle),
+  "{{EXPERIENCE_TITLE}}": escapeHtml(locale.ui.experienceTitle),
+  "{{BLOG_LABEL}}": escapeHtml(locale.ui.blog),
+  "{{PROFILE_SCHEMA}}": homeSchema(code),
+  "{{WORK_SCHEMA}}": workSchema(code),
   "{{BLOG_SCHEMA}}": blogSchema(articles),
-  "{{PROFILE_NAME}}": escapeHtml(profile.name),
-  "{{PROFILE_ROLE}}": escapeHtml(profile.role),
-  "{{PROFILE_DESCRIPTION}}": escapeHtml(profile.description),
-  "{{PROFILE_SUMMARY}}": escapeHtml(profile.summary),
-  "{{PROFILE_INTRO}}": escapeHtml(profile.intro),
-  "{{PROFILE_HOME_STORY}}": profile.homeStory.map((paragraph) => `<p>${linkedProfileText(paragraph)}</p>`).join("\n"),
-  "{{PROFILE_HOME_CURRENT}}": linkedProfileText(profile.homeCurrent),
-  "{{PROFILE_BLOG_INTRO}}": escapeHtml(profile.blogIntro),
-  "{{PROFILE_CURRENT_LINKS}}": profile.currentRoles.map((job) => `${escapeHtml(job.role)} at <a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.organization)}</a>.`).join("<br>"),
-  "{{PROFILE_LOCATION}}": escapeHtml(profile.location),
-  "{{PROFILE_EMAIL}}": escapeHtml(profile.email),
-  "{{PROFILE_LINKEDIN}}": escapeHtml(profile.sameAs.find((url) => url.startsWith("https://www.linkedin.com/in/"))),
-  "{{PROFILE_ABOUT}}": profile.about.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("\n"),
-  "{{PROFILE_WRITING}}": escapeHtml(profile.writing),
-  "{{PROFILE_CONTRIBUTIONS}}": profile.contributions.map((item, index) => `<section class="contribution section-shell" id="contribution-${index + 1}" aria-labelledby="contribution-title-${index + 1}">
+  "{{PROFILE_NAME}}": escapeHtml(localProfile.name),
+  "{{PROFILE_ROLE}}": escapeHtml(localProfile.role),
+  "{{PROFILE_DESCRIPTION}}": escapeHtml(localProfile.description),
+  "{{PROFILE_SUMMARY}}": escapeHtml(localProfile.summary),
+  "{{PROFILE_INTRO}}": escapeHtml(localProfile.intro),
+  "{{PROFILE_HOME_STORY}}": localProfile.homeStory.map((paragraph) => `<p>${linkedProfileText(paragraph)}</p>`).join("\n"),
+  "{{PROFILE_HOME_CURRENT}}": linkedProfileText(localProfile.homeCurrent),
+  "{{PROFILE_BLOG_INTRO}}": escapeHtml(localProfile.blogIntro),
+  "{{PROFILE_CURRENT_LINKS}}": localProfile.currentRoles.map((job) => `${escapeHtml(job.role)} · <a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.organization)}</a>`).join("<br>"),
+  "{{PROFILE_LOCATION}}": escapeHtml(localProfile.location),
+  "{{PROFILE_EMAIL}}": escapeHtml(localProfile.email),
+  "{{PROFILE_LINKEDIN}}": escapeHtml(localProfile.sameAs.find((url) => url.startsWith("https://www.linkedin.com/in/"))),
+  "{{PROFILE_ABOUT}}": localProfile.about.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("\n"),
+  "{{PROFILE_WRITING}}": escapeHtml(localProfile.writing),
+  "{{PROFILE_CONTRIBUTIONS}}": localProfile.contributions.map((item, index) => `<section class="contribution section-shell" id="contribution-${index + 1}" aria-labelledby="contribution-title-${index + 1}">
     <p class="contribution-label">Review contribution · ${escapeHtml(item.publisher)} · <time datetime="${escapeHtml(item.datePublished)}">${escapeHtml(item.datePublished.slice(0, 4))}</time></p>
     <h2 id="contribution-title-${index + 1}"><a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)} <span aria-hidden="true">↗</span></a></h2>
     <p class="contribution-byline">By ${escapeHtml(item.author)}</p>
     <p class="contribution-copy">${escapeHtml(item.summary)} ${escapeHtml(item.contribution)}</p>
   </section>`).join("\n"),
-  "{{COLLABORATION_TITLE}}": escapeHtml(profile.collaboration.title),
-  "{{COLLABORATION_DESCRIPTION}}": escapeHtml(profile.collaboration.description),
-  "{{COLLABORATION_APPROACH}}": escapeHtml(profile.collaboration.approach),
-  "{{COLLABORATION_INVITATION}}": escapeHtml(profile.collaboration.invitation),
-  "{{PROFILE_NOW}}": profile.currentRoles.map((job) => `<div class="now-role"><h3><a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.organization)}</a> · ${escapeHtml(job.role)}</h3><p>${escapeHtml(job.description)}</p></div>`).join("\n"),
-  "{{PROFILE_PROJECTS}}": profile.projects.map((project) => `<article class="open-project"><h3><a href="${escapeHtml(project.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(project.name)} <span aria-hidden="true">↗</span></a></h3><p>${escapeHtml(project.description)}</p></article>`).join("\n"),
-  "{{PROFILE_CURRENT}}": profile.currentRoles.map((job) => `${escapeHtml(job.role)}, ${escapeHtml(job.organization)}`).join("<br>"),
-  "{{PROFILE_FOCUS}}": escapeHtml(profile.focus),
-  "{{PROFILE_AUDIENCE}}": escapeHtml(profile.audience),
-  "{{PROFILE_MUSIC}}": escapeHtml(profile.music.description),
-  "{{PROFILE_PLAYLIST}}": escapeHtml(profile.music.url),
-  "{{PROFILE_CAPABILITIES}}": profile.capabilities.map((item) => `<div><dt>${escapeHtml(item.name)}</dt><dd>${escapeHtml(item.description)}</dd></div>`).join("\n"),
-  "{{PROFILE_EDUCATION}}": profile.education.map((item) => `<article class="education-item">
+  "{{COLLABORATION_TITLE}}": escapeHtml(localProfile.collaboration.title),
+  "{{COLLABORATION_DESCRIPTION}}": escapeHtml(localProfile.collaboration.description),
+  "{{COLLABORATION_APPROACH}}": escapeHtml(localProfile.collaboration.approach),
+  "{{COLLABORATION_INVITATION}}": escapeHtml(localProfile.collaboration.invitation),
+  "{{PROFILE_NOW}}": localProfile.currentRoles.map((job) => `<div class="now-role"><h3><a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.organization)}</a> · ${escapeHtml(job.role)}</h3><p>${escapeHtml(job.description)}</p></div>`).join("\n"),
+  "{{PROFILE_PROJECTS}}": localProfile.projects.map((project) => `<article class="open-project"><h3><a href="${escapeHtml(project.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(project.name)} <span aria-hidden="true">↗</span></a></h3><p>${escapeHtml(project.description)}</p></article>`).join("\n"),
+  "{{PROFILE_CURRENT}}": localProfile.currentRoles.map((job) => `${escapeHtml(job.role)}, ${escapeHtml(job.organization)}`).join("<br>"),
+  "{{PROFILE_FOCUS}}": escapeHtml(localProfile.focus),
+  "{{PROFILE_AUDIENCE}}": escapeHtml(localProfile.audience),
+  "{{PROFILE_MUSIC}}": escapeHtml(localProfile.music.description),
+  "{{PROFILE_PLAYLIST}}": escapeHtml(localProfile.music.url),
+  "{{PROFILE_CAPABILITIES}}": localProfile.capabilities.map((item) => `<div><dt>${escapeHtml(item.name)}</dt><dd>${escapeHtml(item.description)}</dd></div>`).join("\n"),
+  "{{PROFILE_EDUCATION}}": localProfile.education.map((item) => `<article class="education-item">
     <h3>${escapeHtml(item.institution)}</h3>
-    <p>${escapeHtml(item.program)}</p>
+    <p>${item.url ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.program)} <span aria-hidden="true">↗</span></a>` : escapeHtml(item.program)}</p>
     <p class="education-meta">${escapeHtml(item.qualification)} · ${escapeHtml(item.period)}</p>
   </article>`).join("\n"),
-  "{{PROFILE_EXPERIENCE}}": profile.experience.map((job) => `<article class="experience-item">
+  "{{PROFILE_EXPERIENCE}}": localProfile.experience.map((job) => `<article class="experience-item">
     <header class="experience-heading"><h3 class="experience-company">${job.url ? `<a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.company)}</a>` : escapeHtml(job.company)}</h3><p>${escapeHtml(job.role)}</p><p class="experience-date">${escapeHtml(job.period)}</p></header>
     <div class="experience-body${job.positions ? " experience-body-grid" : ""}">${job.positions
       ? job.positions.map((position) => `<p><strong>${escapeHtml(position.company)}</strong><br>${escapeHtml(position.description)}</p>`).join("")
       : `<p>${escapeHtml(job.description)}</p>${(job.highlights || []).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}${job.coverage ? `<p><a href="${escapeHtml(job.coverage.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.coverage.label)} <span aria-hidden="true">↗</span></a></p>` : ""}`}</div>
   </article>`).join("\n"),
-  "{{BLOG_CONTROLS}}": pageControls("/", "Home", "←"),
+  "{{BLOG_CONTROLS}}": pageControls(homePath, locale.ui.home, "←"),
   "{{ARTICLE_COUNT}}": String(articles.length),
   "{{FEATURED_ARTICLES}}": featuredWriting(articles),
   "{{ARTICLE_ARCHIVE}}": archiveMarkup(articles),
-};
+  };
+}
+
+function applyReplacements(html, replacements) {
+  Object.entries(replacements).forEach(([token, replacement]) => {
+    html = html.replaceAll(token, replacement);
+  });
+  return html;
+}
 
 for (const filename of await walk(SRC_DIR)) {
   if (!filename.endsWith(".html")) continue;
   const relative = path.relative(SRC_DIR, filename);
-  let html = await fs.readFile(filename, "utf8");
-  Object.entries(replacements).forEach(([token, replacement]) => {
-    html = html.replaceAll(token, replacement);
-  });
+  const page = relative === "index.html" ? "home" : relative === path.join("work-together", "index.html") ? "work" : "other";
+  const html = applyReplacements(await fs.readFile(filename, "utf8"), replacementsFor("en", page));
   const target = path.join(DIST_DIR, relative);
   await fs.mkdir(path.dirname(target), { recursive: true });
   await fs.writeFile(target, html, "utf8");
+}
+
+for (const code of localeCodes.slice(1)) {
+  for (const [source, relative, page] of [
+    [path.join(SRC_DIR, "index.html"), path.join(code, "index.html"), "home"],
+    [path.join(SRC_DIR, "work-together", "index.html"), path.join(code, "work-together", "index.html"), "work"],
+  ]) {
+    const html = applyReplacements(await fs.readFile(source, "utf8"), replacementsFor(code, page));
+    const target = path.join(DIST_DIR, relative);
+    await fs.mkdir(path.dirname(target), { recursive: true });
+    await fs.writeFile(target, html, "utf8");
+  }
 }
 
 for (let index = 0; index < articles.length; index += 1) {

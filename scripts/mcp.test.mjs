@@ -46,13 +46,41 @@ test("profile, search and fetch return canonical URLs and complete published con
 
 test("resources expose the same published snapshot, including every article", async () => {
   const { resources } = await client.listResources();
-  assert.equal(resources.length, snapshot.articles.length + 3);
+  assert.equal(resources.length, snapshot.articles.length + 3 + 12);
   for (const article of snapshot.articles) {
     assert.ok(resources.some(({ uri }) => uri === article.markdownUrl));
   }
   const article = snapshot.articles[0];
   const read = await client.readResource({ uri: article.markdownUrl });
   assert.equal(read.contents[0].text, article.text);
+});
+
+test("profile tools and resources expose every supported locale without translating articles", async () => {
+  for (const locale of ["es", "fr", "pt", "ja", "zh", "ru"]) {
+    const profile = await client.callTool({ name: "get_profile", arguments: { locale } });
+    assert.equal(profile.structuredContent.language, snapshot.locales[locale].profile.language);
+    assert.equal(profile.structuredContent.url, `https://sergei-parfenov.com/${locale}/`);
+    assert.equal(profile.structuredContent.workUrl, `https://sergei-parfenov.com/${locale}/work-together/`);
+    const fetched = await client.callTool({ name: "fetch", arguments: { id: "profile", locale } });
+    assert.equal(fetched.structuredContent.text, snapshot.locales[locale].profileMarkdown);
+    assert.equal(fetched.structuredContent.url, profile.structuredContent.url);
+  }
+  const article = snapshot.articles[0];
+  const fetched = await client.callTool({ name: "fetch", arguments: { id: article.id, locale: "ja" } });
+  assert.equal(fetched.structuredContent.url, article.url);
+  assert.equal(fetched.structuredContent.language, article.language);
+});
+
+test("Accept-Language provides the MCP default when a tool call omits locale", async () => {
+  const localizedClient = new Client({ name: "localized-site-test", version: "1.0.0" });
+  await localizedClient.connect(new StreamableHTTPClientTransport(new URL(url), { requestInit: { headers: { "Accept-Language": "de-DE,fr-FR;q=0.9" } } }));
+  try {
+    const profile = await localizedClient.callTool({ name: "get_profile", arguments: {} });
+    assert.equal(profile.structuredContent.language, "fr");
+    assert.equal(profile.structuredContent.url, "https://sergei-parfenov.com/fr/");
+  } finally {
+    await localizedClient.close();
+  }
 });
 
 test("agents can discover review contributions without confusing them with authored articles", async () => {

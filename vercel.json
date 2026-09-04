@@ -11,8 +11,11 @@
   "rewrites": [{ "source": "/mcp", "destination": "/api/mcp" }],
   "redirects": [
     { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/:locale(es|fr|pt|ja|zh|ru)/index.html", "destination": "/:locale/", "permanent": true },
     { "source": "/work-together", "destination": "/work-together/", "permanent": true },
     { "source": "/work-together/index.html", "destination": "/work-together/", "permanent": true },
+    { "source": "/:locale(es|fr|pt|ja|zh|ru)/work-together", "destination": "/:locale/work-together/", "permanent": true },
+    { "source": "/:locale(es|fr|pt|ja|zh|ru)/work-together/index.html", "destination": "/:locale/work-together/", "permanent": true },
     { "source": "/blog/:slug/index.html", "destination": "/blog/:slug/", "permanent": true },
     { "source": "/blog", "destination": "/blog.html", "permanent": true },
     { "source": "/blog/", "destination": "/blog.html", "permanent": true },
@@ -40,12 +43,32 @@
       ]
     },
     {
+      "source": "/:locale(es|fr|pt|ja|zh|ru)/index.md",
+      "headers": [
+        { "key": "Content-Type", "value": "text/markdown; charset=utf-8" },
+        { "key": "X-Robots-Tag", "value": "noindex, follow" }
+      ]
+    },
+    {
       "source": "/:file(profile|articles|mcp).json",
       "headers": [
         { "key": "Content-Type", "value": "application/json; charset=utf-8" },
         { "key": "X-Robots-Tag", "value": "noindex, follow" }
       ]
     },
+    {
+      "source": "/:locale(es|fr|pt|ja|zh|ru)/profile.json",
+      "headers": [
+        { "key": "Content-Type", "value": "application/json; charset=utf-8" },
+        { "key": "X-Robots-Tag", "value": "noindex, follow" }
+      ]
+    },
+    { "source": "/es/:path*", "headers": [{ "key": "Content-Language", "value": "es" }] },
+    { "source": "/fr/:path*", "headers": [{ "key": "Content-Language", "value": "fr" }] },
+    { "source": "/pt/:path*", "headers": [{ "key": "Content-Language", "value": "pt-BR" }] },
+    { "source": "/ja/:path*", "headers": [{ "key": "Content-Language", "value": "ja" }] },
+    { "source": "/zh/:path*", "headers": [{ "key": "Content-Language", "value": "zh-Hans" }] },
+    { "source": "/ru/:path*", "headers": [{ "key": "Content-Language", "value": "ru" }] },
     {
       "source": "/llms.txt",
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, follow" }]

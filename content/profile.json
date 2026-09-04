@@ -77,7 +77,7 @@
     ]}
   ],
   "education": [
-    {"institution": "Stanford University", "program": "CS231n: Deep Learning for Computer Vision", "kind": "course", "qualification": "Course", "period": "Apr 2024 to Jun 2024", "startDate": "2024-04", "endDate": "2024-06"},
+    {"institution": "Stanford University", "program": "CS231n: Deep Learning for Computer Vision", "url": "https://cs231n.stanford.edu/", "kind": "course", "qualification": "Course", "period": "Apr 2024 to Jun 2024", "startDate": "2024-04", "endDate": "2024-06"},
     {"institution": "Saint Petersburg State University of Finance and Economics", "program": "Computer Information Systems", "kind": "degree", "qualification": "Bachelor’s degree", "period": "2005 to 2010", "startDate": "2005", "endDate": "2010"}
   ],
   "music": {"description": "I collect themed playlists on Spotify.", "url": "https://open.spotify.com/playlist/6kX9RuLad2D5hsX86fjvgg?si=f7ac7e7e3f264f68"}

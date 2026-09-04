@@ -38,11 +38,17 @@ test("profile and articles share one author identity and indexable HTML metadata
 test("sitemap has only indexable canonical pages with genuine article dates", async () => {
   const sitemap = await read("sitemap.xml");
   const urls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
-  assert.deepEqual(new Set(urls), new Set([`${origin}/`, `${origin}/work-together/`, `${origin}/blog.html`, ...snapshot.articles.map((article) => article.url)]));
+  const locales = ["es", "fr", "pt", "ja", "zh", "ru"];
+  assert.deepEqual(new Set(urls), new Set([
+    `${origin}/`, `${origin}/work-together/`, `${origin}/blog.html`,
+    ...locales.flatMap((locale) => [`${origin}/${locale}/`, `${origin}/${locale}/work-together/`]),
+    ...snapshot.articles.map((article) => article.url),
+  ]));
   assert.equal(urls.length, new Set(urls).size);
   assert.ok(!sitemap.includes("privacy.html"));
   assert.ok(!sitemap.includes("index.html"));
-  assert.ok(sitemap.includes(`<url><loc>${origin}/</loc></url>`));
+  assert.ok(sitemap.includes('xmlns:xhtml="http://www.w3.org/1999/xhtml"'));
+  for (const locale of ["en", ...locales, "x-default"]) assert.ok(sitemap.includes(`hreflang="${locale === "zh" ? "zh-Hans" : locale}"`));
   const robots = await read("robots.txt");
   assert.ok(robots.includes("User-agent: *\nAllow: /"));
   assert.ok(robots.includes(`Sitemap: ${origin}/sitemap.xml`));
@@ -169,6 +175,7 @@ test("LinkedIn uses the corrected canonical profile across pages and agent outpu
 });
 
 test("education distinguishes the Stanford course from the university degree", async () => {
+  const courseUrl = "https://cs231n.stanford.edu/";
   const bio = JSON.parse(await read("profile.json"));
   const work = await read("work-together/index.html");
   const markdown = await read("index.md");
@@ -176,6 +183,7 @@ test("education distinguishes the Stanford course from the university degree", a
     ["course", "2024-04", "2024-06"], ["degree", "2005", "2010"],
   ]);
   assert.equal(bio.education[0].program, "CS231n: Deep Learning for Computer Vision");
+  assert.equal(bio.education[0].url, courseUrl);
   assert.equal(bio.education[1].program, "Computer Information Systems");
   assert.deepEqual(snapshot.profile.education, bio.education);
   for (const item of bio.education) {
@@ -183,6 +191,11 @@ test("education distinguishes the Stanford course from the university degree", a
       assert.ok(work.includes(item[field]));
       assert.ok(markdown.includes(item[field]));
     }
+  }
+  assert.ok(work.includes(`<a href="${courseUrl}" target="_blank" rel="noopener noreferrer">${bio.education[0].program} <span aria-hidden="true">↗</span></a>`));
+  assert.ok(markdown.includes(`[${bio.education[0].program}](${courseUrl})`));
+  for (const locale of ["es", "fr", "pt", "ja", "zh", "ru"]) {
+    assert.ok((await read(`${locale}/work-together/index.html`)).includes(`href="${courseUrl}"`));
   }
   assert.ok(work.includes('id="education"'));
   assert.ok(!(await read("index.html")).includes('class="education-note"'));
@@ -247,13 +260,13 @@ test("homepage reads as a personal introduction without directory rows or header
   assert.ok(home.includes('class="home-identity"'));
   assert.ok(home.includes('class="home-opening"'));
   assert.ok(!home.includes('class="home-location"'));
-  assert.ok(home.includes('class="home-colophon">Barcelona, <span data-current-year>2026</span> <span aria-hidden="true">☯︎</span>'));
+  assert.ok(home.includes(`class="home-colophon">Barcelona, ${new Date().getFullYear()} <span aria-hidden="true">☯︎</span>`));
   assert.ok(home.includes('class="home-letter"'));
   assert.ok(!home.includes('class="profile-columns'));
   assert.ok(!home.includes('class="home-row"'));
   assert.ok(!home.includes("page-controls"));
   assert.ok(!home.includes("open.spotify.com"));
-  assert.equal((home.match(/href="\.\/blog.html"/g) || []).length, 1);
+  assert.equal((home.match(/href="\/blog.html"/g) || []).length, 1);
   assert.ok(styles.includes("prefers-reduced-motion: no-preference"));
   assert.ok(styles.includes("max-width: 767px"));
   assert.match(styles, /\.home-identity h1\s*\{[^}]*font-family: var\(--font-editorial\)/);

@@ -1,0 +1,202 @@
+{
+  "htmlLang": "es",
+  "hreflang": "es",
+  "ogLocale": "es_ES",
+  "languageName": "Español",
+  "seo": {
+    "homeTitle": "Sergei Parfenov | Cofundador, CTO e ingeniero de IA/ML",
+    "workTitle": "Trabajar juntos | Sergei Parfenov",
+    "workDescription": "Trabaja con Sergei Parfenov en productos de IA, evaluación de agentes, destilación de modelos y sistemas de aprendizaje. Experiencia y proyectos."
+  },
+  "ui": {
+    "skip": "Saltar al contenido",
+    "home": "Inicio",
+    "experienceLink": "Experiencia y formas de colaborar",
+    "blogTitle": "En el blog",
+    "email": "Correo",
+    "privacy": "Privacidad",
+    "portraitAlt": "Retrato de Sergei Parfenov",
+    "aboutTitle": "Un poco sobre mi trabajo",
+    "openTitle": "Proyectos abiertos",
+    "helpTitle": "En qué puedo ayudar",
+    "educationTitle": "Formación y cursos",
+    "experienceTitle": "El camino hasta aquí",
+    "blog": "Blog"
+  },
+  "markdown": {
+    "canonicalProfile": "URL canónica del perfil",
+    "detailedExperience": "Experiencia detallada y colaboración",
+    "alsoKnownAs": "También conocido como",
+    "basedIn": "Vive en",
+    "background": "Trayectoria",
+    "currentWork": "Trabajo actual",
+    "workingTogether": "Trabajar juntos",
+    "whereHelp": "En qué puedo ayudar",
+    "openProjects": "Proyectos abiertos",
+    "experience": "Experiencia",
+    "education": "Formación y cursos",
+    "writing": "Artículos",
+    "publishedArticles": "artículos publicados",
+    "articlesAlso": "Los artículos también se publican en DEV.",
+    "reviewContributions": "Contribuciones como revisor",
+    "by": "Por",
+    "myRole": "Mi contribución",
+    "music": "Música",
+    "contact": "Contacto y perfiles"
+  },
+  "profile": {
+    "role": "Cofundador y CTO, ingeniero de IA/ML",
+    "description": "Sergei Parfenov es cofundador y CTO de Aliwio y asesor tecnológico de Symptomato. Construye productos de IA, sistemas de aprendizaje y software.",
+    "summary": "Ingeniería, producto y el trabajo que ocurre entre ambos.",
+    "intro": "Durante la última década he construido productos desde cero: escribiendo software, decidiendo qué merece la pena construir y ocupándome de las partes complicadas hasta que funcionan para personas reales.",
+    "homeStory": [
+      "Me incorporé a Yandex Praktikum cuando el equipo aún era pequeño. Más adelante, en TripleTen y Nebius Academy, seguí trabajando en los sistemas que sostienen el aprendizaje. En TripleTen construí herramientas de IA para evaluación, búsqueda y tutoría. También cofundé IAWY, un tutor con IA que lanzamos en dos bootcamps de América Latina."
+    ],
+    "homeCurrent": "Hoy soy cofundador y CTO de Aliwio, donde construyo software para clínicas veterinarias. También soy asesor tecnológico de Symptomato y ayudo a diseñar un servicio en el que la IA recopila el contexto antes de que un profesional sanitario se incorpore a la conversación.",
+    "blogIntro": "Comparto experimentos, análisis técnicos y lo que aprendo construyendo sistemas de IA. Casi 10.000 personas siguen mis textos.",
+    "location": "Barcelona, España",
+    "about": [
+      "Me incorporé a Yandex Praktikum como la undécima persona del equipo y ayudé a construir el producto desde sus primeras etapas. Trabajé en varios componentes, diseñé la arquitectura de pruebas del simulador de programación, que utilizaban entre 7.000 y 10.000 estudiantes al día, y desarrollé un modelo de ML para evaluar entregas de proyectos. Todo esto fue antes de ChatGPT.",
+      "También ayudé a lanzar el programa de QA Engineering en Estados Unidos. En TripleTen conecté IA, ingeniería backend y experiencia de aprendizaje, incluyendo personalización y el Mastery Depth Tracker.",
+      "Durante aproximadamente un año desarrollé IAWY, una startup para revisar automáticamente proyectos de estudiantes. Lanzamos el producto en dos bootcamps de América Latina.",
+      "Hoy soy cofundador y CTO de Aliwio, un CRM para clínicas veterinarias, y asesor tecnológico de Symptomato, un servicio que combina la recogida de información mediante IA con profesionales sanitarios. Vivo en Barcelona y trabajo entre las decisiones de producto, la arquitectura y la implementación."
+    ],
+    "writing": "Escribo sobre ingeniería de IA: experimentos, sistemas que fallan y lo que realmente dicen las mediciones. Mis textos llegan a casi 10.000 personas.",
+    "currentRoles": {
+      "Aliwio": {
+        "role": "Cofundador y CTO",
+        "description": "Construyo un CRM para clínicas veterinarias independientes, desde la arquitectura técnica hasta el propio producto."
+      },
+      "Symptomato": {
+        "role": "Asesor tecnológico",
+        "description": "Asesoro sobre tecnología para un servicio en el que la IA recopila el contexto antes de que un profesional sanitario se incorpore a la conversación."
+      }
+    },
+    "contributions": {
+      "The Agentic Commerce Blueprint": {
+        "role": "Revisión pública",
+        "summary": "Una arquitectura de referencia para sistemas de comercio utilizados por agentes de IA.",
+        "contribution": "Aporté comentarios públicos sobre procedencia tipada, sobre cómo las negativas deben propagarse a las afirmaciones derivadas y sobre las comprobaciones que vinculan las acciones de un agente con los permisos vigentes y el estado actual del sistema."
+      }
+    },
+    "collaboration": {
+      "title": "Podríamos trabajar juntos.",
+      "description": "Un producto inicial que construir, una hipótesis de IA que comprobar o un sistema que debe funcionar para miles de personas. Uno las decisiones de ingeniería y producto.",
+      "approach": "Puedo convertir una idea en una primera versión comprobable, trabajar en la arquitectura y la implementación, y ayudar al equipo a decidir qué construir después. Explico las decisiones técnicas desde el producto y las personas que lo utilizan.",
+      "invitation": "Cuéntame qué estás construyendo, dónde te has atascado y cómo sería un resultado útil."
+    },
+    "capabilities": {
+      "An AI idea worth testing": {
+        "name": "Una idea de IA que merece una prueba",
+        "description": "Convertir una idea incierta en un experimento concreto. Construir un prototipo funcional, comprobar la hipótesis y usar lo aprendido para decidir qué merece convertirse en producto antes de comprometerse con un desarrollo grande."
+      },
+      "Building an early product": {
+        "name": "Construir un producto desde su primera versión",
+        "description": "Trabajar en la primera versión, la arquitectura, el backend y la interfaz. Decidir con el equipo qué construir ahora, qué dejar fuera y cómo llevar el producto a un uso real."
+      },
+      "Agents you can evaluate": {
+        "name": "Agentes que se pueden evaluar",
+        "description": "Entender por qué falla un agente, no solo si su respuesta parece convincente. Construir comprobaciones para el uso de herramientas, la memoria, la recuperación de información y la recuperación ante fallos, con trazas inspeccionables y pruebas repetibles."
+      },
+      "Smaller models, measured trade-offs": {
+        "name": "Modelos más pequeños con compromisos medidos",
+        "description": "Explorar destilación y ajuste fino para una tarea concreta. Comparar el modelo pequeño con una referencia en calidad, velocidad y memoria antes de decidir si el compromiso merece la pena."
+      },
+      "Learning platforms & automated assessment": {
+        "name": "Plataformas de aprendizaje y evaluación automática",
+        "description": "Diseñar arquitecturas de pruebas para simuladores de programación, evaluación con ML de proyectos y feedback que ayude a los estudiantes a avanzar. Conectar estos sistemas con el currículo, la confianza del alumno y la retención."
+      }
+    },
+    "projects": {
+      "Screenshot model distillation": {
+        "name": "Destilación de un modelo para capturas de pantalla",
+        "description": "Un experimento de visión de 7B a 2B con un proceso reproducible de entrenamiento y evaluación. Una prueba de concepto pequeña, incluidos los puntos en los que las métricas me llevaron a una conclusión equivocada."
+      },
+      "Agent memory & provenance": {
+        "name": "Memoria y procedencia en agentes",
+        "description": "Un entorno experimental para medir cómo la compactación de memoria cambia las decisiones de un agente, incluidos resultados que contradijeron mi propia hipótesis."
+      }
+    },
+    "experience": {
+      "Aliwio": {
+        "role": "Cofundador y CTO",
+        "period": "feb. de 2026 hasta hoy",
+        "description": "Como cofundador y CTO, soy responsable de la arquitectura técnica y la ingeniería de producto de un CRM para clínicas veterinarias independientes."
+      },
+      "Symptomato": {
+        "role": "Asesor tecnológico",
+        "period": "ene. de 2026 hasta hoy",
+        "description": "Asesoro a Symptomato en tecnología. El servicio utiliza un asistente de IA para recopilar contexto y después incorpora a un profesional sanitario a la conversación."
+      },
+      "TripleTen": {
+        "role": "Ingeniero de IA",
+        "period": "dic. de 2021 a ene. de 2026",
+        "description": "Construí sistemas de evaluación, recuperación de información y tutoría con IA, desde la arquitectura hasta las versiones en producción.",
+        "highlights": [
+          "Diseñé e implementé un sistema de evaluación con una arquitectura de planificación y ejecución. Reduje la latencia de evaluación de 8,4 a 0,6 segundos, catorce veces más rápido, y sustituí 140 cuestionarios antiguos de texto libre.",
+          "Construí un flujo de vectorización del CMS con Kafka que procesaba 100.000 elementos al día. Desarrollé la búsqueda semántica de principio a fin, aumentando la interacción con la búsqueda un 9 % y reduciendo el tiempo hasta encontrar contenido un 18 %.",
+          "Construí la generación automática de prácticas, reduciendo el tiempo de creación de tareas de 2,5 horas a 18 minutos. Publiqué un plugin interno para VS Code que redujo un 27 % el tiempo medio de soporte por incidencia de estudiante.",
+          "Trabajé en el modo de voz del tutor de IA Dot, conectando WebRTC, reconocimiento de voz, un LLM y síntesis de voz. Ayudé a llevarlo a una versión estable, con un 97,8 % de sesiones correctas y una mediana de 1,3 segundos hasta la primera respuesta.",
+          "Ayudé a definir la personalización del aprendizaje y construí funciones que mejoraron la retención de estudiantes. En el Mastery Depth Tracker conecté producto e ingeniería para medir la confianza de los alumnos e identificar dónde necesitaban más práctica. También ayudé a lanzar el programa de QA Engineering en Estados Unidos."
+        ]
+      },
+      "IAWY": {
+        "role": "Cofundador y CPO",
+        "period": "ago. de 2023 a jul. de 2024",
+        "description": "Cofundé y desarrollé IAWY, una startup para la revisión automática de proyectos de estudiantes. Definí la visión y la hoja de ruta de un tutor con IA integrado en plataformas de aprendizaje existentes. Lo lanzamos con éxito en dos bootcamps de América Latina.",
+        "coverageLabel": "IAWY en Tech.eu · 22 de febrero de 2024"
+      },
+      "Retailhub": {
+        "role": "Investigador de IA",
+        "period": "oct. de 2023 a ene. de 2024",
+        "description": "Diseñé un flujo para enriquecer fichas de producto: normalización de datos de entrada, extracción de atributos, generación de características estructuradas y redacción de descripciones en lenguaje natural."
+      },
+      "Yandex Praktikum": {
+        "role": "Ingeniero de software",
+        "period": "mar. de 2018 a dic. de 2021",
+        "description": "Fui la undécima persona en incorporarse al equipo y una de las personas que construyeron el producto desde sus primeras etapas, trabajando en varios componentes.",
+        "highlights": [
+          "Diseñé la arquitectura de pruebas del simulador de programación que utilizaban entre 7.000 y 10.000 estudiantes al día.",
+          "Desarrollé un modelo de ML para evaluar proyectos de estudiantes antes de ChatGPT y participé en el lanzamiento del programa de Desarrollo Web."
+        ]
+      },
+      "Thingyfy": {
+        "role": "Ingeniero de software",
+        "period": "oct. de 2019 a oct. de 2020",
+        "description": "Construí productos para startups con React y TypeScript, con atención a la adaptabilidad y la escalabilidad."
+      },
+      "Yandex School of Data Analysis": {
+        "role": "Especialista en aprendizaje",
+        "period": "oct. de 2018 a ene. de 2020",
+        "description": "Trabajé como especialista en aprendizaje en Moscú."
+      },
+      "Sravni.ru": {
+        "role": "Ingeniero de software",
+        "period": "nov. de 2017 a oct. de 2018",
+        "description": "Construí productos de seguros con React."
+      },
+      "Earlier work": {
+        "role": "Ingeniero y profesor",
+        "period": "2016 a 2019",
+        "positions": {
+          "European Gymnasium": "Informática y desarrollo web.",
+          "Spaces": "Ingeniería de producto para inmuebles comerciales.",
+          "MCS": "Enseñanza de Arduino, Swift, Python, desarrollo web y realidad virtual."
+        }
+      }
+    },
+    "education": {
+      "Stanford University": {
+        "program": "CS231n: aprendizaje profundo para visión por computador",
+        "qualification": "Curso",
+        "period": "abr. de 2024 a jun. de 2024"
+      },
+      "Saint Petersburg State University of Finance and Economics": {
+        "program": "Sistemas de información",
+        "qualification": "Grado universitario",
+        "period": "2005 a 2010"
+      }
+    },
+    "music": "Colecciono playlists temáticas en Spotify."
+  }
+}

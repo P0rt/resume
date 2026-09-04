@@ -1,16 +1,9 @@
-const themeColors = document.querySelectorAll("[data-theme-color]");
-const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-function updateThemeColor() {
-  themeColors.forEach((meta) => meta.setAttribute("content", systemTheme.matches ? "#131416" : "#f7f7f4"));
-}
-
-systemTheme.addEventListener("change", updateThemeColor);
-updateThemeColor();
-
 const revealItems = document.querySelectorAll("[data-reveal]");
-if (reduceMotion || !("IntersectionObserver" in window)) {
+if (!revealItems.length) {
+  // Static pages do not need an observer.
+} else if (reduceMotion || !("IntersectionObserver" in window)) {
   revealItems.forEach((item) => item.classList.add("is-visible"));
 } else {
   const revealObserver = new IntersectionObserver((entries, observer) => {
@@ -22,10 +15,6 @@ if (reduceMotion || !("IntersectionObserver" in window)) {
   }, { rootMargin: "0px 0px -12%", threshold: 0.08 });
   revealItems.forEach((item) => revealObserver.observe(item));
 }
-
-document.querySelectorAll("[data-current-year]").forEach((element) => {
-  element.textContent = String(new Date().getFullYear());
-});
 
 async function copyText(text, button) {
   button.disabled = true;

@@ -98,7 +98,10 @@ test("the detailed profile stays consistent across the page, JSON, Markdown and 
   }
   assert.ok(markdown.includes(bio.homeCurrent));
   assert.ok(!home.includes("Mastery Depth Tracker"));
-  assert.ok(!home.includes("I joined Yandex Praktikum"));
+  assert.ok(home.replace(/<[^>]*>/g, "").includes("I joined Yandex Praktikum"));
+  assert.ok(home.includes("Nebius Academy"));
+  assert.ok(!home.includes("7,000–10,000"));
+  assert.ok(!home.includes("8.4 seconds to 0.6 seconds"));
   assert.ok(work.includes("I joined Yandex Praktikum"));
   assert.ok(!home.includes("open-project"));
   assert.ok(!home.includes("help-list"));
@@ -192,7 +195,7 @@ test("career corrections stay accurate in every public representation", async ()
   const work = await read("work-together/index.html");
   const home = await read("index.html");
   const markdown = await read("index.md");
-  assert.deepEqual(bio.currentRoles.map((job) => [job.organization, job.role]), [["Aliwio", "CTO"], ["Symptomato", "CTO"]]);
+  assert.deepEqual(bio.currentRoles.map((job) => [job.organization, job.role]), [["Aliwio", "Co-Founder and CTO"], ["Symptomato", "Tech Adviser"]]);
   assert.deepEqual(bio.experience.filter((job) => job.status === "current").map((job) => job.company), ["Aliwio", "Symptomato"]);
   const tripleten = bio.experience.find((job) => job.company === "TripleTen");
   assert.equal(tripleten.status, "past");
@@ -207,8 +210,8 @@ test("career corrections stay accurate in every public representation", async ()
   assert.equal(iawy.endDate, "2024-07");
   assert.ok(iawy.description.includes("two bootcamps in Latin America"));
   for (const [company, role, startDate, endDate] of [
-    ["Aliwio", "CTO", "2026-02", undefined],
-    ["Symptomato", "CTO", "2026-01", undefined],
+    ["Aliwio", "Co-Founder and CTO", "2026-02", undefined],
+    ["Symptomato", "Tech Adviser", "2026-01", undefined],
     ["Retailhub", "AI Researcher", "2023-10", "2024-01"],
     ["Yandex Praktikum", "Software Engineer", "2018-03", "2021-12"],
     ["Thingyfy", "Software Engineer", "2019-10", "2020-10"],
@@ -226,7 +229,7 @@ test("career corrections stay accurate in every public representation", async ()
   }
   assert.ok(home.includes('href="https://tripleten.com"'));
   assert.ok(home.includes('href="https://practicum.yandex.ru/"'));
-  assert.ok(home.includes(`href="${iawy.coverage.url}"`));
+  assert.ok(!home.includes(`href="${iawy.coverage.url}"`));
   assert.ok(home.includes('href="https://symptomato.com"'));
   const pages = [home, work, await read("blog.html"), await read(`blog/${snapshot.articles[0].id}/index.html`)];
   for (const page of pages) {

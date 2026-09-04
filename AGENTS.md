@@ -31,7 +31,8 @@
 
 ## Biographical accuracy
 - Use Sergei's supplied facts and screenshots, not achievements from design-reference biographies. No invented awards, revenues, client names, metrics, availability or testimonial quotes.
-- Current stated roles: CTO at Aliwio and Symptomato. LinkedIn screenshots call Symptomato “Technology Adviser”; do not silently resolve that discrepancy. See README provenance.
+- Current stated roles: Co-Founder and CTO at Aliwio; Tech Adviser at Symptomato. These titles were explicitly corrected by Sergei on September 4, 2026. See README provenance.
+- Nebius Academy belongs in the compact homepage career arc after TripleTen. Do not add a dated experience entry or infer a role until Sergei supplies the exact title and dates.
 - TripleTen is a **past** role: AI Engineer, December 2021–January 2026. No separate Practicum USA block.
 - Yandex Praktikum: 11th member of that product team, not of all Yandex and not a claimed co-founder. Trainer architecture served 7,000–10,000 students/day; ML project assessment preceded ChatGPT. Those detailed facts belong on the work page, not the compact homepage.
 - IAWY: Co-Founder/CPO, August 2023–July 2024; two LATAM bootcamp launches are user-supplied. Tech.eu coverage is sponsored accelerator coverage, not an award.

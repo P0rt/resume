@@ -34,6 +34,7 @@
 - Footer location is `Barcelona, <current year> ☯︎`, not a subtitle under the name. Music/Spotify is hidden for now. Do not publish `src/assets/resume.pdf`.
 - Motion stays subtle and respects reduced motion. Article text and highlighting must work without JavaScript; copy controls are progressive enhancements.
 - Performance baseline: run Lighthouse in Navigation mode with a clean browser profile. The homepage should make no script request and hold 100 Performance with 0 ms TBT; do not trade typography or image quality for unweighted diagnostic suggestions or a noisy browser-side task.
+- Check both desktop and mobile, including the Lighthouse Agentic Browsing category (separate from the public MCP API). Fast font downloads can hide CLS: preserve Manrope's measured Arial fallback metrics and test a delayed WOFF2 load after typography changes. Keep the fallback limited to the source font's glyph coverage. Reserve article copy-control space before JavaScript loads.
 - Polish reading measure, paragraph rhythm, lists, long titles, code and tables. Do not rewrite an article merely to make its layout easier.
 
 ## Biographical accuracy
@@ -53,6 +54,7 @@
 - Label fenced code blocks (`python`, `js`, `bash`, `json`, etc.). Highlighting is static and dual-theme; unrecognised languages fall back to plain text without breaking publication.
 - `npm run articles:sync` can overwrite DEV-sourced local articles. Use only for an explicitly requested refresh, not as a routine build step.
 - For new DEV-hosted covers run `npm run images:import` and commit `content/images/covers/` sources. Normal builds must stay offline; only published covers are generated into public assets. Keep original front-matter URLs and text unchanged. Check payloads, theme switching, image requests and clean mobile Lighthouse when changing image delivery; do not trade image quality or typography for a score.
+- Inline article illustrations use `content/images/inline-dimensions.json` to reserve their space before loading. For new images, explicitly run `node scripts/import-image-dimensions.mjs`; the build must never fetch them. Preserve both intrinsic dimensions and the CSS sizing variables that keep the original aspect ratio and 720px height cap.
 - Existing DEV copies have canonicals pointing to the matching personal-site URLs. Local metadata does not update DEV; modify external publications only when requested, preserving their content.
 - Preserve self-canonicals, one article H1, author identity, JSON-LD, RSS, sitemap, Markdown alternates, JSON catalogs and stable MCP document IDs. Do not promise Google rankings or indexing.
 - MCP profile tools accept explicit locales `en`, `es`, `fr`, `pt`, `ja`, `zh` and `ru`; HTTP `Accept-Language` is only a fallback. Keep localized profile resources at `/<locale>/profile.json` and `/<locale>/index.md`. Never pretend that article bodies were translated when they were not.

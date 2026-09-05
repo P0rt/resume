@@ -66,16 +66,16 @@
 .blog-page .post-row time { color: var(--muted); font: inherit; letter-spacing: 0; }
 .blog-page .post-row-copy { display: block; min-width: 0; }
 .blog-page .post-row-title { margin: 0; font: 400 30px/36px var(--font-editorial); letter-spacing: -.02em; text-wrap: pretty; }
-.blog-page .post-row-description { max-width: 65ch; margin: 12px 0; color: var(--muted); font-size: 16px; line-height: 24px; }
+.blog-page .post-row-description { max-width: 40em; margin: 12px 0; color: var(--muted); font-size: 16px; line-height: 24px; }
 .blog-page .post-row-meta { display: block; width: 100%; justify-self: stretch; color: var(--muted); text-align: left; font: 12px/16px var(--font-code); letter-spacing: 0; }
 .blog-page .post-row-link:hover .post-row-title { color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
 
 .article-page .article-header { max-width: 960px; padding-block: 48px 40px; }
 .article-page .article-header h1 { max-width: 28ch; margin: 0; font: 400 48px/1 var(--font-editorial); letter-spacing: -.025em; text-wrap: balance; overflow-wrap: anywhere; }
 .article-deck { max-width: 704px; margin: 24px 0 0; color: var(--muted); font-size: 20px; line-height: 28px; text-wrap: pretty; }
-.article-meta-line { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 24px; margin-top: 32px; font: 14px/20px "Manrope", sans-serif; letter-spacing: 0; color: var(--muted); }
+.article-meta-line { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 24px; margin-top: 32px; font: 14px/20px "Manrope", "Manrope Fallback", sans-serif; letter-spacing: 0; color: var(--muted); }
 .article-meta-line a { color: var(--ink); text-underline-offset: 4px; }
-.article-meta-line button { margin-left: auto; }
+.article-meta-line button { margin-left: auto; min-inline-size: 6.5em; }
 .article-tags { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 16px; color: var(--muted); font: 12px/16px var(--font-code); }
 .article-tags > span::before { content: "#"; color: var(--accent); }
 .article-cover { width: min(calc(100% - 2 * var(--page-gutter)), 864px); margin: 0 auto 48px; background: var(--surface); }
@@ -118,6 +118,9 @@
 .code-copy:disabled,
 .article-meta-line button:disabled { cursor: default; color: var(--accent); }
 .code-copy[hidden], .article-meta-line button[hidden] { display: none; }
+/* Reserve the enhancement's space from first paint, but keep it unavailable
+   until its click handler exists. With JS disabled it stays display:none. */
+.js .code-copy[hidden], .js .article-meta-line button[hidden] { display: inline-flex; visibility: hidden; }
 .article-prose pre { overflow-x: auto; overscroll-behavior-x: contain; margin: 0; padding: 24px; font: 14px/20px var(--font-code); tab-size: 2; letter-spacing: 0; }
 .article-prose pre code { padding: 0; background: transparent; font: inherit; }
 .shiki, .shiki span { color: var(--shiki-light); }
@@ -131,6 +134,7 @@
 .article-prose tr:last-child td { border-bottom: 0; }
 .article-prose tbody tr:hover { background: var(--surface); }
 .article-prose img { width: auto; max-height: 720px; margin-inline: auto; }
+.article-prose .article-image { width: min(100%, var(--image-width), calc(720px * var(--image-ratio))); }
 .article-prose iframe { width: 100%; max-width: 100%; border: 1px solid var(--line); }
 .article-prose hr { margin-block: 48px; border: 0; border-top: 1px solid var(--line); }
 .article-prose input[type="checkbox"] { accent-color: var(--accent); }

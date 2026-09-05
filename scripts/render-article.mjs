@@ -1,9 +1,21 @@
 import { Marked, Renderer, TextRenderer } from "marked";
 import { bundledLanguages, createHighlighter } from "shiki";
+import { readFile } from "node:fs/promises";
 
 const escapeHtml = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 const languageNames = { python: "Python", py: "Python", javascript: "JavaScript", js: "JavaScript", typescript: "TypeScript", ts: "TypeScript", bash: "Bash", sh: "Shell", shell: "Shell", json: "JSON", yaml: "YAML", yml: "YAML", html: "HTML", css: "CSS", sql: "SQL", text: "Plain text", txt: "Plain text", plaintext: "Plain text" };
 const highlighter = await createHighlighter({ themes: ["github-light-default", "github-dark-default"], langs: [] });
+// Imported explicitly from public images; ordinary builds stay fully offline.
+const imageManifest = JSON.parse(await readFile(new URL("../content/images/inline-dimensions.json", import.meta.url), "utf8"));
+if (imageManifest.version !== 1 || !imageManifest.images || typeof imageManifest.images !== "object") {
+  throw new Error("Invalid inline image dimensions manifest");
+}
+for (const dimensions of Object.values(imageManifest.images)) {
+  if (!Number.isSafeInteger(dimensions?.width) || !Number.isSafeInteger(dimensions?.height) ||
+      dimensions.width <= 0 || dimensions.height <= 0 || dimensions.width * dimensions.height > 40_000_000) {
+    throw new Error("Invalid inline image dimensions");
+  }
+}
 
 // One shared highlighter, but fresh heading IDs and parser state for each article.
 export async function renderArticle(markdown) {
@@ -20,6 +32,14 @@ export async function renderArticle(markdown) {
   let tableNumber = 0;
 
   parser.use({ renderer: {
+    image(token) {
+      // Let Marked keep its URL handling and escaping of alt/title unchanged.
+      const html = Renderer.prototype.image.call(this, token);
+      const dimensions = Object.hasOwn(imageManifest.images, token.href) ? imageManifest.images[token.href] : null;
+      if (!dimensions || !html.startsWith("<img ")) return html;
+      const ratio = (dimensions.width / dimensions.height).toFixed(6);
+      return html.replace("<img ", `<img width="${dimensions.width}" height="${dimensions.height}" class="article-image" style="--image-width: ${dimensions.width}px; --image-ratio: ${ratio}" `);
+    },
     code(token) {
       const requestedLanguage = languageOf(token);
       const language = Object.hasOwn(bundledLanguages, requestedLanguage) ? requestedLanguage : "text";

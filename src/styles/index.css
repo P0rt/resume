@@ -6,6 +6,34 @@
   font-display: swap;
 }
 
+/* Match the local fallback to Manrope while its WOFF2 is loading.
+   Advance widths measured at 450/650 on the site's English prose; vertical
+   metrics use Manrope's 2132/600/0 units at 2000 UPEM, divided by size-adjust.
+   Limit this to Manrope's actual glyph coverage so other scripts stay unchanged. */
+@font-face {
+  font-family: "Manrope Fallback";
+  src: local("Arial"), local("ArialMT");
+  font-style: normal;
+  font-weight: 400;
+  size-adjust: 104.24558%;
+  ascent-override: 102.25853%;
+  descent-override: 28.77820%;
+  line-gap-override: 0%;
+  unicode-range: U+000D, U+0020-007E, U+00A0-00FF, U+0102, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2013-2014, U+2018-201A, U+201C-201E, U+2022, U+2026, U+2039-203A, U+2044, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215;
+}
+
+@font-face {
+  font-family: "Manrope Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-style: normal;
+  font-weight: 700;
+  size-adjust: 100.32535%;
+  ascent-override: 106.25430%;
+  descent-override: 29.90271%;
+  line-gap-override: 0%;
+  unicode-range: U+000D, U+0020-007E, U+00A0-00FF, U+0102, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2013-2014, U+2018-201A, U+201C-201E, U+2022, U+2026, U+2039-203A, U+2044, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215;
+}
+
 :root {
   color-scheme: light;
   --paper: #f7f7f4;
@@ -63,7 +91,7 @@ body {
   background-position: center top;
   background-size: var(--grid-unit) var(--grid-unit);
   color: var(--ink);
-  font-family: "Manrope", sans-serif;
+  font-family: "Manrope", "Manrope Fallback", sans-serif;
   font-size: 16px;
   font-weight: 450;
   letter-spacing: -.012em;

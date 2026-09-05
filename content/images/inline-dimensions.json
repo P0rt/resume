@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "images": {
+    "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kcw0usb2uaz7iit0canq.png": {
+      "width": 1535,
+      "height": 1024
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/03gj221r7xaz1agy6662.jpeg": {
+      "width": 1280,
+      "height": 859
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/0ptpb68u5hqwx6vn9az9.png": {
+      "width": 1312,
+      "height": 924
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/3thoxinpqeifljzbbewm.png": {
+      "width": 1312,
+      "height": 924
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/55pab4ayqxs0wemgym66.png": {
+      "width": 1312,
+      "height": 430
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/5tcxjzstpg832iw70wmk.png": {
+      "width": 1312,
+      "height": 924
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/8n25oj6rr3c9jzqj740z.jpeg": {
+      "width": 1280,
+      "height": 859
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/93zp7pmyapgyzbxf35n6.png": {
+      "width": 1320,
+      "height": 381
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/cn7ddjhd8lq3fywjpqfi.png": {
+      "width": 1312,
+      "height": 730
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/din9tmpee60ehclopehd.png": {
+      "width": 1312,
+      "height": 924
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/ehf0c228bwihr48l1sqf.png": {
+      "width": 1312,
+      "height": 924
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/fbajxyqtj0ntdvg321lw.png": {
+      "width": 1312,
+      "height": 924
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/iczvv0ukofzed1svk52l.png": {
+      "width": 1312,
+      "height": 924
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/kje6d1jmo6sv1h6ayy5f.png": {
+      "width": 1312,
+      "height": 480
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/ll1ikpkxlnb8lc0m7uxw.png": {
+      "width": 1080,
+      "height": 554
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/n8apf4g08xqj13xbdlxo.jpeg": {
+      "width": 1280,
+      "height": 859
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/txazqo6nqr1gwvph3vhi.png": {
+      "width": 1312,
+      "height": 924
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/u5ozqurq4bn5nqze770v.png": {
+      "width": 1312,
+      "height": 924
+    },
+    "https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/z41x776xebcfb5jeyx7v.jpeg": {
+      "width": 1280,
+      "height": 859
+    },
+    "https://raw.githubusercontent.com/P0rt/provenance-compaction-lab/main/docs/figures/fig_crossover_vs_penalty.png": {
+      "width": 1050,
+      "height": 675
+    },
+    "https://raw.githubusercontent.com/P0rt/provenance-compaction-lab/main/docs/figures/fig_false_proceed_vs_cadence.png": {
+      "width": 1125,
+      "height": 675
+    },
+    "https://raw.githubusercontent.com/P0rt/provenance-compaction-lab/main/docs/figures/fig_gate_agreement_by_class.png": {
+      "width": 1259,
+      "height": 651
+    },
+    "https://raw.githubusercontent.com/P0rt/provenance-compaction-lab/main/docs/figures/fig_reconstruction_decay.png": {
+      "width": 1200,
+      "height": 675
+    },
+    "https://raw.githubusercontent.com/P0rt/the_cozy_web/main/figures/coziness_hist.png": {
+      "width": 960,
+      "height": 504
+    },
+    "https://raw.githubusercontent.com/P0rt/the_cozy_web/main/figures/effective_vocab.png": {
+      "width": 1080,
+      "height": 552
+    },
+    "https://raw.githubusercontent.com/P0rt/the_cozy_web/main/figures/liveness_vs_autonomy.png": {
+      "width": 1080,
+      "height": 600
+    },
+    "https://raw.githubusercontent.com/P0rt/vlm-distill-screenshots/main/assets/ablation_steps.png": {
+      "width": 930,
+      "height": 660
+    },
+    "https://raw.githubusercontent.com/P0rt/vlm-distill-screenshots/main/assets/quality_vs_memory.png": {
+      "width": 1140,
+      "height": 690
+    },
+    "https://raw.githubusercontent.com/P0rt/vlm-distill-screenshots/main/assets/quality_vs_speed.png": {
+      "width": 1140,
+      "height": 690
+    }
+  }
+}

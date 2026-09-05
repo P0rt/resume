@@ -60,7 +60,7 @@ test("CSS honors the system theme even without JavaScript or with a stale theme 
 test("Manrope is discovered through CSS instead of an unnecessary document preload", async () => {
   const styles = await readFile(new URL("../src/styles/index.css", import.meta.url), "utf8");
   assert.match(styles, /@font-face\s*\{[\s\S]*?font-family:\s*"Manrope";[\s\S]*?manrope-latin\.woff2/);
-  assert.match(styles, /body\s*\{[\s\S]*?font-family:\s*"Manrope",\s*sans-serif;/);
+  assert.match(styles, /body\s*\{[\s\S]*?font-family:\s*"Manrope",\s*"Manrope Fallback",\s*sans-serif;/);
 
   for (const path of [
     "../src/index.html",

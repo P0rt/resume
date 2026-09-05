@@ -39,15 +39,44 @@ test("home and work pages are complete static documents in every supported local
 });
 
 test("localized agent documents agree with their human-readable canonical pages", async () => {
-  for (const code of localeCodes.slice(1)) {
-    const bio = JSON.parse(await read(`${code}/profile.json`));
-    const markdown = await read(`${code}/index.md`);
+  const bundle = JSON.parse(await readFile(new URL("../.generated/mcp-data.json", import.meta.url), "utf8"));
+  for (const code of localeCodes) {
+    const bio = JSON.parse(await read(`${filePrefix(code)}profile.json`));
+    const markdown = await read(`${filePrefix(code)}index.md`);
+    const work = await read(`${filePrefix(code)}work-together/index.html`);
     assert.equal(bio.language, locales[code].htmlLang);
-    assert.equal(bio.url, `${DOMAIN}/${code}/`);
-    assert.equal(bio.workUrl, `${DOMAIN}/${code}/work-together/`);
+    assert.equal(bio.url, localeHomeUrl(code));
+    assert.equal(bio.workUrl, localeWorkUrl(code));
     assert.equal(bio.description, locales[code].profile.description);
+    assert.deepEqual(bio, bundle.locales[code].profile);
+    assert.equal(markdown, bundle.locales[code].profileMarkdown);
+    assert.ok(work.includes(`type="application/json" href="${DOMAIN}/${filePrefix(code)}profile.json"`));
     assert.ok(markdown.includes(locales[code].profile.collaboration.description));
     assert.ok(markdown.includes(`${locales[code].markdown.canonicalProfile}: ${bio.url}`));
   }
   assert.equal(JSON.parse(await read("ru/profile.json")).name, "Сергей Парфенов");
+});
+
+test("experience after Praktikum is collapsed without removing it from HTML or agent documents", async () => {
+  for (const code of localeCodes) {
+    const work = await read(`${filePrefix(code)}work-together/index.html`);
+    const details = work.match(/<details class="earlier-experience">([\s\S]*?)<\/details>/)?.[1];
+    assert.ok(details, `${code}: native details is closed by default`);
+    assert.ok(details.includes(`<summary>${escapeHtml(locales[code].ui.earlierExperience)}</summary>`));
+    assert.equal((details.match(/<article class="experience-item">/g) || []).length, 4);
+    const visible = work.replace(/<details[\s\S]*?<\/details>/g, "");
+    assert.equal((visible.match(/<article class="experience-item">/g) || []).length, 6);
+    assert.ok(visible.includes("Yandex Praktikum"));
+    const bio = JSON.parse(await read(`${filePrefix(code)}profile.json`));
+    const markdown = await read(`${filePrefix(code)}index.md`);
+    assert.equal(bio.experience.length, 10);
+    for (const job of bio.experience.slice(6)) {
+      assert.ok(details.includes(escapeHtml(job.company)));
+      assert.ok(markdown.includes(job.company));
+      for (const position of job.positions || []) {
+        assert.ok(details.includes(escapeHtml(position.description)));
+        assert.ok(markdown.includes(position.description));
+      }
+    }
+  }
 });

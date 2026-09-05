@@ -237,7 +237,7 @@ test("career corrections stay accurate in every public representation", async ()
     assert.equal(job.endDate, endDate);
   }
   for (const text of [work, markdown]) {
-    for (const fact of ["11th", "7,000–10,000", "before ChatGPT", "8.4 seconds to 0.6 seconds", "140 legacy", "100,000 items", "2.5 hours to 18 minutes", "97.8%", "IAWY", "Symptomato", iawy.coverage.url]) assert.ok(text.includes(fact), `Missing career fact: ${fact}`);
+    for (const fact of ["11th", "7,000–10,000", "before ChatGPT", "8.4 to 0.6 seconds", "140 legacy", "100,000 items", "2.5 hours to 18 minutes", "97.8%", "IAWY", "Symptomato", iawy.coverage.url]) assert.ok(text.includes(fact), `Missing career fact: ${fact}`);
     assert.ok(!text.includes("Dec 2020 to present"));
   }
   assert.ok(home.includes('href="https://tripleten.com"'));

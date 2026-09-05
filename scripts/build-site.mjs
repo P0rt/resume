@@ -75,6 +75,26 @@ function pageControls(href, label, arrow = "↗") {
   </header>`;
 }
 
+function experienceItem(job) {
+  return `<article class="experience-item">
+    <header class="experience-heading"><h3 class="experience-company">${job.url ? `<a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.company)}</a>` : escapeHtml(job.company)}</h3><p>${escapeHtml(job.role)}</p><p class="experience-date">${escapeHtml(job.period)}</p></header>
+    <div class="experience-body${job.positions ? " experience-body-grid" : ""}">${job.positions
+      ? job.positions.map((position) => `<p><strong>${escapeHtml(position.company)}</strong><br>${escapeHtml(position.description)}</p>`).join("")
+      : `<p>${escapeHtml(job.description)}</p>${(job.highlights || []).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}${job.coverage ? `<p><a href="${escapeHtml(job.coverage.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.coverage.label)} <span aria-hidden="true">↗</span></a></p>` : ""}`}</div>
+  </article>`;
+}
+
+function experienceHistory(jobs, ui) {
+  // Use the source identity so a translated company name cannot move the boundary.
+  const boundary = profile.experience.findIndex((job) => job.company === "Yandex Praktikum") + 1;
+  if (!boundary || boundary >= jobs.length) return jobs.map(experienceItem).join("\n");
+  return `${jobs.slice(0, boundary).map(experienceItem).join("\n")}
+    <details class="earlier-experience">
+      <summary>${escapeHtml(ui.earlierExperience)}</summary>
+      <div class="earlier-experience-list">${jobs.slice(boundary).map(experienceItem).join("\n")}</div>
+    </details>`;
+}
+
 async function loadArticles() {
   const slugs = new Set();
   const filenames = (await fs.readdir(ARTICLES_DIR)).filter((filename) => filename.endsWith(".md"));
@@ -384,12 +404,7 @@ function replacementsFor(code = "en", page = "other") {
     <p>${item.url ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.program)} <span aria-hidden="true">↗</span></a>` : escapeHtml(item.program)}</p>
     <p class="education-meta">${escapeHtml(item.qualification)} · ${escapeHtml(item.period)}</p>
   </article>`).join("\n"),
-  "{{PROFILE_EXPERIENCE}}": localProfile.experience.map((job) => `<article class="experience-item">
-    <header class="experience-heading"><h3 class="experience-company">${job.url ? `<a href="${escapeHtml(job.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.company)}</a>` : escapeHtml(job.company)}</h3><p>${escapeHtml(job.role)}</p><p class="experience-date">${escapeHtml(job.period)}</p></header>
-    <div class="experience-body${job.positions ? " experience-body-grid" : ""}">${job.positions
-      ? job.positions.map((position) => `<p><strong>${escapeHtml(position.company)}</strong><br>${escapeHtml(position.description)}</p>`).join("")
-      : `<p>${escapeHtml(job.description)}</p>${(job.highlights || []).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}${job.coverage ? `<p><a href="${escapeHtml(job.coverage.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.coverage.label)} <span aria-hidden="true">↗</span></a></p>` : ""}`}</div>
-  </article>`).join("\n"),
+  "{{PROFILE_EXPERIENCE}}": experienceHistory(localProfile.experience, locale.ui),
   "{{BLOG_CONTROLS}}": pageControls(homePath, locale.ui.home, "←"),
   "{{ARTICLE_COUNT}}": String(articles.length),
   "{{FEATURED_ARTICLES}}": featuredWriting(articles),

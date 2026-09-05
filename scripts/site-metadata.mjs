@@ -19,7 +19,7 @@ const englishLocale = {
     skip: "Skip to content", home: "Home", experienceLink: "Experience & working together", blogTitle: "On the blog",
     email: "Email", privacy: "Privacy", portraitAlt: "Portrait of Sergei Parfenov", aboutTitle: "A bit about my work",
     openTitle: "In the open", helpTitle: "Where I can help", educationTitle: "Education & courses",
-    experienceTitle: "The path here", blog: "Blog",
+    experienceTitle: "The path here", earlierExperience: "Earlier experience", blog: "Blog",
   },
   markdown: {
     canonicalProfile: "Canonical profile URL", detailedExperience: "Detailed experience and collaboration",
@@ -222,8 +222,6 @@ export function articleMarkdown(article) {
 
 export async function writeAgentFiles(articles, outputDirectory) {
   const catalog = articles.map(articleMetadata);
-  const bio = { ...profile, url: `${DOMAIN}/`, workUrl: `${DOMAIN}/work-together/`, articleCount: articles.length };
-  const markdown = profileMarkdown(articles.length);
   const localized = Object.fromEntries(localeCodes.map((code) => {
     const localizedBio = {
       ...locales[code].profile,
@@ -234,6 +232,7 @@ export async function writeAgentFiles(articles, outputDirectory) {
     };
     return [code, { profile: localizedBio, profileMarkdown: profileMarkdown(articles.length, code) }];
   }));
+  const { profile: bio, profileMarkdown: markdown } = localized.en;
   const localizedResources = localeCodes.slice(1).flatMap((code) => [`${DOMAIN}/${code}/profile.json`, `${DOMAIN}/${code}/index.md`]);
   const manifest = {
     name: "Sergei Parfenov: public profile and writing",

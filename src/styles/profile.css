@@ -302,6 +302,33 @@
   gap: 12px;
 }
 
+.earlier-experience {
+  column-span: all;
+  border-block: 1px solid var(--line);
+}
+
+.earlier-experience > summary {
+  min-height: 44px;
+  padding-block: 12px;
+  color: var(--accent);
+  font-size: 14px;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.earlier-experience > summary:hover {
+  color: var(--accent-strong);
+}
+
+.earlier-experience > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.earlier-experience-list {
+  padding-top: 20px;
+}
+
 .profile-page .site-footer {
   font-size: 12px;
 }
@@ -399,7 +426,8 @@
     grid-column: 1 / -1;
   }
 
-  .career-list {
+  .career-list,
+  .earlier-experience-list {
     columns: 2;
     column-gap: 40px;
   }
@@ -435,7 +463,8 @@
     font-size: 32px;
   }
 
-  .career-list {
+  .career-list,
+  .earlier-experience-list {
     columns: auto;
   }
 }

@@ -67,6 +67,7 @@ test("Manrope is available with the first stylesheet without a second font reque
   assert.ok(bundledFont, "The shared CSS must contain the body font before first paint");
   assert.deepEqual(Buffer.from(bundledFont, "base64"), await readFile(new URL("../src/assets/fonts/manrope-latin.woff2", import.meta.url)));
   assert.doesNotMatch(builtStyles, /url\([^)]*manrope-latin\.woff2/);
+  assert.match(builtStyles, /@font-face\s*\{[^}]*font-display:\s*block;/);
 
   for (const path of [
     "../src/index.html",

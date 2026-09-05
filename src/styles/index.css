@@ -3,7 +3,8 @@
   src: url("../assets/fonts/manrope-latin.woff2") format("woff2");
   font-style: normal;
   font-weight: 200 800;
-  font-display: swap;
+  /* Build bundles this font into CSS: wait only for decoding, not a network request. */
+  font-display: block;
 }
 
 /* Match the local fallback to Manrope while its WOFF2 is loading.

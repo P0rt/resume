@@ -1,6 +1,27 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { localeRedirect, localizedPath, normalizeLocale, preferredLocale } from "../lib/locale-routing.mjs";
+import { createRequire } from "node:module";
+import { localeRedirect, localizedPath, normalizeLocale, preferredLocale } from "../lib/locale-routing.cjs";
+
+test("locale routing loads in Vercel's CommonJS bundle as well as ESM consumers", () => {
+  const require = createRequire(import.meta.url);
+  const routing = require("../lib/locale-routing.cjs");
+  const { next } = require("@vercel/functions");
+  for (const header of ["", "en-US,en;q=0.9", "de-DE", "es-ES", "ru-RU"]) {
+    const request = new Request("https://sergei-parfenov.com/?from=regression", {
+      headers: { "Accept-Language": header },
+    });
+    const response = routing.localeRedirect(request) ?? next();
+    assert.ok(response instanceof Response);
+    if (header.startsWith("es") || header.startsWith("ru")) {
+      assert.equal(response.status, 307);
+      assert.equal(response.headers.get("location"), `https://sergei-parfenov.com/${header.slice(0, 2)}/?from=regression`);
+    } else {
+      assert.equal(response.headers.get("x-middleware-next"), "1");
+      assert.equal(response.headers.get("location"), null);
+    }
+  }
+});
 
 test("normalizes the supported browser language families", () => {
   assert.equal(normalizeLocale("es-ES"), "es");

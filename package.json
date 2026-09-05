@@ -24,6 +24,7 @@
   "homepage": "https://sergei-parfenov.com",
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.30.0",
+    "@vercel/functions": "3.9.5",
     "zod": "4.5.4"
   },
   "devDependencies": {

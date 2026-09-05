@@ -57,10 +57,16 @@ test("CSS honors the system theme even without JavaScript or with a stale theme 
   assert.ok(!/\[data-theme|\.theme-toggle|\.theme-thumb/.test(styles));
 });
 
-test("Manrope is discovered through CSS instead of an unnecessary document preload", async () => {
+test("Manrope is available with the first stylesheet without a second font request", async () => {
   const styles = await readFile(new URL("../src/styles/index.css", import.meta.url), "utf8");
   assert.match(styles, /@font-face\s*\{[\s\S]*?font-family:\s*"Manrope";[\s\S]*?manrope-latin\.woff2/);
   assert.match(styles, /body\s*\{[\s\S]*?font-family:\s*"Manrope",\s*"Manrope Fallback",\s*sans-serif;/);
+
+  const builtStyles = await readFile(new URL("../dist/styles/index.css", import.meta.url), "utf8");
+  const bundledFont = builtStyles.match(/url\("data:font\/woff2;base64,([A-Za-z0-9+/=]+)"\)/)?.[1];
+  assert.ok(bundledFont, "The shared CSS must contain the body font before first paint");
+  assert.deepEqual(Buffer.from(bundledFont, "base64"), await readFile(new URL("../src/assets/fonts/manrope-latin.woff2", import.meta.url)));
+  assert.doesNotMatch(builtStyles, /url\([^)]*manrope-latin\.woff2/);
 
   for (const path of [
     "../src/index.html",

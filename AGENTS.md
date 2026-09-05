@@ -34,7 +34,7 @@
 - Footer location is `Barcelona, <current year> ☯︎`, not a subtitle under the name. Music/Spotify is hidden for now. Do not publish `src/assets/resume.pdf`.
 - Motion stays subtle and respects reduced motion. Article text and highlighting must work without JavaScript; copy controls are progressive enhancements.
 - Performance baseline: run Lighthouse in Navigation mode with a clean browser profile. The homepage should make no script request and hold 100 Performance with 0 ms TBT; do not trade typography or image quality for unweighted diagnostic suggestions or a noisy browser-side task.
-- Check both desktop and mobile, including the Lighthouse Agentic Browsing category (separate from the public MCP API). Fast font downloads can hide CLS: preserve Manrope's measured Arial fallback metrics and test a delayed WOFF2 load after typography changes. Keep the fallback limited to the source font's glyph coverage. Reserve article copy-control space before JavaScript loads.
+- Check both desktop and mobile, including the Lighthouse Agentic Browsing category (separate from the public MCP API). Manrope is bundled losslessly into the shared CSS at build time to prevent font-swap CLS at any viewport; preserve this delivery and check cold-load FCP/LCP when changing it. Matching fallback metrics alone cannot prevent words moving between lines. Keep the defensive fallback limited to the source font's glyph coverage. Reserve article copy-control space before JavaScript loads.
 - Polish reading measure, paragraph rhythm, lists, long titles, code and tables. Do not rewrite an article merely to make its layout easier.
 
 ## Biographical accuracy

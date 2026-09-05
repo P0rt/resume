@@ -462,6 +462,15 @@ await Promise.all([
   fs.writeFile(path.join(DIST_DIR, "robots.txt"), `User-agent: *\nAllow: /\nSitemap: ${DOMAIN}/sitemap.xml\n`, "utf8"),
 ]);
 
+// Deliver the exact font with the shared render-blocking CSS. A separate font
+// request can reflow words even when the fallback has matching line heights.
+// Compression keeps this within ~200 bytes of CSS + the original WOFF2.
+const fontSource = 'url("../assets/fonts/manrope-latin.woff2")';
+const fontBytes = await fs.readFile(path.join(SRC_DIR, "assets/fonts/manrope-latin.woff2"));
+const sharedStyles = await fs.readFile(path.join(SRC_DIR, "styles/index.css"), "utf8");
+if (!sharedStyles.includes(fontSource)) throw new Error("Manrope font declaration changed; update its CSS bundling.");
+await fs.writeFile(path.join(DIST_DIR, "styles/index.css"), sharedStyles.replace(fontSource, `url("data:font/woff2;base64,${fontBytes.toString("base64")}")`), "utf8");
+
 await buildIcons(path.join(SRC_DIR, "assets/favicon.svg"), DIST_DIR);
 await writeAgentFiles(articles, DIST_DIR);
 

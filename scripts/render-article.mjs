@@ -34,9 +34,12 @@ export async function renderArticle(markdown) {
   parser.use({ renderer: {
     image(token) {
       // Let Marked keep its URL handling and escaping of alt/title unchanged.
-      const html = Renderer.prototype.image.call(this, token);
+      const rendered = Renderer.prototype.image.call(this, token);
+      if (!rendered.startsWith("<img ")) return rendered;
+      // Body illustrations can load near the viewport; the cover is rendered separately.
+      const html = rendered.replace("<img ", '<img loading="lazy" decoding="async" ');
       const dimensions = Object.hasOwn(imageManifest.images, token.href) ? imageManifest.images[token.href] : null;
-      if (!dimensions || !html.startsWith("<img ")) return html;
+      if (!dimensions) return html;
       const ratio = (dimensions.width / dimensions.height).toFixed(6);
       return html.replace("<img ", `<img width="${dimensions.width}" height="${dimensions.height}" class="article-image" style="--image-width: ${dimensions.width}px; --image-ratio: ${ratio}" `);
     },

@@ -22,6 +22,7 @@ test("all published covers are first-party, responsive, dimensioned and high pri
     assert.ok(figure.includes(`sizes="${COVER_SIZES}"`));
     assert.ok(figure.includes('fetchpriority="high"'));
     assert.ok(figure.includes('loading="eager"'));
+    assert.doesNotMatch(html.match(/<figure class="article-cover"[^>]*>/)[0], /data-reveal/, "The LCP cover must be visible without a JavaScript observer");
     assert.match(figure, /width="\d+" height="\d+"/);
     assert.ok(!figure.includes("dev.to"));
     const original = await readFile(new URL(`content/images/covers/${coverSourceName(data.coverImage)}`, root));

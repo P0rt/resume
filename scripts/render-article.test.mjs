@@ -8,6 +8,7 @@ import { renderArticle } from "./render-article.mjs";
 const decodeText = (html) => html.replace(/<[^>]*>/g, "").replace(/&#(?:x([\da-f]+)|(\d+));/gi, (_, hex, decimal) => String.fromCodePoint(parseInt(hex || decimal, hex ? 16 : 10))).replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&quot;", '"').replaceAll("&apos;", "'").replaceAll("&amp;", "&");
 const codeBodies = (html) => [...html.matchAll(/<pre\b[^>]*><code>([\s\S]*?)<\/code><\/pre>/g)].map((match) => decodeText(match[1]));
 const stripImageSizing = (html) => html.replace(/<img width="\d+" height="\d+" class="article-image" style="--image-width: \d+px; --image-ratio: \d+\.\d{6}" /g, "<img ");
+const stripImageEnhancements = (html) => stripImageSizing(html).replaceAll('<img loading="lazy" decoding="async" ', "<img ");
 
 test("syntax highlighting is static, dual-theme and preserves escaped code exactly", async () => {
   const code = 'def greet(name):\n    # <script> is only text & never markup\n    return f"Hello, {name}!"\n\nprint(greet("Sergei"))';
@@ -67,18 +68,31 @@ test("inline image dimensions preserve Marked URL, alt and title escaping", asyn
     const actual = await renderArticle(markdown);
     assert.ok(actual.includes(`<img width="${dimensions.width}" height="${dimensions.height}" `), url);
     assert.ok(actual.includes(`class="article-image" style="--image-width: ${dimensions.width}px; --image-ratio: ${(dimensions.width / dimensions.height).toFixed(6)}"`), url);
-    assert.equal(stripImageSizing(actual), expected, url);
+    assert.match(actual, /loading="lazy" decoding="async"/);
+    assert.equal(stripImageEnhancements(actual), expected, url);
     assert.doesNotMatch(actual, /<b>|<tag>|alt="A "quote/);
   }
 });
 
-test("unknown Markdown images and authored raw image HTML retain their original rendering", async () => {
+test("unknown Markdown images get native loading attributes while retaining URL and alt escaping", async () => {
   const markdown = '![A "quote" & <tag>](<https://example.com/image?x=1&label=%22value%22> "Title & details")';
-  assert.equal(await renderArticle(markdown), marked.parse(markdown));
+  const html = await renderArticle(markdown);
+  assert.match(html, /<img loading="lazy" decoding="async" /);
+  assert.doesNotMatch(html, /class="article-image"|--image-width:|<tag>/);
+  assert.equal(stripImageEnhancements(html), marked.parse(markdown));
+  const reference = '[![Linked illustration][image]](https://example.com/read)\n\n[image]: https://example.com/image.png "A title"';
+  const referenceHtml = await renderArticle(reference);
+  assert.match(referenceHtml, /<a href="https:\/\/example.com\/read"><img loading="lazy" decoding="async" /);
+  assert.equal(stripImageEnhancements(referenceHtml), marked.parse(reference));
+});
+
+test("authored raw image HTML retains its original rendering and loading policy", async () => {
   const { images } = JSON.parse(await readFile(new URL("../content/images/inline-dimensions.json", import.meta.url), "utf8"));
   const url = Object.keys(images)[0];
-  const raw = `<figure><img src="${url}" alt="A &amp; B" width="80" height="60"></figure>`;
-  assert.equal(await renderArticle(raw), marked.parse(raw));
+  for (const loading of ['', ' loading="eager" decoding="sync"']) {
+    const raw = `<figure><img src="${url}" alt="A &amp; B" width="80" height="60"${loading}></figure>`;
+    assert.equal(await renderArticle(raw), marked.parse(raw));
+  }
 });
 
 test("inline image manifest covers every published Markdown image without changing article text", async () => {
@@ -102,8 +116,9 @@ test("inline image manifest covers every published Markdown image without changi
       assert.ok(Number.isSafeInteger(dimensions.width) && dimensions.width > 0);
       assert.ok(Number.isSafeInteger(dimensions.height) && dimensions.height > 0);
       const html = await renderArticle(token.raw);
-      assert.equal(stripImageSizing(html), marked.parse(token.raw), `${filename}: image content changed`);
+      assert.equal(stripImageEnhancements(html), marked.parse(token.raw), `${filename}: image content changed`);
       assert.ok(html.includes(`<img width="${dimensions.width}" height="${dimensions.height}" `));
+      assert.match(html, /loading="lazy" decoding="async"/);
     }
   }
   assert.ok(occurrences >= 29, `Expected at least the existing 29 inline images; found ${occurrences}`);

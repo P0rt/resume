@@ -176,7 +176,7 @@ async function articleDocument(article, older, newer) {
   const body = await renderArticle(article.content);
   const image = images.covers.get(article.coverImage);
   const cover = article.coverImage ? `
-    <figure class="article-cover" data-reveal>
+    <figure class="article-cover">
       <img src="${escapeHtml(image?.src || article.coverImage)}"${image ? ` srcset="${image.srcset}" sizes="${image.sizes}" width="${image.width}" height="${image.height}"` : ""} alt="${escapeHtml(article.coverAlt || "")}" loading="eager" fetchpriority="high">
     </figure>` : "";
   const sourceLink = article.sourceUrl ? `

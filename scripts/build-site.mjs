@@ -157,7 +157,7 @@ async function articleDocument(article, older, newer) {
   const image = images.covers.get(article.coverImage);
   const cover = article.coverImage ? `
     <figure class="article-cover" data-reveal>
-      <img src="${escapeHtml(image?.src || article.coverImage)}"${image ? ` srcset="${image.srcset}" sizes="${image.sizes}" width="${image.width}" height="${image.height}"` : ""} alt="" loading="eager" fetchpriority="high">
+      <img src="${escapeHtml(image?.src || article.coverImage)}"${image ? ` srcset="${image.srcset}" sizes="${image.sizes}" width="${image.width}" height="${image.height}"` : ""} alt="${escapeHtml(article.coverAlt || "")}" loading="eager" fetchpriority="high">
     </figure>` : "";
   const sourceLink = article.sourceUrl ? `
     <p class="source-line">First published on <a href="${escapeHtml(article.sourceUrl)}" target="_blank" rel="noopener noreferrer">DEV Community <span aria-hidden="true">↗</span></a></p>` : "";

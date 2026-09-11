@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 import sharp from "sharp";
+import { localeCodes } from "./site-metadata.mjs";
 
 test("the favicon master is a compact vector with all three eyes", async () => {
   const svg = await readFile(new URL("../src/assets/favicon.svg", import.meta.url), "utf8");
@@ -52,8 +53,12 @@ test("search and Apple fallbacks have the expected size and transparency", async
   assert.equal(apple.hasAlpha, false);
 });
 
-test("every page has the same root-relative icon links, including nested articles and 404", async () => {
-  const paths = ["index.html", "blog.html", "work-together/index.html", "privacy.html", "404.html", ...(await readdir(new URL("../dist/blog/", import.meta.url))).map((slug) => `blog/${slug}/index.html`)];
+test("every page has the same root-relative icon links, including all locales, nested articles and 404", async () => {
+  const profilePaths = localeCodes.flatMap((code) => {
+    const prefix = code === "en" ? "" : `${code}/`;
+    return [`${prefix}index.html`, `${prefix}work-together/index.html`];
+  });
+  const paths = [...profilePaths, "blog.html", "privacy.html", "404.html", ...(await readdir(new URL("../dist/blog/", import.meta.url))).map((slug) => `blog/${slug}/index.html`)];
   for (const path of paths) {
     const html = await readFile(new URL(`../dist/${path}`, import.meta.url), "utf8");
     for (const asset of ["favicon.ico", "favicon-96.png", "favicon.svg", "apple-touch-icon.png"]) assert.ok(html.includes(`href="/assets/${asset}"`), `${path}: ${asset}`);

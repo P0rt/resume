@@ -1,3 +1,5 @@
+-- DO NOT RUN AS A RELEASE REPORT: time-boundary assumptions need redesign.
+-- Daily cookieless hashing breaks sessions at day boundaries; a fixed 24h cap is not guaranteed.
 -- Сессии и email intent по входному источнику
 -- Публиковать только после подтверждения server session continuity и 24h max-session semantics для cookieless. Завершённые сессии по началу; одна конверсия на session ID.
 SELECT

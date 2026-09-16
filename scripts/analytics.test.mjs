@@ -53,6 +53,7 @@ function harness({ url = "https://sergei-parfenov.com/blog/test-article/", pageT
       const cleaned = options.before_send({ event, timestamp: captureOptions.timestamp,
         $set: { $current_url: win.location.href }, $set_once: { $initial_referrer: doc.referrer },
         properties: { token: "public-test-key", distinct_id: "$posthog_cookieless", $cookieless_mode: true,
+          $raw_user_agent: "Mozilla/5.0 (Synthetic SDK fixture)",
           $current_url: win.location.href, $referrer: doc.referrer, $initial_current_url: win.location.href,
           $set: { email: "secret@example.org" }, ...properties } });
       if (cleaned) events.push(cleaned);
@@ -222,6 +223,23 @@ test("campaigns and locale metadata use bounded identifiers, never arbitrary que
   assert.equal(h.start(), null);
   assert.equal(articleDepth({ top: 0, height: 300 }, 800), 100);
   assert.equal(articleDepth({ top: 1000, height: 300 }, 800), 0);
+});
+
+test("cookieless transport retains the SDK user agent required by the server ingestion contract", async () => {
+  // PostHog's cookieless-manager.getProperties reads $raw_user_agent and $host
+  // from event properties; a missing UA drops the event AFTER HTTP acceptance.
+  // https://github.com/PostHog/posthog/blob/master/nodejs/src/ingestion/common/cookieless/cookieless-manager.ts
+  const h = harness(); await h.start().load();
+  const event = h.events[0];
+  assert.equal(event.properties.$raw_user_agent, "Mozilla/5.0 (Synthetic SDK fixture)");
+  assert.equal(event.properties.$host, "sergei-parfenov.com");
+  assert.equal(event.properties.$cookieless_mode, true);
+  assert.equal(event.properties.distinct_id, "$posthog_cookieless");
+  assert.equal(event.properties.token, "public-test-key");
+  assert.ok(event.timestamp instanceof Date);
+  assert.ok(!("$set" in event));
+  assert.ok(!("$set_once" in event));
+  assert.ok(!JSON.stringify(event).includes("secret"));
 });
 
 test("SDK config is cookieless, manual pageviews and no optional products; runtime opt-out rejects later sends", async () => {

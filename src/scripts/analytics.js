@@ -8,7 +8,9 @@ const INSTANCE = Symbol.for("sergei.analytics.v1");
 const PUBLIC_KEY = typeof __POSTHOG_PUBLIC_KEY__ === "string" ? __POSTHOG_PUBLIC_KEY__ : "";
 const SDK_PROPERTIES = new Set([
   "token", "distinct_id", "$cookieless_mode", "$lib", "$lib_version", "$config_defaults",
-  "$browser", "$browser_version", "$os", "$os_version", "$device_type", "$screen_height",
+  // The server requires this SDK field for cookieless hashing, then removes it
+  // before storing the event. Dropping it here silently loses every event.
+  "$raw_user_agent", "$browser", "$browser_version", "$os", "$os_version", "$device_type", "$screen_height",
   "$screen_width", "$viewport_height", "$viewport_width", "$pageview_id", "$prev_pageview_id",
   "$prev_pageview_duration", "$session_id", "$window_id", "$is_identified", "$process_person_profile",
 ]);

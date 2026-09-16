@@ -1,3 +1,5 @@
+-- DO NOT RUN AS A RELEASE REPORT: time-boundary assumptions need redesign.
+-- Daily cookieless hashing breaks sessions at day boundaries; a fixed 24h cap is not guaranteed.
 -- Входные статьи — сессии и email intent
 -- Вся конверсия относится только к статье входа. A→B→email считается для A. Суммируемый отчёт; home→A→email не относится к A.
 SELECT

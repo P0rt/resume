@@ -1,3 +1,5 @@
+-- DO NOT RUN AS A RELEASE REPORT: time-boundary assumptions need redesign.
+-- Daily cookieless hashing breaks sessions at day boundaries; a fixed 24h cap is not guaranteed.
 -- Статья → work → email — одна сессия
 -- Порядок событий обязателен, промежуточные события допустимы. Никакая пользовательская междневная воронка не заменяет этот отчёт.
 SELECT

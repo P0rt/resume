@@ -193,7 +193,7 @@ test("annotated resources are disjoint, unsupported actions and right-clicks are
 });
 
 test("support activations preserve attribution, exclude unknown destinations, and do not imply payment", async () => {
-  for (const [pageType, placement] of [["blog_index", "blog_tools"], ["article", "article_footer"]]) {
+  for (const [pageType, placement] of [["blog_index", "blog_intro"], ["blog_index", "blog_tools"], ["article", "article_footer"]]) {
     const h = harness({ pageType });
     h.doc.body.dataset.analyticsSupportAvailable = "true";
     const controller = h.start();

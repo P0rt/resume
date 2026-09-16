@@ -45,6 +45,9 @@
 
 .blog-page .blog-tools { margin-top: 24px; flex-direction: row; flex-wrap: wrap; gap: 16px 24px; }
 .blog-page .blog-tools a { font-size: 14px; line-height: 20px; }
+.blog-support { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 32px; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); }
+.blog-support p { flex: 1 1 300px; max-width: 48ch; margin: 0; color: var(--muted); font-size: 16px; line-height: 24px; }
+.blog-support .support-link { flex-shrink: 0; }
 
 .contribution { padding-block: 32px 0; }
 .contribution::before { content: ""; display: block; width: 32px; height: 2px; margin-bottom: 24px; background: var(--accent); }

@@ -25,7 +25,7 @@ FROM (
     AND properties.page_type IN ('blog_index', 'article')
     AND ((event = '$pageview' AND properties.support_available = true)
       OR (event = 'support_clicked' AND properties.provider = 'ko-fi'
-        AND ((properties.page_type = 'blog_index' AND properties.placement = 'blog_tools')
+        AND ((properties.page_type = 'blog_index' AND properties.placement IN ('blog_tools', 'blog_intro'))
           OR (properties.page_type = 'article' AND properties.placement = 'article_footer'))))
     AND notEmpty(coalesce(toString(properties.view_id), ''))
   GROUP BY view_id

@@ -14,7 +14,7 @@ WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))
   AND properties.analytics_mode = 'cookieless'
   AND event = 'support_clicked'
   AND properties.provider = 'ko-fi'
-  AND ((properties.page_type = 'blog_index' AND properties.placement = 'blog_tools')
+  AND ((properties.page_type = 'blog_index' AND properties.placement IN ('blog_tools', 'blog_intro'))
     OR (properties.page_type = 'article' AND properties.placement = 'article_footer'))
   AND notEmpty(coalesce(toString(properties.view_id), ''))
 GROUP BY placement, content

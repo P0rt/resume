@@ -60,7 +60,7 @@ function annotateLinks(html, pageType) {
         let url;
         try { url = new URL(href, "https://sergei-parfenov.com/"); } catch { /* Invalid links do not become analytics targets. */ }
         const supportPlacement = pageType === "article" && within("article-support") ? "article_footer"
-          : pageType === "blog_index" && within("blog-tools") ? "blog_tools" : undefined;
+          : pageType === "blog_index" && within("blog-support") ? "blog_intro" : undefined;
         if (url?.href === profile.supportUrl && supportPlacement) {
           tag = withAttributes(tag, { "data-analytics-event": "support_clicked", "data-analytics-placement": supportPlacement, "data-analytics-provider": "ko-fi" });
         } else if (url && !url.search && !url.hash) {

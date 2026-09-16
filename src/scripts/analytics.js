@@ -120,7 +120,7 @@ export function actionProperties(anchor) {
     return { event, properties: { feed_id: "main", placement } };
   }
   if (event === "support_clicked" && d.analyticsProvider === "ko-fi"
-    && ["blog_tools", "article_footer"].includes(placement)) {
+    && ["blog_intro", "blog_tools", "article_footer"].includes(placement)) {
     try {
       const url = new URL(anchor.getAttribute("href"));
       if (url.origin === "https://ko-fi.com" && url.pathname === "/sergeiparfenov") {

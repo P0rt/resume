@@ -33,7 +33,7 @@ test("archive tracks its visible RSS and profile links, and utility pages have n
   assert.match(blog, /data-analytics-page-type="blog_index"/);
   assert.equal(eventAnchors(blog, "rss_clicked").length, 1);
   assert.equal(eventAnchors(blog, "support_clicked").length, 1);
-  assert.match(eventAnchors(blog, "support_clicked")[0], /data-analytics-placement="blog_tools"/);
+  assert.match(eventAnchors(blog, "support_clicked")[0], /data-analytics-placement="blog_intro"/);
   assert.match(blog, /data-analytics-support-available="true"/);
   assert.match(eventAnchors(blog, "rss_clicked")[0], /data-analytics-feed-id="main"/);
   const profiles = eventAnchors(blog, "profile_clicked");

@@ -42,11 +42,12 @@ test("theme color is selected natively from the browser preference", async () =>
   assert.ok(!/prefers-color-scheme|localStorage|data-theme-toggle|dataset\.theme/.test(script));
 });
 
-test("the homepage and static profile pages ship without executable JavaScript", async () => {
+test("static pages need no UI scripts and load only the nonblocking analytics module", async () => {
   for (const path of ["../dist/index.html", "../dist/work-together/index.html", "../dist/privacy.html", "../dist/404.html"]) {
     const html = await readFile(new URL(path, import.meta.url), "utf8");
     const withoutStructuredData = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g, "");
-    assert.doesNotMatch(withoutStructuredData, /<script\b/);
+    const executableScripts = withoutStructuredData.match(/<script\b[^>]*>[\s\S]*?<\/script>/g) || [];
+    assert.deepEqual(executableScripts, ['<script type="module" src="/scripts/analytics.js"></script>']);
     assert.doesNotMatch(html, /data-current-year/);
   }
 });

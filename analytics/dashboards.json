@@ -1,0 +1,379 @@
+{
+  "version": 1,
+  "created_at": "2026-09-16",
+  "target": {
+    "region": "EU",
+    "project_id": 276039,
+    "hostname": "sergei-parfenov.com"
+  },
+  "status": "documentation_and_local_contract_checked_not_executed_in_posthog",
+  "docs": [
+    "https://posthog.com/docs/sql",
+    "https://posthog.com/docs/sql/aggregations",
+    "https://posthog.com/docs/sql/clickhouse-functions",
+    "https://posthog.com/docs/data-warehouse/sql/variables#applying-dashboard-filters",
+    "https://posthog.com/docs/data/sessions",
+    "https://posthog.com/docs/api/insights"
+  ],
+  "rules": [
+    "Target PostHog Cloud EU project 276039 only.",
+    "Queries are declarative definitions checked against documented syntax and the local event contract; execution in the target project is still pending.",
+    "Confirm actual arriving event names and properties, run each query successfully, and only then save its insight.",
+    "Main queries filter production, schema_version 1, cookieless, and properties.$host. Quality queries inspect all schema versions and modes on production hosts.",
+    "Fixed SQL date and property predicates do not respond to dashboard controls. No filters placeholder is included.",
+    "Core view-level metrics are supporting metrics and do not replace the approved session conversion KPI.",
+    "G1, G2 and G3 require confirmed cookieless session continuity and server session lifetime before publication.",
+    "Own traffic is not recognized automatically. analytics=off disables collection on that page; analytics_test=1 labels that page as test. Neither parameter persists across navigation.",
+    "No fake or seeded production events, no monthly unique-human claims, no 7/30-day retention.",
+    "Client-side known-user-agent bot filtering does not guarantee removal of every bot."
+  ],
+  "dashboards": [
+    {
+      "name": "SP · Audience",
+      "description": "Просмотры и источники просмотров за 28 завершённых дней. Cookieless: не уникальные люди. Сессии и входная атрибуция появятся после проверки непрерывности session ID.",
+      "tiles": [
+        {
+          "id": "A1",
+          "name": "Просмотры: 28 дней vs предыдущие 28",
+          "description": "Счётчик уникальных view_id; предыдущий период той же длины. Не посетители.",
+          "kind": "sql",
+          "sql": "SELECT\n  if(timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28), 'current_28d', 'previous_28d') AS period,\n  uniqExact(properties.view_id) AS pageviews\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 56)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n  AND event = '$pageview'\n  AND notEmpty(coalesce(toString(properties.view_id), ''))\nGROUP BY period\nORDER BY period",
+          "save_query": {
+            "kind": "DataVisualizationNode",
+            "display": "ActionsTable",
+            "source": {
+              "kind": "HogQLQuery",
+              "query": "SELECT\n  if(timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28), 'current_28d', 'previous_28d') AS period,\n  uniqExact(properties.view_id) AS pageviews\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 56)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n  AND event = '$pageview'\n  AND notEmpty(coalesce(toString(properties.view_id), ''))\nGROUP BY period\nORDER BY period"
+            }
+          },
+          "run_status": "not_executed_in_target_project",
+          "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+          "ui": {
+            "chart": "ActionsTable"
+          },
+          "sql_file": "queries/A1.sql"
+        },
+        {
+          "id": "A2",
+          "name": "Страницы и языки — просмотры",
+          "description": "Просмотры реальных страниц, сгруппированные по содержанию и языку.",
+          "kind": "sql",
+          "sql": "SELECT\n  properties.content_key AS content,\n  properties.page_locale AS locale,\n  properties.page_path AS path,\n  uniqExact(properties.view_id) AS pageviews\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n  AND event = '$pageview'\n  AND notEmpty(coalesce(toString(properties.view_id), ''))\nGROUP BY content, locale, path\nORDER BY pageviews DESC\nLIMIT 100",
+          "save_query": {
+            "kind": "DataVisualizationNode",
+            "display": "ActionsTable",
+            "source": {
+              "kind": "HogQLQuery",
+              "query": "SELECT\n  properties.content_key AS content,\n  properties.page_locale AS locale,\n  properties.page_path AS path,\n  uniqExact(properties.view_id) AS pageviews\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n  AND event = '$pageview'\n  AND notEmpty(coalesce(toString(properties.view_id), ''))\nGROUP BY content, locale, path\nORDER BY pageviews DESC\nLIMIT 100"
+            }
+          },
+          "run_status": "not_executed_in_target_project",
+          "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+          "ui": {
+            "chart": "ActionsTable"
+          },
+          "sql_file": "queries/A2.sql"
+        },
+        {
+          "id": "A3",
+          "name": "Источники просмотров — referrer и UTM",
+          "description": "Источник конкретного просмотра. Это ещё не отчёт по источнику входа в сессию; внутренний referrer может быть виден и не считается внешним привлечением.",
+          "kind": "sql",
+          "sql": "SELECT\n  coalesce(nullIf(toString(properties.utm_source), ''), nullIf(toString(properties.$referring_domain), ''), 'direct_or_unknown') AS source,\n  coalesce(nullIf(toString(properties.utm_medium), ''), 'none') AS medium,\n  coalesce(nullIf(toString(properties.utm_campaign), ''), 'none') AS campaign,\n  uniqExact(properties.view_id) AS pageviews\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n  AND event = '$pageview'\n  AND notEmpty(coalesce(toString(properties.view_id), ''))\nGROUP BY source, medium, campaign\nORDER BY pageviews DESC\nLIMIT 100",
+          "save_query": {
+            "kind": "DataVisualizationNode",
+            "display": "ActionsTable",
+            "source": {
+              "kind": "HogQLQuery",
+              "query": "SELECT\n  coalesce(nullIf(toString(properties.utm_source), ''), nullIf(toString(properties.$referring_domain), ''), 'direct_or_unknown') AS source,\n  coalesce(nullIf(toString(properties.utm_medium), ''), 'none') AS medium,\n  coalesce(nullIf(toString(properties.utm_campaign), ''), 'none') AS campaign,\n  uniqExact(properties.view_id) AS pageviews\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n  AND event = '$pageview'\n  AND notEmpty(coalesce(toString(properties.view_id), ''))\nGROUP BY source, medium, campaign\nORDER BY pageviews DESC\nLIMIT 100"
+            }
+          },
+          "run_status": "not_executed_in_target_project",
+          "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+          "ui": {
+            "chart": "ActionsTable"
+          },
+          "sql_file": "queries/A3.sql"
+        }
+      ]
+    },
+    {
+      "name": "SP · Reading",
+      "description": "Чтение оценивается по view_id: ≥30 секунд видимости и фокуса плюс ≥50% тела статьи. Клик RSS не означает подписку; ZIP-клик не подтверждает загрузку.",
+      "tiles": [
+        {
+          "id": "R1",
+          "name": "Статьи: просмотры и вовлечённость",
+          "description": "Когорта по времени pageview, события engagement связаны тем же view_id. Повторный engagement в одном просмотре не увеличивает числитель.",
+          "kind": "sql",
+          "sql": "SELECT\n  slug AS article,\n  count() AS viewed,\n  countIf(engaged_events > 0) AS engaged,\n  round(100.0 * countIf(engaged_events > 0) / nullIf(count(), 0), 2) AS engaged_percent\nFROM (\n  SELECT\n    properties.view_id AS view_id,\n    anyIf(properties.article_slug, event = '$pageview') AS slug,\n    minIf(timestamp, event = '$pageview') AS viewed_at,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'article_engaged') AS engaged_events\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n    AND properties.page_type = 'article'\n    AND event IN ('$pageview', 'article_engaged')\n    AND notEmpty(coalesce(toString(properties.view_id), ''))\n  GROUP BY view_id\n  HAVING pageviews > 0 AND viewed_at < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n)\nGROUP BY article\nORDER BY viewed DESC",
+          "save_query": {
+            "kind": "DataVisualizationNode",
+            "display": "ActionsTable",
+            "source": {
+              "kind": "HogQLQuery",
+              "query": "SELECT\n  slug AS article,\n  count() AS viewed,\n  countIf(engaged_events > 0) AS engaged,\n  round(100.0 * countIf(engaged_events > 0) / nullIf(count(), 0), 2) AS engaged_percent\nFROM (\n  SELECT\n    properties.view_id AS view_id,\n    anyIf(properties.article_slug, event = '$pageview') AS slug,\n    minIf(timestamp, event = '$pageview') AS viewed_at,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'article_engaged') AS engaged_events\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n    AND properties.page_type = 'article'\n    AND event IN ('$pageview', 'article_engaged')\n    AND notEmpty(coalesce(toString(properties.view_id), ''))\n  GROUP BY view_id\n  HAVING pageviews > 0 AND viewed_at < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n)\nGROUP BY article\nORDER BY viewed DESC"
+            }
+          },
+          "run_status": "not_executed_in_target_project",
+          "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+          "ui": {
+            "chart": "ActionsTable"
+          },
+          "sql_file": "queries/R1.sql"
+        },
+        {
+          "id": "R2",
+          "name": "Вовлечённость по неделям — просмотры статей",
+          "description": "Неполные крайние недели: первая/последняя корзины могут содержать менее семи дней. Числитель и знаменатель показаны рядом.",
+          "kind": "sql",
+          "sql": "SELECT\n  toMonday(toTimeZone(viewed_at, 'Europe/Madrid')) AS week,\n  count() AS viewed,\n  countIf(engaged_events > 0) AS engaged,\n  round(100.0 * countIf(engaged_events > 0) / nullIf(count(), 0), 2) AS engaged_percent\nFROM (\n  SELECT\n    properties.view_id AS view_id,\n    anyIf(properties.article_slug, event = '$pageview') AS slug,\n    minIf(timestamp, event = '$pageview') AS viewed_at,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'article_engaged') AS engaged_events\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n    AND properties.page_type = 'article'\n    AND event IN ('$pageview', 'article_engaged')\n    AND notEmpty(coalesce(toString(properties.view_id), ''))\n  GROUP BY view_id\n  HAVING pageviews > 0 AND viewed_at < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n)\nGROUP BY week\nORDER BY week",
+          "save_query": {
+            "kind": "DataVisualizationNode",
+            "display": "ActionsTable",
+            "source": {
+              "kind": "HogQLQuery",
+              "query": "SELECT\n  toMonday(toTimeZone(viewed_at, 'Europe/Madrid')) AS week,\n  count() AS viewed,\n  countIf(engaged_events > 0) AS engaged,\n  round(100.0 * countIf(engaged_events > 0) / nullIf(count(), 0), 2) AS engaged_percent\nFROM (\n  SELECT\n    properties.view_id AS view_id,\n    anyIf(properties.article_slug, event = '$pageview') AS slug,\n    minIf(timestamp, event = '$pageview') AS viewed_at,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'article_engaged') AS engaged_events\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n    AND properties.page_type = 'article'\n    AND event IN ('$pageview', 'article_engaged')\n    AND notEmpty(coalesce(toString(properties.view_id), ''))\n  GROUP BY view_id\n  HAVING pageviews > 0 AND viewed_at < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n)\nGROUP BY week\nORDER BY week"
+            }
+          },
+          "run_status": "not_executed_in_target_project",
+          "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+          "ui": {
+            "chart": "ActionsTable"
+          },
+          "sql_file": "queries/R2.sql"
+        },
+        {
+          "id": "R3",
+          "name": "RSS и ZIP — клики",
+          "description": "Клики и число просмотров с кликом. Не подписки, не завершённые скачивания. Повторный клик виден в clicks, но не дублирует views_with_click.",
+          "kind": "sql",
+          "sql": "SELECT\n  event,\n  properties.page_path AS path,\n  coalesce(toString(properties.asset_id), 'rss') AS resource,\n  count() AS clicks,\n  uniqExact(properties.view_id) AS views_with_click\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n  AND event IN ('rss_clicked', 'download_clicked')\n  AND notEmpty(coalesce(toString(properties.view_id), ''))\nGROUP BY event, path, resource\nORDER BY clicks DESC",
+          "save_query": {
+            "kind": "DataVisualizationNode",
+            "display": "ActionsTable",
+            "source": {
+              "kind": "HogQLQuery",
+              "query": "SELECT\n  event,\n  properties.page_path AS path,\n  coalesce(toString(properties.asset_id), 'rss') AS resource,\n  count() AS clicks,\n  uniqExact(properties.view_id) AS views_with_click\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n  AND event IN ('rss_clicked', 'download_clicked')\n  AND notEmpty(coalesce(toString(properties.view_id), ''))\nGROUP BY event, path, resource\nORDER BY clicks DESC"
+            }
+          },
+          "run_status": "not_executed_in_target_project",
+          "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+          "ui": {
+            "chart": "ActionsTable"
+          },
+          "sql_file": "queries/R3.sql"
+        }
+      ]
+    },
+    {
+      "name": "SP · Collaboration",
+      "description": "Email-клик означает намерение связаться. Здесь показаны клики и диагностика на уровне просмотров; основной сессионный KPI и статья→work→email пока gated до проверки cookieless session continuity.",
+      "tiles": [
+        {
+          "id": "C1",
+          "name": "Email — клики по размещениям",
+          "description": "Email only. Не лиды и не отправленные письма. Размещения home_footer / work_primary.",
+          "kind": "sql",
+          "sql": "SELECT\n  properties.placement AS placement,\n  count() AS clicks,\n  uniqExact(properties.view_id) AS views_with_email_click\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n  AND event = 'contact_clicked'\n  AND properties.channel = 'email'\n  AND notEmpty(coalesce(toString(properties.view_id), ''))\nGROUP BY placement\nORDER BY clicks DESC",
+          "save_query": {
+            "kind": "DataVisualizationNode",
+            "display": "ActionsTable",
+            "source": {
+              "kind": "HogQLQuery",
+              "query": "SELECT\n  properties.placement AS placement,\n  count() AS clicks,\n  uniqExact(properties.view_id) AS views_with_email_click\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n  AND event = 'contact_clicked'\n  AND properties.channel = 'email'\n  AND notEmpty(coalesce(toString(properties.view_id), ''))\nGROUP BY placement\nORDER BY clicks DESC"
+            }
+          },
+          "run_status": "not_executed_in_target_project",
+          "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+          "ui": {
+            "chart": "ActionsTable"
+          },
+          "sql_file": "queries/C1.sql"
+        },
+        {
+          "id": "C2",
+          "name": "Просмотры страниц с email и клики — вспомогательный показатель",
+          "description": "Доля просмотров страниц home/work_together с email-кликом. Это дополнительная метрика уровня просмотра; она не заменяет утверждённую конверсию сессий.",
+          "kind": "sql",
+          "sql": "SELECT\n  page_type,\n  count() AS pageviews_with_email_available,\n  countIf(contact_events > 0) AS views_with_email_click,\n  round(100.0 * countIf(contact_events > 0) / nullIf(count(), 0), 2) AS view_click_percent\nFROM (\n  SELECT\n    properties.view_id AS view_id,\n    anyIf(properties.page_type, event = '$pageview') AS page_type,\n    minIf(timestamp, event = '$pageview') AS viewed_at,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'contact_clicked') AS contact_events\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n    AND properties.page_type IN ('home', 'work_together')\n    AND event IN ('$pageview', 'contact_clicked')\n    AND notEmpty(coalesce(toString(properties.view_id), ''))\n  GROUP BY view_id\n  HAVING pageviews > 0 AND viewed_at < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n)\nGROUP BY page_type\nORDER BY pageviews_with_email_available DESC",
+          "save_query": {
+            "kind": "DataVisualizationNode",
+            "display": "ActionsTable",
+            "source": {
+              "kind": "HogQLQuery",
+              "query": "SELECT\n  page_type,\n  count() AS pageviews_with_email_available,\n  countIf(contact_events > 0) AS views_with_email_click,\n  round(100.0 * countIf(contact_events > 0) / nullIf(count(), 0), 2) AS view_click_percent\nFROM (\n  SELECT\n    properties.view_id AS view_id,\n    anyIf(properties.page_type, event = '$pageview') AS page_type,\n    minIf(timestamp, event = '$pageview') AS viewed_at,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'contact_clicked') AS contact_events\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n    AND properties.page_type IN ('home', 'work_together')\n    AND event IN ('$pageview', 'contact_clicked')\n    AND notEmpty(coalesce(toString(properties.view_id), ''))\n  GROUP BY view_id\n  HAVING pageviews > 0 AND viewed_at < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n)\nGROUP BY page_type\nORDER BY pageviews_with_email_available DESC"
+            }
+          },
+          "run_status": "not_executed_in_target_project",
+          "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+          "ui": {
+            "chart": "ActionsTable"
+          },
+          "sql_file": "queries/C2.sql"
+        },
+        {
+          "id": "C3",
+          "name": "Внешние профили — клики",
+          "description": "LinkedIn/GitHub/DEV — интерес к профилю. Эти действия не входят в email contact intent.",
+          "kind": "sql",
+          "sql": "SELECT\n  properties.platform AS platform,\n  properties.placement AS placement,\n  count() AS clicks,\n  uniqExact(properties.view_id) AS views_with_profile_click\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n  AND event = 'profile_clicked'\n  AND notEmpty(coalesce(toString(properties.view_id), ''))\nGROUP BY platform, placement\nORDER BY clicks DESC",
+          "save_query": {
+            "kind": "DataVisualizationNode",
+            "display": "ActionsTable",
+            "source": {
+              "kind": "HogQLQuery",
+              "query": "SELECT\n  properties.platform AS platform,\n  properties.placement AS placement,\n  count() AS clicks,\n  uniqExact(properties.view_id) AS views_with_profile_click\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n  AND event = 'profile_clicked'\n  AND notEmpty(coalesce(toString(properties.view_id), ''))\nGROUP BY platform, placement\nORDER BY clicks DESC"
+            }
+          },
+          "run_status": "not_executed_in_target_project",
+          "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+          "ui": {
+            "chart": "ActionsTable"
+          },
+          "sql_file": "queries/C3.sql"
+        }
+      ]
+    },
+    {
+      "name": "SP · Data quality",
+      "description": "7 завершённых дней, production hostname/environment. Версия схемы намеренно не отфильтрована, чтобы увидеть ошибочные версии. Наличие session ID не доказывает continuity. Все query результаты настоящие, без seed/fake events.",
+      "tiles": [
+        {
+          "id": "Q1",
+          "name": "Объём событий и версии схемы — 7 дней",
+          "description": "Диагностический объём; неожиданные события и версии видны, а не скрыты фильтром схемы.",
+          "kind": "sql",
+          "sql": "SELECT\n  event,\n  coalesce(toString(properties.schema_version), 'missing') AS schema_version,\n  coalesce(toString(properties.analytics_mode), 'missing') AS analytics_mode,\n  count() AS events\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 7)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\nGROUP BY event, schema_version, analytics_mode\nORDER BY events DESC",
+          "save_query": {
+            "kind": "DataVisualizationNode",
+            "display": "ActionsTable",
+            "source": {
+              "kind": "HogQLQuery",
+              "query": "SELECT\n  event,\n  coalesce(toString(properties.schema_version), 'missing') AS schema_version,\n  coalesce(toString(properties.analytics_mode), 'missing') AS analytics_mode,\n  count() AS events\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 7)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\nGROUP BY event, schema_version, analytics_mode\nORDER BY events DESC"
+            }
+          },
+          "run_status": "not_executed_in_target_project",
+          "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+          "ui": {
+            "chart": "ActionsTable"
+          },
+          "sql_file": "queries/Q1.sql"
+        },
+        {
+          "id": "Q2",
+          "name": "Обязательные поля и session ID — 7 дней",
+          "description": "Сессионные отчёты не включаются только по заполненности ID: отдельно нужен реальный многостраничный сценарий.",
+          "kind": "sql",
+          "sql": "SELECT\n  event,\n  count() AS events,\n  countIf(empty(coalesce(toString(properties.schema_version), ''))\n    OR empty(coalesce(toString(properties.page_type), ''))\n    OR empty(coalesce(toString(properties.page_path), ''))\n    OR empty(coalesce(toString(properties.content_key), ''))\n    OR empty(coalesce(toString(properties.page_locale), ''))\n    OR empty(coalesce(toString(properties.view_id), ''))\n    OR empty(coalesce(toString(properties.environment), ''))\n    OR empty(coalesce(toString(properties.analytics_mode), ''))) AS missing_required,\n  countIf(empty(coalesce(toString(properties.$session_id), ''))) AS missing_session_id,\n  countIf(properties.page_type = 'article' AND empty(coalesce(toString(properties.article_slug), ''))) AS articles_without_slug\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 7)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\nGROUP BY event\nORDER BY missing_required DESC, events DESC",
+          "save_query": {
+            "kind": "DataVisualizationNode",
+            "display": "ActionsTable",
+            "source": {
+              "kind": "HogQLQuery",
+              "query": "SELECT\n  event,\n  count() AS events,\n  countIf(empty(coalesce(toString(properties.schema_version), ''))\n    OR empty(coalesce(toString(properties.page_type), ''))\n    OR empty(coalesce(toString(properties.page_path), ''))\n    OR empty(coalesce(toString(properties.content_key), ''))\n    OR empty(coalesce(toString(properties.page_locale), ''))\n    OR empty(coalesce(toString(properties.view_id), ''))\n    OR empty(coalesce(toString(properties.environment), ''))\n    OR empty(coalesce(toString(properties.analytics_mode), ''))) AS missing_required,\n  countIf(empty(coalesce(toString(properties.$session_id), ''))) AS missing_session_id,\n  countIf(properties.page_type = 'article' AND empty(coalesce(toString(properties.article_slug), ''))) AS articles_without_slug\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 7)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\nGROUP BY event\nORDER BY missing_required DESC, events DESC"
+            }
+          },
+          "run_status": "not_executed_in_target_project",
+          "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+          "ui": {
+            "chart": "ActionsTable"
+          },
+          "sql_file": "queries/Q2.sql"
+        },
+        {
+          "id": "Q3",
+          "name": "Дубли и pageleave coverage — 7 дней",
+          "description": "Pageleave доставляется best effort; 100% не требуется. Дубликаты сигнализируют о повторной инициализации обработчиков.",
+          "kind": "sql",
+          "sql": "SELECT\n  count() AS total_views,\n  countIf(pageviews > 1) AS views_with_duplicate_pageview,\n  countIf(engaged_events > 1) AS views_with_duplicate_engagement,\n  countIf(pageleaves > 0) AS views_with_pageleave,\n  round(100.0 * countIf(pageleaves > 0) / nullIf(count(), 0), 2) AS pageleave_coverage_percent\nFROM (\n  SELECT\n    properties.view_id AS view_id,\n    minIf(timestamp, event = '$pageview') AS viewed_at,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'article_engaged') AS engaged_events,\n    countIf(event = '$pageleave') AS pageleaves\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 7)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n    AND event IN ('$pageview', '$pageleave', 'article_engaged')\n    AND notEmpty(coalesce(toString(properties.view_id), ''))\n  GROUP BY view_id\n  HAVING pageviews > 0 AND viewed_at < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n)",
+          "save_query": {
+            "kind": "DataVisualizationNode",
+            "display": "ActionsTable",
+            "source": {
+              "kind": "HogQLQuery",
+              "query": "SELECT\n  count() AS total_views,\n  countIf(pageviews > 1) AS views_with_duplicate_pageview,\n  countIf(engaged_events > 1) AS views_with_duplicate_engagement,\n  countIf(pageleaves > 0) AS views_with_pageleave,\n  round(100.0 * countIf(pageleaves > 0) / nullIf(count(), 0), 2) AS pageleave_coverage_percent\nFROM (\n  SELECT\n    properties.view_id AS view_id,\n    minIf(timestamp, event = '$pageview') AS viewed_at,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'article_engaged') AS engaged_events,\n    countIf(event = '$pageleave') AS pageleaves\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 7)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n    AND event IN ('$pageview', '$pageleave', 'article_engaged')\n    AND notEmpty(coalesce(toString(properties.view_id), ''))\n  GROUP BY view_id\n  HAVING pageviews > 0 AND viewed_at < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n)"
+            }
+          },
+          "run_status": "not_executed_in_target_project",
+          "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+          "ui": {
+            "chart": "ActionsTable"
+          },
+          "sql_file": "queries/Q3.sql"
+        }
+      ]
+    }
+  ],
+  "gated_session_insights": [
+    {
+      "id": "G1",
+      "name": "Сессии и email intent по входному источнику",
+      "description": "Публиковать только после подтверждения server session continuity и 24h max-session semantics для cookieless. Завершённые сессии по началу; одна конверсия на session ID.",
+      "kind": "sql",
+      "sql": "SELECT\n  entry_source,\n  count() AS sessions,\n  countIf(contacts > 0) AS contact_sessions,\n  round(100.0 * countIf(contacts > 0) / nullIf(count(), 0), 2) AS contact_session_percent\nFROM (\n  SELECT\n    properties.$session_id AS session_id,\n    min(timestamp) AS session_start,\n    max(timestamp) AS last_event,\n    argMinIf(properties.page_type, timestamp, event = '$pageview') AS entry_type,\n    argMinIf(properties.article_slug, timestamp, event = '$pageview') AS entry_article,\n    argMinIf(coalesce(nullIf(toString(properties.utm_source), ''), nullIf(toString(properties.$referring_domain), ''), 'direct_or_unknown'), timestamp, event = '$pageview') AS entry_source,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'contact_clicked' AND properties.channel = 'email') AS contacts,\n    countIf(event = '$pageview' AND properties.page_type = 'work_together') AS work_views,\n    windowFunnel(86400)(timestamp,\n      event = '$pageview' AND properties.page_type = 'article',\n      event = '$pageview' AND properties.page_type = 'work_together',\n      event = 'contact_clicked' AND properties.channel = 'email'\n    ) AS article_work_email_stage\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 29)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n    AND notEmpty(coalesce(toString(properties.$session_id), ''))\n  GROUP BY session_id\n  HAVING pageviews > 0\n    AND session_start >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n    AND session_start < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n    AND last_event < subtractMinutes(now(), 30)\n)\nGROUP BY entry_source\nORDER BY sessions DESC",
+      "save_query": {
+        "kind": "DataVisualizationNode",
+        "display": "ActionsTable",
+        "source": {
+          "kind": "HogQLQuery",
+          "query": "SELECT\n  entry_source,\n  count() AS sessions,\n  countIf(contacts > 0) AS contact_sessions,\n  round(100.0 * countIf(contacts > 0) / nullIf(count(), 0), 2) AS contact_session_percent\nFROM (\n  SELECT\n    properties.$session_id AS session_id,\n    min(timestamp) AS session_start,\n    max(timestamp) AS last_event,\n    argMinIf(properties.page_type, timestamp, event = '$pageview') AS entry_type,\n    argMinIf(properties.article_slug, timestamp, event = '$pageview') AS entry_article,\n    argMinIf(coalesce(nullIf(toString(properties.utm_source), ''), nullIf(toString(properties.$referring_domain), ''), 'direct_or_unknown'), timestamp, event = '$pageview') AS entry_source,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'contact_clicked' AND properties.channel = 'email') AS contacts,\n    countIf(event = '$pageview' AND properties.page_type = 'work_together') AS work_views,\n    windowFunnel(86400)(timestamp,\n      event = '$pageview' AND properties.page_type = 'article',\n      event = '$pageview' AND properties.page_type = 'work_together',\n      event = 'contact_clicked' AND properties.channel = 'email'\n    ) AS article_work_email_stage\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 29)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n    AND notEmpty(coalesce(toString(properties.$session_id), ''))\n  GROUP BY session_id\n  HAVING pageviews > 0\n    AND session_start >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n    AND session_start < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n    AND last_event < subtractMinutes(now(), 30)\n)\nGROUP BY entry_source\nORDER BY sessions DESC"
+        }
+      },
+      "run_status": "not_executed_in_target_project",
+      "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+      "ui": {
+        "chart": "ActionsTable"
+      },
+      "gate": "DO_NOT_SAVE_BEFORE_REAL_COOKILESS_SESSION_CONTINUITY_AND_SESSION_LIFETIME_VERIFIED",
+      "sql_file": "queries/G1.sql"
+    },
+    {
+      "id": "G2",
+      "name": "Входные статьи — сессии и email intent",
+      "description": "Вся конверсия относится только к статье входа. A→B→email считается для A. Суммируемый отчёт; home→A→email не относится к A.",
+      "kind": "sql",
+      "sql": "SELECT\n  entry_article AS article,\n  count() AS entry_sessions,\n  countIf(work_views > 0) AS sessions_reaching_work,\n  countIf(contacts > 0) AS contact_sessions,\n  round(100.0 * countIf(contacts > 0) / nullIf(count(), 0), 2) AS entry_contact_percent\nFROM (\n  SELECT\n    properties.$session_id AS session_id,\n    min(timestamp) AS session_start,\n    max(timestamp) AS last_event,\n    argMinIf(properties.page_type, timestamp, event = '$pageview') AS entry_type,\n    argMinIf(properties.article_slug, timestamp, event = '$pageview') AS entry_article,\n    argMinIf(coalesce(nullIf(toString(properties.utm_source), ''), nullIf(toString(properties.$referring_domain), ''), 'direct_or_unknown'), timestamp, event = '$pageview') AS entry_source,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'contact_clicked' AND properties.channel = 'email') AS contacts,\n    countIf(event = '$pageview' AND properties.page_type = 'work_together') AS work_views,\n    windowFunnel(86400)(timestamp,\n      event = '$pageview' AND properties.page_type = 'article',\n      event = '$pageview' AND properties.page_type = 'work_together',\n      event = 'contact_clicked' AND properties.channel = 'email'\n    ) AS article_work_email_stage\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 29)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n    AND notEmpty(coalesce(toString(properties.$session_id), ''))\n  GROUP BY session_id\n  HAVING pageviews > 0\n    AND session_start >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n    AND session_start < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n    AND last_event < subtractMinutes(now(), 30)\n)\nWHERE entry_type = 'article'\nGROUP BY article\nORDER BY entry_sessions DESC",
+      "save_query": {
+        "kind": "DataVisualizationNode",
+        "display": "ActionsTable",
+        "source": {
+          "kind": "HogQLQuery",
+          "query": "SELECT\n  entry_article AS article,\n  count() AS entry_sessions,\n  countIf(work_views > 0) AS sessions_reaching_work,\n  countIf(contacts > 0) AS contact_sessions,\n  round(100.0 * countIf(contacts > 0) / nullIf(count(), 0), 2) AS entry_contact_percent\nFROM (\n  SELECT\n    properties.$session_id AS session_id,\n    min(timestamp) AS session_start,\n    max(timestamp) AS last_event,\n    argMinIf(properties.page_type, timestamp, event = '$pageview') AS entry_type,\n    argMinIf(properties.article_slug, timestamp, event = '$pageview') AS entry_article,\n    argMinIf(coalesce(nullIf(toString(properties.utm_source), ''), nullIf(toString(properties.$referring_domain), ''), 'direct_or_unknown'), timestamp, event = '$pageview') AS entry_source,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'contact_clicked' AND properties.channel = 'email') AS contacts,\n    countIf(event = '$pageview' AND properties.page_type = 'work_together') AS work_views,\n    windowFunnel(86400)(timestamp,\n      event = '$pageview' AND properties.page_type = 'article',\n      event = '$pageview' AND properties.page_type = 'work_together',\n      event = 'contact_clicked' AND properties.channel = 'email'\n    ) AS article_work_email_stage\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 29)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n    AND notEmpty(coalesce(toString(properties.$session_id), ''))\n  GROUP BY session_id\n  HAVING pageviews > 0\n    AND session_start >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n    AND session_start < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n    AND last_event < subtractMinutes(now(), 30)\n)\nWHERE entry_type = 'article'\nGROUP BY article\nORDER BY entry_sessions DESC"
+        }
+      },
+      "run_status": "not_executed_in_target_project",
+      "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+      "ui": {
+        "chart": "ActionsTable"
+      },
+      "gate": "DO_NOT_SAVE_BEFORE_REAL_COOKILESS_SESSION_CONTINUITY_AND_SESSION_LIFETIME_VERIFIED",
+      "sql_file": "queries/G2.sql"
+    },
+    {
+      "id": "G3",
+      "name": "Статья → work → email — одна сессия",
+      "description": "Порядок событий обязателен, промежуточные события допустимы. Никакая пользовательская междневная воронка не заменяет этот отчёт.",
+      "kind": "sql",
+      "sql": "SELECT\n  countIf(article_work_email_stage >= 1) AS article_sessions,\n  countIf(article_work_email_stage >= 2) AS reached_work_after_article,\n  countIf(article_work_email_stage >= 3) AS reached_email_after_work,\n  round(100.0 * countIf(article_work_email_stage >= 3) / nullIf(countIf(article_work_email_stage >= 1), 0), 2) AS article_to_email_percent\nFROM (\n  SELECT\n    properties.$session_id AS session_id,\n    min(timestamp) AS session_start,\n    max(timestamp) AS last_event,\n    argMinIf(properties.page_type, timestamp, event = '$pageview') AS entry_type,\n    argMinIf(properties.article_slug, timestamp, event = '$pageview') AS entry_article,\n    argMinIf(coalesce(nullIf(toString(properties.utm_source), ''), nullIf(toString(properties.$referring_domain), ''), 'direct_or_unknown'), timestamp, event = '$pageview') AS entry_source,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'contact_clicked' AND properties.channel = 'email') AS contacts,\n    countIf(event = '$pageview' AND properties.page_type = 'work_together') AS work_views,\n    windowFunnel(86400)(timestamp,\n      event = '$pageview' AND properties.page_type = 'article',\n      event = '$pageview' AND properties.page_type = 'work_together',\n      event = 'contact_clicked' AND properties.channel = 'email'\n    ) AS article_work_email_stage\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 29)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n    AND notEmpty(coalesce(toString(properties.$session_id), ''))\n  GROUP BY session_id\n  HAVING pageviews > 0\n    AND session_start >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n    AND session_start < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n    AND last_event < subtractMinutes(now(), 30)\n)",
+      "save_query": {
+        "kind": "DataVisualizationNode",
+        "display": "ActionsTable",
+        "source": {
+          "kind": "HogQLQuery",
+          "query": "SELECT\n  countIf(article_work_email_stage >= 1) AS article_sessions,\n  countIf(article_work_email_stage >= 2) AS reached_work_after_article,\n  countIf(article_work_email_stage >= 3) AS reached_email_after_work,\n  round(100.0 * countIf(article_work_email_stage >= 3) / nullIf(countIf(article_work_email_stage >= 1), 0), 2) AS article_to_email_percent\nFROM (\n  SELECT\n    properties.$session_id AS session_id,\n    min(timestamp) AS session_start,\n    max(timestamp) AS last_event,\n    argMinIf(properties.page_type, timestamp, event = '$pageview') AS entry_type,\n    argMinIf(properties.article_slug, timestamp, event = '$pageview') AS entry_article,\n    argMinIf(coalesce(nullIf(toString(properties.utm_source), ''), nullIf(toString(properties.$referring_domain), ''), 'direct_or_unknown'), timestamp, event = '$pageview') AS entry_source,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'contact_clicked' AND properties.channel = 'email') AS contacts,\n    countIf(event = '$pageview' AND properties.page_type = 'work_together') AS work_views,\n    windowFunnel(86400)(timestamp,\n      event = '$pageview' AND properties.page_type = 'article',\n      event = '$pageview' AND properties.page_type = 'work_together',\n      event = 'contact_clicked' AND properties.channel = 'email'\n    ) AS article_work_email_stage\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 29)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n    AND notEmpty(coalesce(toString(properties.$session_id), ''))\n  GROUP BY session_id\n  HAVING pageviews > 0\n    AND session_start >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n    AND session_start < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n    AND last_event < subtractMinutes(now(), 30)\n)"
+        }
+      },
+      "run_status": "not_executed_in_target_project",
+      "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+      "ui": {
+        "chart": "ActionsTable"
+      },
+      "gate": "DO_NOT_SAVE_BEFORE_REAL_COOKILESS_SESSION_CONTINUITY_AND_SESSION_LIFETIME_VERIFIED",
+      "sql_file": "queries/G3.sql"
+    }
+  ],
+  "deployment_status": "repository_implementation_ready_deployment_pending",
+  "dashboard_status": "pending_creation",
+  "session_qa_status": "pending_real_cookieless_cross_page_verification"
+}

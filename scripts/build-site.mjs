@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import { renderArticle } from "./render-article.mjs";
 import { buildIcons } from "./build-icons.mjs";
 import { buildImages } from "./build-images.mjs";
+import { buildAnalytics, decorateAnalytics } from "./build-analytics.mjs";
 import {
   DOMAIN, profile, locales, localeCodes, localeHomeUrl, localeWorkUrl,
   homeSchema, workSchema, blogSchema, articleSchema, writeAgentFiles,
@@ -424,9 +425,10 @@ for (const filename of await walk(SRC_DIR)) {
   const relative = path.relative(SRC_DIR, filename);
   const page = relative === "index.html" ? "home" : relative === path.join("work-together", "index.html") ? "work" : "other";
   const html = applyReplacements(await fs.readFile(filename, "utf8"), replacementsFor("en", page));
+  const pageType = { "index.html": "home", [path.join("work-together", "index.html")]: "work_together", "blog.html": "blog_index", "privacy.html": "privacy", "404.html": "not_found" }[relative];
   const target = path.join(DIST_DIR, relative);
   await fs.mkdir(path.dirname(target), { recursive: true });
-  await fs.writeFile(target, html, "utf8");
+  await fs.writeFile(target, decorateAnalytics(html, { pageType, locale: "en" }), "utf8");
 }
 
 for (const code of localeCodes.slice(1)) {
@@ -437,7 +439,7 @@ for (const code of localeCodes.slice(1)) {
     const html = applyReplacements(await fs.readFile(source, "utf8"), replacementsFor(code, page));
     const target = path.join(DIST_DIR, relative);
     await fs.mkdir(path.dirname(target), { recursive: true });
-    await fs.writeFile(target, html, "utf8");
+    await fs.writeFile(target, decorateAnalytics(html, { pageType: page === "home" ? "home" : "work_together", locale: code }), "utf8");
   }
 }
 
@@ -446,7 +448,7 @@ for (let index = 0; index < articles.length; index += 1) {
   const target = path.join(DIST_DIR, "blog", article.slug, "index.html");
   await fs.mkdir(path.dirname(target), { recursive: true });
   const html = (await articleDocument(article, articles[index + 1], articles[index - 1])).replace("{{SITE_ICONS}}", siteIcons);
-  await fs.writeFile(target, html, "utf8");
+  await fs.writeFile(target, decorateAnalytics(html, { pageType: "article", locale: article.language || "en", slug: article.slug }), "utf8");
 }
 
 await Promise.all([
@@ -461,6 +463,10 @@ await Promise.all([
   fs.writeFile(path.join(DIST_DIR, "sitemap.xml"), sitemapDocument(articles), "utf8"),
   fs.writeFile(path.join(DIST_DIR, "robots.txt"), `User-agent: *\nAllow: /\nSitemap: ${DOMAIN}/sitemap.xml\n`, "utf8"),
 ]);
+
+// Bundle after copying the progressive-enhancement scripts so the raw analytics
+// source can never overwrite its browser-ready entry point and SDK chunks.
+await buildAnalytics(ROOT, DIST_DIR);
 
 // Deliver the exact font with the shared render-blocking CSS. A separate font
 // request can reflow words even when the fallback has matching line heights.

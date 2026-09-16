@@ -45,9 +45,37 @@
 
 .blog-page .blog-tools { margin-top: 24px; flex-direction: row; flex-wrap: wrap; gap: 16px 24px; }
 .blog-page .blog-tools a { font-size: 14px; line-height: 20px; }
-.blog-support { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 32px; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); }
-.blog-support p { flex: 1 1 300px; max-width: 48ch; margin: 0; color: var(--muted); font-size: 16px; line-height: 24px; }
-.blog-support .support-link { flex-shrink: 0; }
+/* The favicon's green and ink stay the same in both system themes. */
+.blog-page::before { display: none; }
+.blog-support { position: relative; display: flex; background: #00ed00; color: #101010; }
+.support-ticker-link { display: block; flex: 1; min-width: 0; padding: 12px 24px; color: #101010; font-size: 14px; line-height: 22px; text-decoration: none; }
+.support-ticker-link:hover { color: #101010; }
+.support-ticker-link:focus-visible { outline: 2px solid #101010; outline-offset: -4px; }
+.support-ticker-copy strong { display: inline-block; margin-left: 12px; font-weight: 750; text-decoration: underline; text-underline-offset: 3px; }
+.support-ticker-copy[aria-hidden], .support-pause, .support-pause-control { display: none; }
+
+/* Touch screens and reduced-motion readers get the complete, static message.
+   The native checkbox also makes a persistent pause possible without JS. */
+@media (min-width: 721px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .support-ticker-link { overflow: hidden; padding: 0; }
+  .support-ticker-track { display: flex; width: max-content; min-width: 200%; animation: support-scroll 36s linear infinite; }
+  .support-ticker-copy, .support-ticker-copy[aria-hidden] { display: flex; flex: 1; align-items: center; justify-content: center; gap: 20px; min-height: 48px; padding: 8px 48px; white-space: nowrap; }
+  .support-ticker-copy strong { margin: 0; }
+  .blog-support:hover .support-ticker-track,
+  .blog-support:focus-within .support-ticker-track,
+  .support-pause:checked ~ .support-ticker-link .support-ticker-track { animation-play-state: paused; }
+  .support-pause { display: block; position: absolute; z-index: 1; inset: 0 0 0 auto; width: 48px; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+  .support-pause-control { display: flex; flex: 0 0 48px; align-items: center; justify-content: center; border-left: 1px solid #101010; }
+  .support-pause:focus-visible ~ .support-pause-control { outline: 2px solid #101010; outline-offset: -5px; }
+  .support-play-icon, .support-pause:checked ~ .support-pause-control .support-pause-icon { display: none; }
+  .support-pause:checked ~ .support-pause-control .support-play-icon { display: block; }
+}
+
+@keyframes support-scroll {
+  to { transform: translateX(-50%); }
+}
+
+@media print { .blog-support { display: none; } }
 
 .contribution { padding-block: 32px 0; }
 .contribution::before { content: ""; display: block; width: 32px; height: 2px; margin-bottom: 24px; background: var(--accent); }

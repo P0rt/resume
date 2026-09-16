@@ -1,6 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
+import { profile } from "./site-metadata.mjs";
 
 // This ingestion-only project key is public by design; never use a personal API key here.
 const PUBLIC_PROJECT_KEY = "phc_posNrSU8xsWCgSShArGvz8ajUrikHjoNihHfHsMaTRbC";
@@ -58,7 +59,11 @@ function annotateLinks(html, pageType) {
       } else if (href) {
         let url;
         try { url = new URL(href, "https://sergei-parfenov.com/"); } catch { /* Invalid links do not become analytics targets. */ }
-        if (url && !url.search && !url.hash) {
+        const supportPlacement = pageType === "article" && within("article-support") ? "article_footer"
+          : pageType === "blog_index" && within("blog-tools") ? "blog_tools" : undefined;
+        if (url?.href === profile.supportUrl && supportPlacement) {
+          tag = withAttributes(tag, { "data-analytics-event": "support_clicked", "data-analytics-placement": supportPlacement, "data-analytics-provider": "ko-fi" });
+        } else if (url && !url.search && !url.hash) {
           const profile = OWN_PROFILES.get(`${url.origin}${url.pathname.replace(/\/+$/, "")}`);
           if (placement && profile) {
             tag = withAttributes(tag, { "data-analytics-event": "profile_clicked", "data-analytics-placement": placement, "data-analytics-platform": profile });
@@ -93,6 +98,9 @@ export function decorateAnalytics(html, { pageType, locale, slug } = {}) {
   if (!/<body\b[^>]*>/i.test(html) || !/<\/body>/i.test(html)) throw new Error("Analytics decoration needs a complete HTML document");
   html = html.replace(/<body\b[^>]*>/i, (tag) => withAttributes(tag, properties));
   html = annotateLinks(html, pageType);
+  if (html.includes('data-analytics-event="support_clicked"')) {
+    html = html.replace(/<body\b[^>]*>/i, (tag) => withAttributes(tag, { "data-analytics-support-available": "true" }));
+  }
   const script = '<script type="module" src="/scripts/analytics.js"></script>';
   if (!html.includes(script)) html = html.replace(/<\/body>/i, `  ${script}\n</body>`);
   return html;

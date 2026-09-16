@@ -6,7 +6,7 @@
     "project_id": 276039,
     "hostname": "sergei-parfenov.com"
   },
-  "status": "core_12_insights_executed_and_saved_in_target_project",
+  "status": "core_12_and_support_2_insights_executed_and_saved_in_target_project",
   "docs": [
     "https://posthog.com/docs/sql",
     "https://posthog.com/docs/sql/aggregations",
@@ -17,7 +17,7 @@
   ],
   "rules": [
     "Target PostHog Cloud EU project 276039 only.",
-    "All 12 core queries executed successfully in EU project 276039 and were saved as insights, three per dashboard.",
+    "The original 12 core queries and two support queries executed successfully in EU project 276039 and were saved as insights; SP · Reading now has five insights and the other three dashboards have three each.",
     "Initial completed-day production results were empty (Q3: one aggregate row with zero counts and NULL percentage); environment=test QA events were separately confirmed in PostHog.",
     "Main queries filter production, schema_version 1, cookieless, and properties.$host. Quality queries inspect all schema versions and modes on production hosts.",
     "Fixed SQL date and property predicates do not respond to dashboard controls. No filters placeholder is included.",
@@ -25,7 +25,8 @@
     "G1, G2 and G3 remain unsaved drafts pending time-boundary redesign and server checks for reload, bfcache, inactivity and day transitions; basic cross-page continuity is confirmed.",
     "Own traffic is not recognized automatically. analytics=off disables collection on that page; analytics_test=1 labels that page as test. Neither parameter persists across navigation.",
     "No fake or seeded production events, no monthly unique-human claims, no 7/30-day retention.",
-    "Client-side known-user-agent bot filtering does not guarantee removal of every bot."
+    "Client-side known-user-agent bot filtering does not guarantee removal of every bot.",
+    "Support reports R4/R5 executed successfully and were saved in target project 276039. support_clicked is outbound intent, not completed payment; R5 includes only pageviews with support_available=true. R4/R5 descriptions are documented here but not yet saved in the insight UI."
   ],
   "dashboards": [
     {
@@ -117,7 +118,7 @@
     },
     {
       "name": "SP · Reading",
-      "description": "Чтение оценивается по view_id: ≥30 секунд видимости и фокуса плюс ≥50% тела статьи. Клик RSS не означает подписку; ZIP-клик не подтверждает загрузку.",
+      "description": "Вовлечённое чтение: ≥30 секунд видимости и фокуса плюс ≥50% тела статьи. RSS/ZIP и Ko-fi учитывают переходы, не подписки, скачивания или оплаченные донаты. R5 показывает долю просмотров с переходом на Ko-fi только среди страниц, где ссылка уже добавлена; это не показатель увидевших блок. 28 завершённых дней Europe/Madrid; только production. Общие фильтры дашборда не изменяют SQL.",
       "tiles": [
         {
           "id": "R1",
@@ -196,11 +197,65 @@
           "initial_result": {
             "row_count": 0
           }
+        },
+        {
+          "id": "R4",
+          "name": "R4 · Ko-fi: клики по размещениям и страницам · 28 дней",
+          "description": "Переходы к Ko-fi по placement и content_key за 28 завершённых дней. Повторные клики учитываются отдельно от уникальных view_id. Эти события не подтверждают донаты.",
+          "kind": "sql",
+          "sql": "SELECT\n  properties.placement AS placement,\n  properties.content_key AS content,\n  count() AS clicks,\n  uniqExact(properties.view_id) AS views_with_support_click\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n  AND event = 'support_clicked'\n  AND properties.provider = 'ko-fi'\n  AND ((properties.page_type = 'blog_index' AND properties.placement = 'blog_tools')\n    OR (properties.page_type = 'article' AND properties.placement = 'article_footer'))\n  AND notEmpty(coalesce(toString(properties.view_id), ''))\nGROUP BY placement, content\nORDER BY clicks DESC",
+          "save_query": {
+            "kind": "DataVisualizationNode",
+            "display": "ActionsTable",
+            "source": {
+              "kind": "HogQLQuery",
+              "query": "SELECT\n  properties.placement AS placement,\n  properties.content_key AS content,\n  count() AS clicks,\n  uniqExact(properties.view_id) AS views_with_support_click\nFROM events\nWHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n  AND timestamp < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n  AND properties.environment = 'production'\n  AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n  AND toString(properties.schema_version) = '1'\n  AND properties.analytics_mode = 'cookieless'\n  AND event = 'support_clicked'\n  AND properties.provider = 'ko-fi'\n  AND ((properties.page_type = 'blog_index' AND properties.placement = 'blog_tools')\n    OR (properties.page_type = 'article' AND properties.placement = 'article_footer'))\n  AND notEmpty(coalesce(toString(properties.view_id), ''))\nGROUP BY placement, content\nORDER BY clicks DESC"
+            }
+          },
+          "run_status": "executed_successfully_and_saved_in_target_project",
+          "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+          "ui": {
+            "chart": "ActionsTable"
+          },
+          "sql_file": "queries/R4.sql",
+          "insight_short_id": "ttjEFdcT",
+          "url": "https://eu.posthog.com/project/276039/insights/ttjEFdcT",
+          "initial_result": {
+            "row_count": 0
+          },
+          "description_sync_status": "repository_only_not_saved_in_ui"
+        },
+        {
+          "id": "R5",
+          "name": "R5 · Ko-fi: доля просмотров с кликом · 28 дней",
+          "description": "Когорта просмотров blog_index/article с support_available=true. Знаменатель исключает просмотры до добавления ссылки. Клики связаны тем же view_id; наличие ссылки не означает её видимость или оплату.",
+          "kind": "sql",
+          "sql": "SELECT\n  page_type,\n  content,\n  count() AS pageviews_with_support_available,\n  countIf(support_events > 0) AS views_with_support_click,\n  round(100.0 * countIf(support_events > 0) / nullIf(count(), 0), 2) AS view_click_percent\nFROM (\n  SELECT\n    properties.view_id AS view_id,\n    anyIf(properties.page_type, event = '$pageview') AS page_type,\n    anyIf(properties.content_key, event = '$pageview') AS content,\n    minIf(timestamp, event = '$pageview') AS viewed_at,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'support_clicked') AS support_events\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n    AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n    AND toString(properties.schema_version) = '1'\n    AND properties.analytics_mode = 'cookieless'\n    AND properties.page_type IN ('blog_index', 'article')\n    AND ((event = '$pageview' AND properties.support_available = true)\n      OR (event = 'support_clicked' AND properties.provider = 'ko-fi'\n        AND ((properties.page_type = 'blog_index' AND properties.placement = 'blog_tools')\n          OR (properties.page_type = 'article' AND properties.placement = 'article_footer'))))\n    AND notEmpty(coalesce(toString(properties.view_id), ''))\n  GROUP BY view_id\n  HAVING pageviews > 0 AND viewed_at < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n)\nGROUP BY page_type, content\nORDER BY pageviews_with_support_available DESC",
+          "save_query": {
+            "kind": "DataVisualizationNode",
+            "display": "ActionsTable",
+            "source": {
+              "kind": "HogQLQuery",
+              "query": "SELECT\n  page_type,\n  content,\n  count() AS pageviews_with_support_available,\n  countIf(support_events > 0) AS views_with_support_click,\n  round(100.0 * countIf(support_events > 0) / nullIf(count(), 0), 2) AS view_click_percent\nFROM (\n  SELECT\n    properties.view_id AS view_id,\n    anyIf(properties.page_type, event = '$pageview') AS page_type,\n    anyIf(properties.content_key, event = '$pageview') AS content,\n    minIf(timestamp, event = '$pageview') AS viewed_at,\n    countIf(event = '$pageview') AS pageviews,\n    countIf(event = 'support_clicked') AS support_events\n  FROM events\n  WHERE timestamp >= subtractDays(toStartOfDay(toTimeZone(now(), 'Europe/Madrid')), 28)\n    AND timestamp < now()\n    AND properties.environment = 'production'\n    AND properties.$host IN ('sergei-parfenov.com', 'www.sergei-parfenov.com')\n    AND toString(properties.schema_version) = '1'\n    AND properties.analytics_mode = 'cookieless'\n    AND properties.page_type IN ('blog_index', 'article')\n    AND ((event = '$pageview' AND properties.support_available = true)\n      OR (event = 'support_clicked' AND properties.provider = 'ko-fi'\n        AND ((properties.page_type = 'blog_index' AND properties.placement = 'blog_tools')\n          OR (properties.page_type = 'article' AND properties.placement = 'article_footer'))))\n    AND notEmpty(coalesce(toString(properties.view_id), ''))\n  GROUP BY view_id\n  HAVING pageviews > 0 AND viewed_at < toStartOfDay(toTimeZone(now(), 'Europe/Madrid'))\n)\nGROUP BY page_type, content\nORDER BY pageviews_with_support_available DESC"
+            }
+          },
+          "run_status": "executed_successfully_and_saved_in_target_project",
+          "date_policy": "SQL фиксирует завершенные дни Europe/Madrid; dashboard date/property controls не влияют на запрос.",
+          "ui": {
+            "chart": "ActionsTable"
+          },
+          "sql_file": "queries/R5.sql",
+          "insight_short_id": "AbG5o9gL",
+          "url": "https://eu.posthog.com/project/276039/insights/AbG5o9gL",
+          "initial_result": {
+            "row_count": 0
+          },
+          "description_sync_status": "repository_only_not_saved_in_ui"
         }
       ],
       "dashboard_id": 956413,
       "url": "https://eu.posthog.com/project/276039/dashboard/956413",
-      "status": "saved_with_3_verified_insights"
+      "status": "saved_with_5_verified_insights"
     },
     {
       "name": "SP · Collaboration",
@@ -448,14 +503,14 @@
     }
   ],
   "deployment_status": "01feee04_vercel_and_ci_success_live_module_verified",
-  "dashboard_status": "complete_4_dashboards_3_saved_insights_each",
+  "dashboard_status": "complete_4_dashboards_14_saved_insights",
   "session_qa_status": "live_article_home_work_email_same_server_session_confirmed_time_boundaries_pending",
   "session_boundary_warning": "G1-G3 are design drafts, not executable release definitions: daily cookieless hashing breaks sessions at the project/event timezone day boundary; no separate fixed 24-hour maximum was found in the reviewed server implementation. Rework and verify before use.",
   "validation": {
     "project_id": 276039,
     "core_query_execution": "all_12_successful",
     "saved_dashboard_count": 4,
-    "saved_insight_count": 12,
+    "saved_insight_count": 14,
     "empty_results": "A1-A3, R1-R3, C1-C3 and Q1-Q2 returned no rows for completed-day production windows at initial validation.",
     "Q3_result": {
       "row_count": 1,
@@ -466,7 +521,17 @@
       "pageleave_coverage_percent": null
     },
     "saved_sql_format": "Whitespace collapsed in the PostHog editor; semantics match the repository SQL files.",
-    "interpretation": "The current day and environment=test QA events are excluded; empty production tables at setup are expected and are not fabricated zero-traffic claims."
+    "interpretation": "The current day and environment=test QA events are excluded; empty production tables at setup are expected and are not fabricated zero-traffic claims.",
+    "support_query_execution": "R4_R5_successful_and_saved",
+    "support_initial_results": {
+      "R4": {
+        "row_count": 0
+      },
+      "R5": {
+        "row_count": 0
+      }
+    },
+    "support_description_sync": "R4/R5 names, queries, dashboard assignment and links verified in UI; individual insight descriptions remain repository-only."
   },
   "live_qa": {
     "environment": "test",
@@ -506,5 +571,6 @@
       "articles_without_slug": 0,
       "scope": "Four event types verified server-side. profile_clicked, download_clicked and rss_clicked are covered by local tests, not this server QA."
     }
-  }
+  },
+  "support_status": "R4_R5_executed_and_saved_in_target_project"
 }

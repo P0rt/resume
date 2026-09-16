@@ -192,6 +192,35 @@ test("annotated resources are disjoint, unsupported actions and right-clicks are
   assert.equal(h.events.length, 6, "middle click is one activation");
 });
 
+test("support activations preserve attribution, exclude unknown destinations, and do not imply payment", async () => {
+  for (const [pageType, placement] of [["blog_index", "blog_tools"], ["article", "article_footer"]]) {
+    const h = harness({ pageType });
+    h.doc.body.dataset.analyticsSupportAvailable = "true";
+    const controller = h.start();
+    const data = { analyticsEvent: "support_clicked", analyticsProvider: "ko-fi", analyticsPlacement: placement };
+    const target = anchor(data, "https://ko-fi.com/sergeiparfenov?ref=site");
+    h.doc.dispatch("click", { target, button: 0, detail: 0 });
+    await controller.load();
+    assert.deepEqual(h.events.map((e) => e.event), ["$pageview", "support_clicked"]);
+    assert.equal(h.events[0].properties.support_available, true);
+    const properties = h.events[1].properties;
+    assert.equal(properties.provider, "ko-fi");
+    assert.equal(properties.placement, placement);
+    assert.equal(properties.view_id, h.events[0].properties.view_id);
+    assert.equal(properties.content_key, pageType === "article" ? "article:test-article" : "blog_index");
+    assert.ok(!("amount" in properties) && !("payment_status" in properties));
+    h.doc.dispatch("click", { target: anchor(data, "https://ko-fi.com/someone-else"), button: 0 });
+    h.doc.dispatch("click", { target: anchor(data, "https://ko-fi.com.evil.example/sergeiparfenov"), button: 0 });
+    h.doc.dispatch("click", { target: anchor({ ...data, analyticsProvider: "unknown" }, "https://ko-fi.com/sergeiparfenov"), button: 0 });
+    h.doc.dispatch("auxclick", { target, button: 2 });
+    assert.equal(h.events.length, 2);
+    h.doc.dispatch("auxclick", { target, button: 1 });
+    assert.equal(h.events.length, 3);
+  }
+  const old = harness(); await old.start().load();
+  assert.equal(old.events[0].properties.support_available, false);
+});
+
 test("scrubber rejects unknown events and strips URL, DOM and person payloads at both levels", () => {
   const context = { common: { page_path: "/blog/a/", view_id: "new", analytics_mode: "cookieless" },
     origin: "https://sergei-parfenov.com", referrer: "https://example.org/private?email=private@example.org#private" };

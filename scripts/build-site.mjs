@@ -241,6 +241,12 @@ async function articleDocument(article, older, newer) {
       ${cover}
       <div class="article-prose section-shell" data-article-body>${body}</div>
       <footer class="article-footer section-shell">
+        <aside class="article-support" aria-labelledby="support-title">
+          <p class="support-label">A small thank you</p>
+          <h2 id="support-title">Help make the next experiment possible.</h2>
+          <p>If this article helped you understand something or solve a problem, you can support my writing with a coffee.</p>
+          <a class="support-link" href="${escapeHtml(profile.supportUrl)}" target="_blank" rel="noopener noreferrer">Buy me a coffee <span aria-hidden="true">↗</span></a>
+        </aside>
         ${sourceLink}
         <nav class="article-pagination" aria-label="More articles">${olderLink}${newerLink}</nav>
       </footer>
@@ -407,6 +413,7 @@ function replacementsFor(code = "en", page = "other") {
   </article>`).join("\n"),
   "{{PROFILE_EXPERIENCE}}": experienceHistory(localProfile.experience, locale.ui),
   "{{BLOG_CONTROLS}}": pageControls(homePath, locale.ui.home, "←"),
+  "{{SUPPORT_URL}}": escapeHtml(profile.supportUrl),
   "{{ARTICLE_COUNT}}": String(articles.length),
   "{{FEATURED_ARTICLES}}": featuredWriting(articles),
   "{{ARTICLE_ARCHIVE}}": archiveMarkup(articles),

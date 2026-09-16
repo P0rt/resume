@@ -2,7 +2,7 @@
 // storage, identity, DOM text, or arbitrary URL parameters belong in this layer.
 const HOSTS = new Set(["sergei-parfenov.com", "www.sergei-parfenov.com"]);
 const PAGE_TYPES = new Set(["home", "work_together", "blog_index", "article", "privacy", "not_found"]);
-const EVENTS = new Set(["$pageview", "$pageleave", "article_engaged", "contact_clicked", "profile_clicked", "download_clicked", "rss_clicked"]);
+const EVENTS = new Set(["$pageview", "$pageleave", "article_engaged", "contact_clicked", "profile_clicked", "download_clicked", "rss_clicked", "support_clicked"]);
 const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
 const INSTANCE = Symbol.for("sergei.analytics.v1");
 const PUBLIC_KEY = typeof __POSTHOG_PUBLIC_KEY__ === "string" ? __POSTHOG_PUBLIC_KEY__ : "";
@@ -17,7 +17,7 @@ const SDK_PROPERTIES = new Set([
 const OWN_PROPERTIES = new Set([
   "schema_version", "page_type", "page_path", "content_key", "page_locale", "article_slug", "view_id",
   "environment", "analytics_mode", "foreground_seconds", "max_article_depth_pct", "channel", "placement",
-  "platform", "asset_id", "file_type", "feed_id", "article_body_present", ...UTM_KEYS,
+  "platform", "asset_id", "file_type", "feed_id", "article_body_present", "provider", "support_available", ...UTM_KEYS,
 ]);
 
 export function safePath(pathname) {
@@ -119,6 +119,15 @@ export function actionProperties(anchor) {
   if (event === "rss_clicked" && d.analyticsFeedId === "main" && placement === "blog_tools") {
     return { event, properties: { feed_id: "main", placement } };
   }
+  if (event === "support_clicked" && d.analyticsProvider === "ko-fi"
+    && ["blog_tools", "article_footer"].includes(placement)) {
+    try {
+      const url = new URL(anchor.getAttribute("href"));
+      if (url.origin === "https://ko-fi.com" && url.pathname === "/sergeiparfenov") {
+        return { event, properties: { provider: "ko-fi", placement } };
+      }
+    } catch { /* Invalid support links do not become analytics targets. */ }
+  }
   return null;
 }
 
@@ -182,6 +191,7 @@ export function startAnalytics({ win = window, doc = document, key = PUBLIC_KEY,
     foregroundMs = 0; maxDepth = 0; engaged = false; suspended = false;
     lastTick = now(); wasForeground = foreground();
     capture("$pageview", { ...campaignProperties(win.location.search),
+      ...(["blog_index", "article"].includes(common.page_type) ? { support_available: doc.body.dataset.analyticsSupportAvailable === "true" } : {}),
       ...(common.page_type === "article" ? { article_body_present: !!article } : {}) });
     tick();
   };

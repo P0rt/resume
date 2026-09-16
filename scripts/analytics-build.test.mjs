@@ -32,6 +32,9 @@ test("archive tracks its visible RSS and profile links, and utility pages have n
   const blog = await built("blog.html");
   assert.match(blog, /data-analytics-page-type="blog_index"/);
   assert.equal(eventAnchors(blog, "rss_clicked").length, 1);
+  assert.equal(eventAnchors(blog, "support_clicked").length, 1);
+  assert.match(eventAnchors(blog, "support_clicked")[0], /data-analytics-placement="blog_tools"/);
+  assert.match(blog, /data-analytics-support-available="true"/);
   assert.match(eventAnchors(blog, "rss_clicked")[0], /data-analytics-feed-id="main"/);
   const profiles = eventAnchors(blog, "profile_clicked");
   assert.equal(profiles.length, 3);
@@ -52,6 +55,13 @@ test("every published article has identity, but only the two actual companion do
     assert.ok(html.includes(`data-analytics-content-key="article:${entry.name}"`));
     assert.ok(html.includes(`data-analytics-article-slug="${entry.name}"`));
     assert.match(html, /data-analytics-page-type="article"/);
+    const support = eventAnchors(html, "support_clicked");
+    assert.equal(support.length, 1);
+    assert.match(support[0], /href="https:\/\/ko-fi.com\/sergeiparfenov\?ref=site"/);
+    assert.match(support[0], /data-analytics-placement="article_footer"/);
+    assert.match(support[0], /data-analytics-provider="ko-fi"/);
+    assert.match(html, /data-analytics-support-available="true"/);
+    assert.ok(html.indexOf('class="article-support"') > html.indexOf('class="article-footer section-shell"'), "Support remains outside measured article body");
     assert.equal(eventAnchors(html, "profile_clicked").length, 0, "Article citations are not profile clicks");
     downloads.push(...eventAnchors(html, "download_clicked"));
   }

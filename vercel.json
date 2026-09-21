@@ -10,6 +10,7 @@
   },
   "rewrites": [
     { "source": "/jev", "destination": "https://ai-2027-vs-reality.com/jev" },
+    { "source": "/jev/", "destination": "https://ai-2027-vs-reality.com/jev/" },
     { "source": "/jev/:path*", "destination": "https://ai-2027-vs-reality.com/jev/:path*" },
     { "source": "/mcp", "destination": "/api/mcp" }
   ],

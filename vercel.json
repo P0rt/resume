@@ -8,7 +8,11 @@
       "maxDuration": 10
     }
   },
-  "rewrites": [{ "source": "/mcp", "destination": "/api/mcp" }],
+  "rewrites": [
+    { "source": "/jev", "destination": "https://ai-2027-vs-reality.com/jev" },
+    { "source": "/jev/:path*", "destination": "https://ai-2027-vs-reality.com/jev/:path*" },
+    { "source": "/mcp", "destination": "/api/mcp" }
+  ],
   "redirects": [
     { "source": "/index.html", "destination": "/", "permanent": true },
     { "source": "/:locale(es|fr|pt|ja|zh|ru)/index.html", "destination": "/:locale/", "permanent": true },
@@ -22,6 +26,15 @@
     { "source": "/mcp/", "destination": "/mcp", "permanent": true }
   ],
   "headers": [
+    {
+      "source": "/jev/:path*",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "CDN-Cache-Control", "value": "no-store" },
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+        { "key": "x-vercel-enable-rewrite-caching", "value": "0" }
+      ]
+    },
     {
       "source": "/assets/optimized/:path*",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]

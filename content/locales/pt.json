@@ -49,11 +49,12 @@
     "role": "Cofundador e CTO, engenheiro de IA/ML",
     "description": "Sergei Parfenov é cofundador e CTO da Aliwio e consultor de tecnologia da Symptomato. Constrói produtos de IA, sistemas de aprendizagem e software.",
     "summary": "Engenharia, produto e o trabalho que existe entre os dois.",
-    "intro": "Há dez anos construo produtos desde o início: escrevo o software, ajudo a decidir o que deve ser construído e continuo lidando com as partes difíceis até que funcionem para pessoas reais.",
+    "intro": "Há dez anos projeto e desenvolvo sistemas de software. Trabalho com arquitetura, backend e integração de modelos de aprendizado de máquina. Levo as soluções dos primeiros protótipos à implantação e operação em produção.",
     "homeStory": [
-      "Entrei na Yandex Praktikum quando a equipe ainda era pequena. Mais tarde, na TripleTen e na Nebius Academy, continuei trabalhando nos sistemas que sustentam a aprendizagem. Na TripleTen, construí ferramentas de IA para avaliação, busca e tutoria. Também cofundei a IAWY, uma tutora de IA que lançamos em dois bootcamps na América Latina."
+      "Trabalhei na Yandex, na TripleTen e na Nebius. Desenvolvi ferramentas de IA para busca, avaliação de conhecimentos e tutoria. Assim, a educação se tornou uma parte importante do meu trabalho como engenheiro.",
+      "Sou bacharel em Sistemas de Informação pela Universidade Estatal de Economia e Finanças de São Petersburgo. Em 2024, estudei aprendizado profundo aplicado à visão computacional no curso CS231n da Universidade Stanford. Continuo aprendendo por meio dos meus próprios experimentos, sobre os quais escrevo no blog."
     ],
-    "homeCurrent": "Hoje sou cofundador e CTO da Aliwio, onde construo software para clínicas veterinárias. Também sou consultor de tecnologia da Symptomato e ajudo a desenvolver um serviço em que a IA reúne o contexto antes que um profissional de saúde entre na conversa.",
+    "homeCurrent": "Atualmente sou CTO da Aliwio, onde desenvolvo software para clínicas veterinárias, e consultor técnico da Symptomato.",
     "blogIntro": "Compartilho experimentos, análises técnicas e o que aprendo construindo sistemas de IA. Quase 10 mil pessoas acompanham meus textos.",
     "location": "Barcelona, Espanha",
     "about": [

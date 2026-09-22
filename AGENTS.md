@@ -21,7 +21,7 @@
 - Simple, distinctive personal notebook, with fine graph-paper squares, white/black and cobalt accent. Avoid generic marketing sections, card grids, three-column home layouts and filler copy.
 - Sergei explicitly likes the original serif headings: Iowan Old Style / Palatino / Georgia. Body is local Manrope; code and small technical labels use system monospace.
 - Homepage: large portrait, name and a concise but substantive narrative in one reading column. Only a mention/link to the blog below the introduction; no article feed, full CV, header menu or top blog link.
-- Detailed career, education, projects and collaboration belong on `/work-together/`. Blog is separate at `/blog.html`.
+- Detailed career, education entries, projects and collaboration belong on `/work-together/`. The homepage also includes a compact education paragraph with the bachelor's degree and Stanford CS231n course. Blog is separate at `/blog.html`.
 - Keep experience through Yandex Praktikum visible. Put the entries below it in a localized native `<details>` control; retain the complete career in HTML, JSON, Markdown and MCP.
 - Home and work have static `es`, `fr`, `pt`, `ja`, `zh` and `ru` variants under `/<locale>/`. Facts remain in `content/profile.json`; translated prose lives in `content/locales/*.json`. Keep every locale complete and preserve reciprocal `hreflang`, self-canonicals, localized JSON-LD, sitemap entries and localized Markdown/JSON profile alternates.
 - Browser-language routing applies only to `/` and `/work-together/`, via `Accept-Language` and temporary redirects. Direct localized URLs never redirect. The blog and article bodies stay in their original language unless Sergei explicitly requests translations.
@@ -40,7 +40,7 @@
 ## Biographical accuracy
 - Use Sergei's supplied facts and screenshots, not achievements from design-reference biographies. No invented awards, revenues, client names, metrics, availability or testimonial quotes.
 - Current stated roles: Co-Founder and CTO at Aliwio; Tech Adviser at Symptomato. These titles were explicitly corrected by Sergei on September 4, 2026. See README provenance.
-- Nebius Academy belongs in the compact homepage career arc after TripleTen and links to https://academy.nebius.com. Do not add a dated experience entry or infer a role until Sergei supplies the exact title and dates.
+- The September 22, 2026 approved homepage copy uses Yandex, TripleTen and Nebius, without Praktikum, Academy, small-team wording or the pre-ChatGPT claim. Nebius links to https://nebius.com/. Do not add a dated experience entry or infer a role until Sergei supplies the exact title and dates. The current-work paragraph says CTO at Aliwio and technical consultant at Symptomato; keep detailed career facts on the work page.
 - TripleTen is a **past** role: AI Engineer, December 2021–January 2026. No separate Practicum USA block.
 - Yandex Praktikum: 11th member of that product team, not of all Yandex and not a claimed co-founder. Trainer architecture served 7,000–10,000 students/day; ML project assessment preceded ChatGPT. Those detailed facts belong on the work page, not the compact homepage.
 - IAWY: Co-Founder/CPO, August 2023–July 2024; two LATAM bootcamp launches are user-supplied. Tech.eu coverage is sponsored accelerator coverage, not an award.

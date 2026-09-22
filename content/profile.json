@@ -5,11 +5,12 @@
   "role": "Co-Founder and CTO, AI/ML Engineer",
   "description": "Sergei Parfenov is Co-Founder and CTO at Aliwio and Tech Adviser at Symptomato. He builds AI products, learning systems and early-stage software.",
   "summary": "Engineering, product and the work in between.",
-  "intro": "I’ve spent the past decade building products from the ground up — writing software, shaping what gets built, and staying with the messy parts until they work for real people.",
+  "intro": "For the past ten years, I’ve been designing and developing software systems. I work on architecture, backend engineering and the integration of machine learning models. I take solutions from early prototypes through launch and ongoing operation in production.",
   "homeStory": [
-    "I joined Yandex Praktikum when it was still a small team. Later, at TripleTen and Nebius Academy, I kept working on the systems around how people learn. At TripleTen, I built AI tools for assessment, search and tutoring. I also co-founded IAWY, an AI tutor that we launched with two bootcamps in Latin America."
+    "I’ve worked at Yandex, TripleTen and Nebius. I built AI tools for search, knowledge assessment and tutoring. Education became a major part of my engineering work along the way.",
+    "I hold a bachelor’s degree in Computer Information Systems from Saint Petersburg State University of Finance and Economics. In 2024, I studied deep learning for computer vision through Stanford University’s CS231n course. I’m still learning through my own experiments, which I write about on the blog."
   ],
-  "homeCurrent": "Today I’m Co-Founder and CTO at Aliwio, building software for veterinary clinics. I’m also a Tech Adviser at Symptomato, helping shape a service where AI gathers context before a human health specialist joins the conversation.",
+  "homeCurrent": "I’m currently CTO at Aliwio, where I build software for veterinary clinics, and a technical consultant at Symptomato.",
   "blogIntro": "I share experiments, technical deep dives and what I learn building AI systems. Nearly 10k subscribers follow my writing.",
   "location": "Barcelona, Spain",
   "about": [

@@ -49,11 +49,12 @@
     "role": "Cofondateur et CTO, ingénieur IA/ML",
     "description": "Sergei Parfenov est cofondateur et CTO d’Aliwio, et conseiller technique de Symptomato. Il conçoit des produits d’IA et des systèmes d’apprentissage.",
     "summary": "L’ingénierie, le produit et tout ce qui les relie.",
-    "intro": "Depuis dix ans, je construis des produits à partir de zéro : j’écris le logiciel, je participe aux choix de produit et je reste au contact des problèmes difficiles jusqu’à ce que le résultat fonctionne pour de vraies personnes.",
+    "intro": "Depuis dix ans, je conçois et développe des systèmes logiciels. Je travaille sur l’architecture, le backend et l’intégration de modèles d’apprentissage automatique. Je mène les solutions des premiers prototypes à leur mise en production et à leur exploitation.",
     "homeStory": [
-      "J’ai rejoint Yandex Praktikum alors que l’équipe était encore petite. Plus tard, chez TripleTen puis Nebius Academy, j’ai continué à travailler sur les systèmes qui rendent l’apprentissage possible. Chez TripleTen, j’ai construit des outils d’IA pour l’évaluation, la recherche et le tutorat. J’ai aussi cofondé IAWY, un tuteur IA que nous avons lancé dans deux bootcamps en Amérique latine."
+      "J’ai travaillé chez Yandex, TripleTen et Nebius. J’ai développé des outils d’IA pour la recherche, l’évaluation des connaissances et le tutorat. L’éducation est ainsi devenue une part importante de mon travail d’ingénieur.",
+      "Je suis titulaire d’un bachelor en systèmes d’information de l’Université d’État d’économie et de finance de Saint-Pétersbourg. En 2024, j’ai étudié l’apprentissage profond appliqué à la vision par ordinateur dans le cadre du cours CS231n de l’Université Stanford. Je continue d’apprendre à travers mes propres expérimentations, que je partage sur le blog."
     ],
-    "homeCurrent": "Aujourd’hui, je suis cofondateur et CTO d’Aliwio, où je construis des logiciels pour les cliniques vétérinaires. Je suis aussi conseiller technique de Symptomato et j’aide à concevoir un service dans lequel l’IA recueille le contexte avant l’intervention d’un professionnel de santé.",
+    "homeCurrent": "Je suis actuellement CTO chez Aliwio, où je développe des logiciels pour les cliniques vétérinaires, et consultant technique auprès de Symptomato.",
     "blogIntro": "Je partage mes expériences, des analyses techniques approfondies et ce que j’apprends en construisant des systèmes d’IA. Près de 10 000 personnes suivent mes publications.",
     "location": "Barcelone, Espagne",
     "about": [

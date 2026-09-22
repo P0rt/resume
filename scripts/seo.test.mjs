@@ -104,8 +104,11 @@ test("the detailed profile stays consistent across the page, JSON, Markdown and 
   }
   assert.ok(markdown.includes(bio.homeCurrent));
   assert.ok(!home.includes("Mastery Depth Tracker"));
-  assert.ok(home.replace(/<[^>]*>/g, "").includes("I joined Yandex Praktikum"));
-  assert.ok(home.includes("Nebius Academy"));
+  assert.ok(home.replace(/<[^>]*>/g, "").includes("I’ve worked at Yandex, TripleTen and Nebius."));
+  assert.ok(home.includes('href="https://nebius.com/"'));
+  assert.ok(home.includes('href="https://cs231n.stanford.edu/"'));
+  assert.ok(!home.includes("Yandex Praktikum"));
+  assert.ok(!home.includes("Nebius Academy"));
   assert.ok(!home.includes("7,000–10,000"));
   assert.ok(!home.includes("8.4 seconds to 0.6 seconds"));
   assert.ok(work.includes("I joined Yandex Praktikum"));
@@ -241,8 +244,8 @@ test("career corrections stay accurate in every public representation", async ()
     assert.ok(!text.includes("Dec 2020 to present"));
   }
   assert.ok(home.includes('href="https://tripleten.com"'));
-  assert.ok(home.includes('href="https://academy.nebius.com"'));
-  assert.ok(home.includes('href="https://practicum.yandex.ru/"'));
+  assert.ok(home.includes('href="https://nebius.com/"'));
+  assert.ok(home.includes('href="https://yandex.com/"'));
   assert.ok(!home.includes(`href="${iawy.coverage.url}"`));
   assert.ok(home.includes('href="https://symptomato.com"'));
   const pages = [home, work, await read("blog.html"), await read(`blog/${snapshot.articles[0].id}/index.html`)];

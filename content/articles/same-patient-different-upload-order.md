@@ -4,7 +4,7 @@ slug: "same-patient-different-upload-order"
 description: "A synthetic experiment for Symptomato shows how an omitted source can hide a conflict, even when the final accepted value is correct."
 published: true
 date: "2026-09-30T09:09:19Z"
-updated: "2026-09-30T09:48:18Z"
+updated: "2026-09-30T10:12:33Z"
 tags:
   - "ai"
   - "machinelearning"
@@ -177,6 +177,24 @@ The evaluator needed its own checks. An initial audit corrected timestamp compar
 A separate controlled demonstration removed every superseded assertion from 24 parameterized histories. Eight existing questions still passed on all 24; full-record evaluation passed on none. Adding a history question exposed every failure. Question answering can test the same contract if its coverage is exhaustive, but a handful of correct answers is not evidence that the whole record survived.
 
 Streaming evaluation of medical memory is established prior work. [MedMemoryBench](https://arxiv.org/abs/2605.11814) evaluates memory as it is constructed; [ClinTraceBench](https://arxiv.org/abs/2609.01111) studies longitudinal clinical tasks with source-verifiable evidence. ChartReplay's narrower contribution is an explicit record-construction contract and traces showing how an update can lose evidence or change its disposition.
+
+### The Kaggle tasks
+
+The [ChartReplay benchmark on Kaggle](https://www.kaggle.com/benchmarks/sergeiparfenov/chartreplay-source-grounded-record-integrity) consists of three existing smoke tasks, one for each update architecture. They use two synthetic histories—a correction chain and a history containing a multi-assertion note—delivered chronologically and with duplicate replays, once per schedule.
+
+Each task returns the fraction of the two case–repetition groups for which **both delivery schedules produce the same exact final record**. This score tests correctness and invariance together; it is different from the fraction of individual episodes that finish correctly.
+
+The saved Gemini 3.8 Flash results are:
+
+| Task | Correct-and-invariant score | Exact final records |
+|---|---:|---:|
+| Full rebuild | 1.0 (2/2 groups) | 4/4 episodes |
+| Rolling rewrite | 1.0 (2/2 groups) | 4/4 episodes |
+| Extract plus ledger | 0.5 (1/2 groups) | 3/4 episodes |
+
+These runs comprise **12 episodes and 84 recorded application calls**. They belong to a separate smoke phase, outside the primary 540 episodes and the secondary 72 Gemini episodes. The two histories recur in the larger pilot, so this is not independent held-out confirmation.
+
+The tasks provide a small executable test of the same evidence-preservation contract. They cover corrections and repeated delivery; the reconciliation example with values 138, 145 and 140 comes from the larger pilot, not these smoke tasks. The architecture scores are reported separately because combining them would obscure the comparison.
 
 ### What this changes for the system we are building
 

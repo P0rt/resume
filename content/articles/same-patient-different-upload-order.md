@@ -4,7 +4,7 @@ slug: "same-patient-different-upload-order"
 description: "A synthetic experiment for Symptomato shows how an omitted source can hide a conflict, even when the final accepted value is correct."
 published: true
 date: "2026-09-30T09:09:19Z"
-updated: "2026-09-30T10:12:33Z"
+updated: "2026-09-30T10:30:30Z"
 tags:
   - "ai"
   - "machinelearning"
@@ -20,15 +20,13 @@ coverAlt: "An archivist compares two records for the same patient as identical d
 
 ## What I Benchmarked
 
+In the first chronological run of one synthetic history, a record built from GPT-6 Luna's extractions returned the expected answer to **21 of 22 final queries**. Yet it had lost an earlier source assertion, hiding a conflict before a correction arrived. The accepted value at the end was right; the documented history was incomplete.
+
 A patient uploads a laboratory report, an older discharge summary and a photograph of a prescription. A correction arrives later. The same report appears twice. One note describes the patient's mother; another says a diagnosis is suspected. The dates inside the documents do not follow the order in which the files arrived.
 
-For the person reviewing that history, a clean summary is only useful if it has preserved the evidence. Which source supports this value? Was it corrected? Do two documents disagree? Does this statement concern the patient? What remains unknown?
+I'm a technical consultant at [Symptomato](https://symptomato.com), where AI gathers context before a human health specialist joins the conversation. For Symptomato, we are building a way to turn incoming documents into a longitudinal, source-grounded record.
 
-I'm a technical consultant at [Symptomato](https://symptomato.com), where AI gathers context before a human health specialist joins the conversation. For Symptomato, we are building a way to turn incoming documents into a longitudinal record that can answer those questions. **ChartReplay** is the experiment I built to test the integrity of that process.
-
-The most revealing failure was a disagreement that disappeared. The model missed a value in one source. When a second source reported a different value for the same event, the constructed record contained only the second value, marked accepted. A later correction produced the expected accepted value, but the original evidence was still missing.
-
-The record looked more settled because it contained less information.
+**ChartReplay** asks whether an update policy preserves every required assertion and its relationships as corrections and repeated documents arrive. A record fails this content test if it omits a required assertion, adds unsupported content or misrepresents its subject, value, time, uncertainty or relationship to other sources.
 
 ### Trust starts with knowing what the record can establish
 
@@ -81,15 +79,21 @@ This is a comparison of those particular update policies, including that asymmet
 
 ## Models Tested
 
-The primary comparison uses the complete saved matrices for [GPT-6 Luna](https://developers.openai.com/api/docs/models/gpt-6-luna) (`gpt-6-luna`), [GPT-6 Sol](https://developers.openai.com/api/docs/models/gpt-6-sol) (`gpt-6-sol`) and [Claude Sonnet 5](https://platform.claude.com/docs/en/models/sonnet-5/overview) (`claude-sonnet-5`). Luna and Sol used the OpenAI API; Sonnet used the Anthropic API.
+The primary models are [GPT-6 Luna](https://developers.openai.com/api/docs/models/gpt-6-luna) (`gpt-6-luna`), [GPT-6 Sol](https://developers.openai.com/api/docs/models/gpt-6-sol) (`gpt-6-sol`) and [Claude Sonnet 5](https://platform.claude.com/docs/en/models/sonnet-5/overview) (`claude-sonnet-5`). **Gemini 3.8 Flash** (`google/gemini-3.8-flash`) supplies two separate Kaggle phases.
 
-Each has the same 60 case–schedule–repetition combinations under three architectures: **180 episodes per model, 540 in total**. This complete three-model subset was selected retrospectively from an original five-model lineup by coverage, not by correctness. Every terminal outcome is included.
+| Evidence | Episodes and models | Execution and overlap |
+|---|---|---|
+| Primary comparison | 540 episodes; Luna, Sol and Sonnet 5 | Direct APIs: OpenAI for Luna/Sol, Anthropic for Sonnet |
+| Matched secondary comparison | 288 outcomes; the same three models plus Gemini | 72 Gemini episodes through Kaggle + 216 reused primary episodes |
+| Public smoke benchmark | 12 episodes; Gemini only | Separate Kaggle runs on two histories |
 
-A secondary comparison includes **Gemini 3.8 Flash** (`google/gemini-3.8-flash`) through Kaggle's hosted interface. Its 72 saved terminal episodes cover 24 combinations under all three architectures. The other models are compared on exactly those same combinations. The primary direct-provider runs are not Kaggle-hosted results.
+Each view includes all three update architectures. The primary comparison has the same 60 case–schedule–repetition combinations for each architecture and model. Its complete three-model subset was selected retrospectively from an original five-model lineup by coverage, not by correctness. Every terminal outcome is included.
+
+The secondary view matches all four models on Gemini's 24 available combinations. The public smoke is a smaller demonstration; its task scores are reported separately below. The direct-provider results are not Kaggle-hosted leaderboard entries.
 
 The original lineup was recorded on September 25, 2026, with recent releases and sustainable recurring cost as the practical criteria. [Luna and Sol were released on September 22](https://developers.openai.com/api/docs/changelog). Sonnet 5, released June 30, was the explicitly chosen cheaper Anthropic tier, not the provider's latest overall release. These are dated selection decisions, not a claim about the current model catalog.
 
-Inputs, prompts and profiles were frozen. Luna and Sol used medium reasoning effort; Sonnet used adaptive reasoning with high effort. These labels do not establish equal compute. Models ran at different times, and the Kaggle route has its own recorded settings. Each model's smoke test preceded its own pilot, but two smoke cases recur in the pilot, so they are not held-out confirmation.
+Inputs, prompts and profiles were frozen. Luna and Sol used medium reasoning effort; Sonnet used adaptive reasoning with high effort. These labels do not establish equal compute. Models ran at different times, and the Kaggle route has its own recorded settings. Each model's smoke test preceded its own pilot.
 
 The primary score requires an episode to finish under the declared interface and produce an exact final chart. Format failures remain unsuccessful outcomes. The direct-provider arms requested JSON through the prompt, without provider-enforced structured output. This matters for interpreting Sonnet's results; it is separate from the question of whether a completed record preserved the evidence. Saved, unmodified responses and first terminal outcomes are evaluated by the frozen rules, with no judge LLM.
 
@@ -109,7 +113,7 @@ In both chronological repetitions, Luna's extractor returned no assertion for th
 
 The first assertion is `CR-02-0000-D34123:1`; the conflicting source is `CR-02-0000-D12503`; the explicit correction is `CR-02-0000-D31621`. Those identities make the error traceable to particular documents rather than a vague claim that the model “forgot something.”
 
-The correction to 140 was later applied correctly, but 138 remained absent through all six checkpoints. In the first repetition, **21 of 22 final queries still returned the expected answer**. The failed query asked for the measurement history. A consumer inspecting only the accepted value would miss the loss.
+The correction to 140 was later applied correctly, but 138 remained absent through all six checkpoints. The first repetition's failed query asked for the measurement history. A consumer inspecting only the accepted value would miss the loss.
 
 Full rebuild and rolling rewrite preserved the complete record in these chronological repetitions. The difference matters: repeated reconstruction gave those arms an opportunity that the one-pass extraction policy did not provide.
 
@@ -154,7 +158,7 @@ Gemini's 24 available combinations let us make a smaller matched comparison acro
 | Claude Sonnet 5 | 0/24 | 5/24 | 0/24 | 65 |
 | Gemini 3.8 Flash, via Kaggle | 23/24 | 20/24 | 17/24 | 11 |
 
-These 288 outcomes comprise 72 Gemini outcomes and 216 reused from the primary comparison. All ten families appear, but unevenly; only one case–repetition group has all three delivery schedules. This is not a complete four-model test of order invariance.
+All ten families appear, but unevenly; only one case–repetition group has all three delivery schedules. This is not a complete four-model test of order invariance.
 
 Gemini's one completed but inexact episode was a shuffled medication history in the ledger arm. A newly delivered source described a separate 5 mg medication order. The extractor omitted it, leaving seven of eight required assertions in the final chart. It is another example of source information failing to enter the derived record.
 
@@ -192,15 +196,25 @@ The saved Gemini 3.8 Flash results are:
 | Rolling rewrite | 1.0 (2/2 groups) | 4/4 episodes |
 | Extract plus ledger | 0.5 (1/2 groups) | 3/4 episodes |
 
-These runs comprise **12 episodes and 84 recorded application calls**. They belong to a separate smoke phase, outside the primary 540 episodes and the secondary 72 Gemini episodes. The two histories recur in the larger pilot, so this is not independent held-out confirmation.
+The smoke used **84 recorded application calls**. Its two histories recur in the larger pilot, so it is not independent held-out confirmation.
 
 The tasks provide a small executable test of the same evidence-preservation contract. They cover corrections and repeated delivery; the reconciliation example with values 138, 145 and 140 comes from the larger pilot, not these smoke tasks. The architecture scores are reported separately because combining them would obscure the comparison.
 
+### Inspect the saved failure offline
+
+[Download the hidden-conflict evidence ZIP](https://sergei-parfenov.com/assets/chartreplay-hidden-conflict-evidence.zip). It contains six synthetic documents, six saved prompts and unmodified model responses, expected and observed states, and 22 saved queries from Luna's first chronological reconciliation run.
+
+Unzip it, open the extracted folder in a terminal, and run:
+
+```sh
+python3 verify_trace.py
+```
+
+The standalone verifier uses Python's standard library and makes no API calls. It reconstructs dispositions and query answers from the saved trace. This case was selected after reviewing the results to illustrate a failure; the bundle does not reproduce all primary tables or the full evaluator.
+
 ### What this changes for the system we are building
 
-For Symptomato, I would treat preservation of the original upload, faithful extraction and justified reconciliation as separate checks. The record should make it possible to inspect the source behind an assertion and to see why an earlier assertion was corrected or remains disputed. A summary can be a view of that history; it should not become the only surviving representation of it.
-
-The next intervention to test is a check before committing an update: did every assertion required by the record contract reach the record from each new source, and are its corrections or conflicts still represented? A failure should lead to review or targeted re-extraction while preserving the original evidence. That intervention has not been evaluated here; the existing results locate the failure boundary, not the performance of a proposed fix.
+For Symptomato, the immediate design implication is to keep the original upload, its extracted assertions and its reconciliation status inspectable separately. A successful extraction call should not, by itself, mark a source fully incorporated. I would expose unresolved coverage to the reviewer and test a separate check that can trigger targeted re-extraction. The benchmark knows which assertions are missing because it has an oracle; the product will not. That coverage check needs evaluation against independently annotated documents before we can claim it improves completeness.
 
 A further evaluation needs independently annotated, naturally written document sets with ambiguous references, dates and source quality. OCR would need its own paired tests against the corresponding text. The present experiment does not assess document authenticity, rank competing sources by authority, verify real-world medical facts or establish clinical safety. A prepared controlled-prose layer has not been run through models and would not, by itself, establish those capabilities.
 

@@ -110,7 +110,7 @@
 .article-tags { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 16px; color: var(--muted); font: 12px/16px var(--font-code); }
 .article-tags > span::before { content: "#"; color: var(--accent); }
 .article-cover { width: min(calc(100% - 2 * var(--page-gutter)), 864px); margin: 0 auto 48px; background: var(--surface); }
-.article-cover img { width: 100%; height: auto; aspect-ratio: 1000 / 420; object-fit: contain; }
+.article-cover img { display: block; width: 100%; height: auto; }
 
 .article-page .article-prose,
 .article-page .article-footer { width: min(100%, 800px); }
